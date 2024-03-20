@@ -1,21 +1,22 @@
-def numero_estacion(lista: list, nombre: str): 
+def indice(lista: list, nombre: str): 
     #este método retorna cuál es el índice de la estación
-    contador = 0
-    for estacion in lista:
-        if estacion == nombre:
-            numero = contador
-        contador =+1
-    return numero
+    for numero in range (len(lista)+1):
+        if lista[numero] == nombre:
+           return numero
 
-def hay_tunel(red, inicio, destino): 
+def hay_tunel(red: list, nombres_estaciones: list, inicio: str, destino: str): 
     #este método retorna si existe un tunel o no
-    numero_inicio = numero_estacion(red, inicio)
-    numero_destino = numero_estacion(red, destino)
+    numero_inicio = indice(nombres_estaciones, inicio)
+    numero_destino = indice(nombres_estaciones, destino)
     if red[numero_inicio][numero_destino] == 0:
         return False
     else:
         return True
      
-a = ["A", "B", "C", "D"]
-print(numero_estacion(a,"A"))
+a = [[0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 0], [1, 1, 1, 0]]
+b = ["a", "b", "c", "d"]
+
+
+
+
     

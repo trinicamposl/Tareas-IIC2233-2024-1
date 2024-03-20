@@ -1,19 +1,20 @@
-import dcciudad 
+from dcciudad import elevar_matriz
+from dcciudad import alcanzable
 from funciones import indice
 from funciones import hay_tunel
+
 class RedMetro:
     def __init__(self, red: list, estaciones: list) -> None:
         self.red = red
         self.estaciones = estaciones
 
-
     def informacion_red(self) -> list:
         cantidad_estaciones = len(self.estaciones) 
         lista = []
-        for estacion in range(cantidad_estaciones+1):
+        for estacion in self.red:
             contador = 0
-            for tunel in range(cantidad_estaciones+1):
-                contador+= tunel
+            for tunel in estacion:
+                contador = contador + tunel
             lista.append(contador)
         return [cantidad_estaciones, lista]
 
@@ -36,10 +37,8 @@ class RedMetro:
             return -1 #nunca existió el tunel
         
     def invertir_tunel(self, estacion_1: str, estacion_2: str) -> bool:
-        numero_inicio = indice(self.estaciones, estacion_1)
-        numero_destino = indice(self.estaciones, estacion_2)
-        hay_ida = hay_tunel(self.estaciones, numero_inicio, numero_destino)
-        hay_vuelta = hay_tunel(self.estaciones, numero_destino, numero_inicio)
+        hay_ida = hay_tunel(self.red, self.estaciones, estacion_1, estacion_2)
+        hay_vuelta = hay_tunel(self.red, self.estaciones, estacion_2, estacion_1)
         if hay_ida and hay_vuelta:
             return True
         elif hay_ida and not hay_vuelta:
@@ -58,13 +57,13 @@ class RedMetro:
         numero_destino = indice(self.estaciones, destino)
         red_2 = elevar_matriz(self.red, 2) #con un intermediario
         existe = alcanzable(self.red, numero_inicio, numero_destino)
-        un_paso = hay_tunel(self.estaciones, numero_inicio, numero_destino)
-        dos_pasos = hay_tunel(red_2, numero_inicio, numero_destino)
+        un_paso = hay_tunel(self.red, self.estaciones, inicio, destino)
+        dos_pasos = hay_tunel(red_2, self.estaciones, inicio, destino)
         if existe:
             if un_paso:
-                return "tunel directo"
+                return "túnel directo"
             elif dos_pasos:
-                return "estacion intermediaria"
+                return "estación intermedia"
             else:
                 return "muy lejos"
         else:
