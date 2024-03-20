@@ -1,5 +1,6 @@
-import dcciudad
-from funciones import numero_estacion
+import dcciudad 
+from funciones import indice
+from funciones import hay_tunel
 class RedMetro:
     def __init__(self, red: list, estaciones: list) -> None:
         self.red = red
@@ -7,58 +8,67 @@ class RedMetro:
 
 
     def informacion_red(self) -> list:
-        numero_estaciones = len(self.estaciones) 
+        cantidad_estaciones = len(self.estaciones) 
         lista = []
-        for estacion in range(numero_estaciones):
+        for estacion in range(cantidad_estaciones+1):
             contador = 0
-            for tunel in range(numero_estaciones):
+            for tunel in range(cantidad_estaciones+1):
                 contador+= tunel
             lista.append(contador)
-        return [numero_estaciones, lista]
+        return [cantidad_estaciones, lista]
 
     def agregar_tunel(self, inicio: str, destino: str) -> int:
-        numero_inicio = numero_estacion(self.estaciones, inicio)
-        numero_destino = numero_estacion(self.estaciones, destino)
-        cambio = numero_inicio, numero_destino
-        if self.red[cambio] == 0:
-           self.red[cambio] = 1
+        numero_inicio = indice(self.estaciones, inicio)
+        numero_destino = indice(self.estaciones, destino)
+        if self.red[numero_inicio][numero_destino] == 0:
+           self.red[numero_inicio][numero_destino] = 1
            return RedMetro.informacion_red(self)[1][numero_inicio]
         else:
             return -1 #ya hay tunel
 
     def tapar_tunel(self, inicio: str, destino: str) -> int:
-        numero_inicio = numero_estacion(self.estaciones, inicio)
-        numero_destino = numero_estacion(self.estaciones, destino)
-        cambio = numero_inicio, numero_destino
-        if self.red[cambio] != 0:
-           self.red[cambio] = 0
+        numero_inicio = indice(self.estaciones, inicio)
+        numero_destino = indice(self.estaciones, destino)
+        if self.red[numero_inicio][numero_destino] != 0:
+           self.red[numero_inicio][numero_destino] = 0
            return RedMetro.informacion_red(self)[1][numero_inicio]
-        if self.red[cambio] == 0:
+        if self.red[numero_inicio][numero_destino] == 0:
             return -1 #nunca existió el tunel
         
     def invertir_tunel(self, estacion_1: str, estacion_2: str) -> bool:
-        numero_inicio = numero_estacion(self.estaciones, estacion_1)
-        numero_destino = numero_estacion(self.estaciones, estacion_2)
-        tunel_ida = RedMetro.agregar_tunel(self, estacion_1, estacion_2) 
-        tunel_vuelta = RedMetro.agregar_tunel(self, estacion_2, estacion_1) 
-        if (tunel_ida == -1) and (tunel_vuelta == -1):
+        numero_inicio = indice(self.estaciones, estacion_1)
+        numero_destino = indice(self.estaciones, estacion_2)
+        hay_ida = hay_tunel(self.estaciones, numero_inicio, numero_destino)
+        hay_vuelta = hay_tunel(self.estaciones, numero_destino, numero_inicio)
+        if hay_ida and hay_vuelta:
             return True
-        elif (tunel_ida == -1) and (tunel_vuelta != -1):
+        elif hay_ida and not hay_vuelta:
             RedMetro.agregar_tunel(self, estacion_2, estacion_1)
             RedMetro.tapar_tunel(self, estacion_1, estacion_2 )
             return True
-        elif (tunel_ida != -1) and (tunel_vuelta == -1):
+        elif not hay_ida  and hay_vuelta:
             RedMetro.agregar_tunel(self, estacion_1, estacion_2)
             RedMetro.tapar_tunel(self, estacion_2, estacion_1)
             return True
         else:
             return False
 
-
-
-
     def nivel_conexiones(self, inicio: str, destino: str) -> str:
-        pass
+        numero_inicio = indice(self.estaciones, inicio)
+        numero_destino = indice(self.estaciones, destino)
+        red_2 = elevar_matriz(self.red, 2) #con un intermediario
+        existe = alcanzable(self.red, numero_inicio, numero_destino)
+        un_paso = hay_tunel(self.estaciones, numero_inicio, numero_destino)
+        dos_pasos = hay_tunel(red_2, numero_inicio, numero_destino)
+        if existe:
+            if un_paso:
+                return "tunel directo"
+            elif dos_pasos:
+                return "estacion intermediaria"
+            else:
+                return "muy lejos"
+        else:
+            return "no hay ruta"
 
     def rutas_posibles(self, inicio: str, destino: str, p_intermedias: int) -> int:
         pass
