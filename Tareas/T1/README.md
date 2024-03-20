@@ -51,7 +51,7 @@ Por otro lado, los módulos que fueron creados fueron los siguientes:
 ## Supuestos y consideraciones adicionales :thinking:
 Los supuestos que realicé durante la tarea son los siguientes:
  
-1. <Para el desarrollo de la función nivel_conexiones asumí que el hecho que se podía o pedía usar la función alcanzable no implicaba que no se podían usar las demás funciones de dcciudad, por lo que usé la función elevar_matriz/a> 
+1. Para el desarrollo de la función **nivel_conexiones** asumí que el hecho que se podía o pedía usar la función alcanzable **no implicaba que no se podían usar las demás funciones** de dcciudad, por lo que **usé la función elevar_matriz**
 2. <Descripción/consideración 2 y justificación del por qué es válido/a>
 3. ...
 
