@@ -12,9 +12,6 @@ def hay_tunel(red: list, nombres_estaciones: list, inicio: str, destino: str):
         return False
     else:
         return True
-     
-a = [[0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 0], [1, 1, 1, 0]]
-b = ["a", "b", "c", "d"]
 
 
 

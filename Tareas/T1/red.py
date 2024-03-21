@@ -70,16 +70,46 @@ class RedMetro:
             return "no hay ruta"
 
     def rutas_posibles(self, inicio: str, destino: str, p_intermedias: int) -> int:
-        pass
+        numero_inicio = indice(self.estaciones, inicio)
+        numero_final = indice(self.estaciones, destino)
+        red = elevar_matriz(self.red, p_intermedias + 1)
+        cuantas = red[numero_inicio][numero_final]
+        return cuantas
 
     def ciclo_mas_corto(self, estacion: str) -> int:
-        pass
+        for numero in range (1, len(self.estaciones)+1):
+            red = elevar_matriz(self.red, numero)
+            tunel = hay_tunel(red, self.estaciones, estacion, estacion)
+            if tunel:
+                return numero -1
+        return -1  
 
     def estaciones_intermedias(self, inicio: str, destino: str) -> list:
-        pass
+        numero_inicio = indice(self.estaciones, inicio)
+        numero_final = indice(self.estaciones, destino)
+        lista = []
+        for numero in range (len(self.estaciones)):
+            if self.red[numero_inicio][numero] == 1:
+                lista.append(numero) #esto toma todos los caminos que pueden salir del inicio
+        lista_intermedios = []
+        for estacion in lista:
+            if self.red[estacion][numero_final] == 1:
+                lista_intermedios.append(self.estaciones[estacion])
+        return lista_intermedios
 
     def estaciones_intermedias_avanzado(self, inicio: str, destino: str) -> list:
-        pass
+        numero_inicio = indice(self.estaciones, inicio)
+        numero_final = indice(self.estaciones, destino)
+        salen = []
+        for numero in range (len(self.estaciones)):
+            if self.red[numero_inicio][numero] == 1:
+                salen.append(numero) #toma los caminos a donde se puede salir del inicio
+        llegan = []
+        for numero in range (len(self.estaciones)):
+            if self.red[numero][numero_final] == 1:
+                llegan.append(numero) #toma todos los caminos que pueden llegar al final
+        
+
 
     def cambiar_planos(self, nombre_archivo: str) -> bool:
         pass
