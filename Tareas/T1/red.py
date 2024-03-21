@@ -2,6 +2,7 @@ from dcciudad import elevar_matriz
 from dcciudad import alcanzable
 from funciones import indice
 from funciones import hay_tunel
+import os 
 
 class RedMetro:
     def __init__(self, red: list, estaciones: list) -> None:
@@ -108,11 +109,17 @@ class RedMetro:
         for numero in range (len(self.estaciones)):
             if self.red[numero][numero_final] == 1:
                 llegan.append(numero) #toma todos los caminos que pueden llegar al final
-        
-
-
+        rutas = []
+        for tren in salen:
+            for metro in llegan:
+                if self.red[tren][metro] == 1:
+                    estacion_1 = self.estaciones[tren]
+                    estacion_2 = self.estaciones[metro]
+                    rutas.append([estacion_1, estacion_2])
+        return rutas
+    
     def cambiar_planos(self, nombre_archivo: str) -> bool:
-        pass
+        
 
     def asegurar_ruta(self, inicio: str, destino: str, p_intermedias: int) -> list:
         pass
