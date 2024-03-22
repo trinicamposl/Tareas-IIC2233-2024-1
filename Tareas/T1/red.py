@@ -125,19 +125,19 @@ class RedMetro:
             with open((camino), "rt") as texto:
                 n = int(texto.readline())
                 estaciones = []
-                for i in range (n+1):
-                    estaciones.append(texto.readline())
-                numeros = texto.readline().split()
+                for i in range (n):
+                    estaciones.append(texto.readline().strip())
+                numeros = texto.readline().split(",")
 
                 for i in range (len(numeros)):
-                            numeros[i] = int(lista[i]) 
+                            numeros[i] = int(numeros[i]) 
                 
                 red = []
-                for i in range (0,n**2, n):
+                for i in range(0,n**2, n):
                     red.append(numeros[i:i+n])  
                     #esta lista en teoría va separando los nombres de las estaciones
-                    red.append(lista)
-                self.red = red
+
+                self.red = red 
                 self.estaciones = estaciones
                 return True
         else:
