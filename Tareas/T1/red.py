@@ -119,33 +119,29 @@ class RedMetro:
         return rutas
     
     def cambiar_planos(self, nombre_archivo: str) -> bool:
-        #if nombre_archivo existe: 
-        with open((nombre_archivo), "rt") as texto:
-            n = int(texto.readline().strip())
-            estaciones = []
-            for i in range (n+1):
-                estaciones.append(texto.readline().strip())
-            numeros = texto.readline().split(",")
-            red = []
-            for i in range (0,n+1):
-                inicio = 0
-                lista = [numeros[inicio:inicio + n + 1].split(",")]
-                inicio = inicio + n + 1 + 2
-                #esta lista en teoría va separando los nombres de las estaciones
-                for elemento in lista:
-                    if elemento == "1":
-                        elemento = 1
-                    else: 
-                        elemento = 0
-                #y aquí vuelvo las variables a números
-                red.append(numeros(lista))
-            self.red = red
-            self.estaciones = estaciones
-            return True
-        #else:
+        camino = os.path.join("data", nombre_archivo)
+        existe = os.path.exists(camino)
+        if existe:
+            with open((camino), "rt") as texto:
+                n = int(texto.readline())
+                estaciones = []
+                for i in range (n+1):
+                    estaciones.append(texto.readline())
+                numeros = texto.readline().split()
+
+                for i in range (len(numeros)):
+                            numeros[i] = int(lista[i]) 
+                
+                red = []
+                for i in range (0,n**2, n):
+                    red.append(numeros[i:i+n])  
+                    #esta lista en teoría va separando los nombres de las estaciones
+                    red.append(lista)
+                self.red = red
+                self.estaciones = estaciones
+                return True
+        else:
             return False
-
-
 
     def asegurar_ruta(self, inicio: str, destino: str, p_intermedias: int) -> list:
         pass

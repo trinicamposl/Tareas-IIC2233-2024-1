@@ -15,7 +15,6 @@ Un buen ```README.md``` no tiene por que ser muy extenso tampoco, hay que ser **
 con detalles de último minuto y consideraciones como por ejemplo cambiar algo
 en cierta línea del código o comentar una función>
 
-### Cosas implementadas y no implementadas :white_check_mark: :x:
 
 ### Cosas implementadas y no implementadas :white_check_mark: :x:
 
@@ -118,4 +117,4 @@ Lo importante es que expliquen qué hace la función y que si saben que alguna p
 ## Referencias de código externo :book:
 
 Para realizar mi tarea saqué código de:
-1. \<link de código>: este hace \<lo que hace> y está implementado en el archivo <nombre.py> en las líneas <número de líneas> y hace <explicación breve de que hace>
+1. \<https://es.stackoverflow.com/questions/134908/dividir-lista-en-lista-de-listas>: este separa listas en listas de igual tamaño \<lo que hace> y está implementado en el archivo <red.py> en las líneas <136, 137, 138 y 139> y hace <que se dividan equitativamente las listas de las rutas cuando se cambian los planos>
