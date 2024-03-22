@@ -117,4 +117,4 @@ Lo importante es que expliquen qué hace la función y que si saben que alguna p
 ## Referencias de código externo :book:
 
 Para realizar mi tarea saqué código de:
-1. \<https://es.stackoverflow.com/questions/134908/dividir-lista-en-lista-de-listas>: este separa listas en listas de igual tamaño \<lo que hace> y está implementado en el archivo <red.py> en las líneas <136, 137, 138 y 139> y hace <que se dividan equitativamente las listas de las rutas cuando se cambian los planos>
+1. \<https://es.stackoverflow.com/questions/134908/dividir-lista-en-lista-de-listas>: este separa listas en listas de igual tamaño, y está implementado en el archivo ```red.py´´´ en las líneas **136, 137, 138 y 139** y hace que se dividan equitativamente las listas de las rutas cuando se cambian los planos.

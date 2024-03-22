@@ -144,4 +144,18 @@ class RedMetro:
             return False
 
     def asegurar_ruta(self, inicio: str, destino: str, p_intermedias: int) -> list:
-        pass
+        numero_inicio = indice(self.estaciones, inicio)
+        numero_final = indice(self.estaciones, destino)
+        nueva_red = self.red[:]
+        red_pedida = elevar_matriz(self.red, p_intermedias + 1)
+        cuantas = red_pedida[numero_inicio][numero_final]
+        if cuantas > 0:
+            for i in range(0, p_intermedias): #aquí recorro todas las rutas menores
+                matriz = elevar_matriz(self.red, i + 1)
+                if hay_tunel(matriz, self.estaciones, inicio, destino):
+                    nueva_red[numero_inicio][numero_final] = 0
+            return nueva_red
+                
+        else:
+            return []
+        
