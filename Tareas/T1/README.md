@@ -11,6 +11,7 @@ Un buen ```README.md``` no tiene por que ser muy extenso tampoco, hay que ser **
 
 ## Consideraciones generales :octocat:
 
+Mi código logra (*se supone*) que todas las funciones pedidas *funcionen*, eso si la función de ciclo_mas_corto en algunos tests me tiraba que existía un loop pero aún así funcionaba. La función asegurar_ruta no funciona completamente bien.
 <Descripción de lo que hace y que **_no_** hace la tarea que entregaron junto
 con detalles de último minuto y consideraciones como por ejemplo cambiar algo
 en cierta línea del código o comentar una función>
@@ -29,16 +30,38 @@ SINO QUE SE DEBERÁ EXPLICAR QUÉ SE REALIZO DETALLADAMENTE EN CADA ITEM.
 
 ### Parte 1:
 #### Automatización: 40 pts (67,3%)
-##### ❌✅🟠 Información Red
-##### ❌✅🟠 Agregar túnel
-##### ❌✅🟠 Tapar túnel 
-##### ❌✅🟠 Invertir túnel
-##### ❌✅🟠 Nivel conexiones
-##### ❌✅🟠 Rutas posibles
-##### ❌✅🟠 Ciclos más cortos
-##### ❌✅🟠 Estaciones intermedias
-##### ❌✅🟠 Estaciones intermedias avanzado
-##### ❌✅🟠 Cambiar planos
+
+##### ✅ Información Red: 
+Conté las estaciones con el largo de la lista de estaciones y recorrí la lista sumando los indices para cada estación para obtener los túneles individuales.
+
+##### ✅ Agregar túnel: 
+Cree una función que definía el índice de la estación comparando el string con la posicion en la lista de estaciones y con eso alteré la posición indicada de la lista, transformando el 0 en un 1 si es que no existía el túnel.
+
+##### ✅ Tapar túnel 
+Hice lo mismo que agregar el túnel, pero cambié 1´s a 0´s.
+
+##### ✅ Invertir túnel
+Cree una función que me definía si existía un túnel entre dos lugares y a partir de eso, separé en las condiciones pedidas por el enunciado y desarrollé, cambiando de ordenes los indices para dar vuelta los túneles.
+
+##### ✅ Nivel conexiones
+Utilicé la función que había creado para ver si existía un túnel, sumado con la función elevar_matriz que se nos entregó para obtener si existían caminos con distintos caminos intermedios. Y con eso separé según las condiciones indicadas en el enunciado y retorné lo necesario.
+
+##### ✅ Rutas posibles
+Utilicé la función elevar_matriz y la elevé al valor pedido + 1, ya que así se obtenía el valor pedido de estaciones intermedias. Luego saqué el indice de la red, que me indicaba la cantidad de caminos y lo retorné.
+
+##### 🟠 Ciclos más cortos
+Pasé por todos los número hasta el máximo pedido, con un ```for```, elevando la matriz cada vez y utilizando la función para ver si existía algun túnel, y si es que se terminaba ese rango, entonces no existía una ruta y se retornaba -1.
+
+##### ✅ Estaciones intermedias
+Primero tomé todos los caminos que podían salir de la estación pedida y los metí en una lista, y luego recorrí la lista, analizando cuáles de esas estaciones tenían túneles hacia el destino, y nuevamente los metí en una lista, que es la que la función devuelve.
+
+
+##### ✅ Estaciones intermedias avanzado
+Cree una lista con todas las estaciones a las que se podía llegar desde el inicio, y aparte hice una lista de todas las estaciones que podían llegar al destino. Finalmente crucé las dos listas, y obtuve una lista que tenía todas las conexiones intermedias posibles (ya que por un lado salían del inico, entre ellas estaban conectadas, y por el otro lado llegaban al destino)
+
+##### ✅ Cambiar planos
+Después de filtrar si el archivo existía o no, abrí la primera linea considerandola como "n" y tomando ese número las siguientes n, para agregarlas a una lista de las estaciones. Luego la última línea le separé las comas, pasé todos los strings a números y los separé en la n listas de n componentes. (esto fue lo que saqué de internet)
+
 ##### ❌✅🟠 Asegurar rutas
 
 
@@ -54,8 +77,8 @@ SINO QUE SE DEBERÁ EXPLICAR QUÉ SE REALIZO DETALLADAMENTE EN CADA ITEM.
 
 
 ## Ejecución :computer:
-El módulo principal de la tarea a ejecutar es  ```archivo.py```. Además se debe crear los siguientes archivos y directorios adicionales:
-1. ```archivo.ext``` en ```ubicación```
+El módulo principal de la tarea a ejecutar es  ```main.py```. Además se debe crear los siguientes archivos y directorios adicionales:
+1. ```funciones.py``` en ```T1```
 2. ```directorio``` en ```ubicación```
 3. ...
 
@@ -64,14 +87,14 @@ El módulo principal de la tarea a ejecutar es  ```archivo.py```. Además se deb
 ### Librerías externas utilizadas
 La lista de librerías externas que utilicé fue la siguiente:
 
-1. ```librería_1```: ```función() / módulo```
-2. ```librería_2```: ```función() / módulo``` (debe instalarse)
+1. ```os```: ```path.join``` y ```path.exists``` 
+2. ```sys```: ```argv``` y  ```exit``` 
 3. ...
 
 ### Librerías propias
 Por otro lado, los módulos que fueron creados fueron los siguientes:
 
-1. ```funciones```: Contiene las funciones ```hay_tunel```, ```indice``` para simplificar el código en red.
+1. ```funciones```: Contiene las funciones ```hay_tunel```, ```indice``` y ```imprimir_menu``` e para simplificar el código en ``red.py``` y en ``main.py``
 2. ```librería_2```: Hecha para <insertar descripción **breve** de lo que hace o qué contiene>
 3. ...
 
