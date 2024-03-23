@@ -94,7 +94,7 @@ La lista de librerías externas que utilicé fue la siguiente:
 ### Librerías propias
 Por otro lado, los módulos que fueron creados fueron los siguientes:
 
-1. ```funciones```: Contiene las funciones ```hay_tunel```, ```indice``` y ```imprimir_menu``` e para simplificar el código en ``red.py``` y en ``main.py``
+1. ```funciones```: Contiene las funciones ```hay_tunel```, ```indice``` y ```imprimir_menu``` e para simplificar el código en ```red.py``` y en ``main.py``
 2. ```librería_2```: Hecha para <insertar descripción **breve** de lo que hace o qué contiene>
 3. ...
 
