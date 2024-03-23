@@ -94,9 +94,7 @@ La lista de librerías externas que utilicé fue la siguiente:
 ### Librerías propias
 Por otro lado, los módulos que fueron creados fueron los siguientes:
 
-1. ```funciones```: Contiene las funciones ```hay_tunel```, ```indice``` y ```imprimir_menu``` e para simplificar el código en ```red.py``` y en ``main.py``
-2. ```librería_2```: Hecha para <insertar descripción **breve** de lo que hace o qué contiene>
-3. ...
+1. ```funciones```: Contiene las funciones ```hay_tunel```, ```indice``` e ```imprimir_menu``` e para simplificar el código en ```red.py``` y en ``main.py`` (están explicadas en el archivo)
 
 ## Supuestos y consideraciones adicionales :thinking:
 Los supuestos que realicé durante la tarea son los siguientes:
@@ -105,7 +103,7 @@ Los supuestos que realicé durante la tarea son los siguientes:
 2. Para la **opción 2 del menú**, asumí que con imprimir el resultado en la consola, **asumí que se refería a imprimir el significado real del resultado**, no sólo imprimir los números, sino si es que existe un camino o no, ya que esto tiene mucho más sentido pensado si es que alguien lo quisiera usar realmente. 
 3. Para la **opción 3 del menú**, asumí que con imprimir el resultado en la consola, **asumí que se refería a imprimir el significado real del resultado**, no sólo imprimir la lista, sino si era posible asegurar la ruta o no, ya que esto tiene mucho más sentido pensado si es que alguien lo quisiera usar realmente. 
 
-PD: <una última consideración (de ser necesaria) o comentario hecho anteriormente que se quiera **recalcar**>
+PD: tengan piedad por favor **:D**>
 
 
 -------
