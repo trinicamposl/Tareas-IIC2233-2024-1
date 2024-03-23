@@ -3,6 +3,8 @@ from sys import argv
 from sys import exit
 import os 
 from funciones import imprimir_menu
+from dcciudad.pyc import imprimir_red
+
 
 nombres = argv
 archivo = f"{nombres[0]}.txt"
@@ -20,11 +22,56 @@ if existe:
         opcion = input()
         while opcion != 4 or opcion != "4":
             if opcion.isnumeric():
-                if opcion == 1 or opcion == 2 or opcion == 3:
+                if int(opcion) == 1:
+                    imprimir_red(metro.red, metro.estaciones)
+                    print ('{:^40}'.format(f"La red actual es {nombres[0]}"))
+                    print('{:^40}'.format(f"Escogiste la estación: {nombres[1]}"))
+                    imprimir_menu()
+                    opcion = input()
+                
+                elif int(opcion) == 2:
+                    metodo = metro.ciclo_mas_corto(estacion)
+                    if metodo != -1:
+                        print ('{:^40}'.format(f"El ciclo más corto es de {metodo}"))
+                    else:
+                        print ('{:^40}'.format("No existe el ciclo pedido"))
+                    print ('{:^40}'.format(f"La red actual es {nombres[0]}"))
+                    print('{:^40}'.format(f"Escogiste la estación: {nombres[1]}"))
+                    imprimir_menu()
+                    opcion = input()
+                
+                elif int(opcion) == 3:
+                    print ('{:^40}'.format("Escoja su destino:"))
+                    destino = input()
+                    print ('{:^40}'.format("¿Cuántas estaciones intermedias desea?"))
+                    p_intermedias = int(input())
+                    asegurar = metro.asegurar_ruta(estacion, destino, p_intermedias)
+                    if len(asegurar) == 0:
+                        print("No se pudo asegurar la ruta solicitada")
+                        print ('{:^40}'.format(f"La red actual es {nombres[0]}"))
+                        print('{:^40}'.format(f"Escogiste la estación: {nombres[1]}"))
+                        imprimir_menu()
+                        opcion = input()
+                    else:
+                        print ("La ruta que solicitó se puede asegurar")
+                        print ('{:^40}'.format(f"La red actual es {nombres[0]}"))
+                        print('{:^40}'.format(f"Escogiste la estación: {nombres[1]}"))
+                        imprimir_menu()
+                        opcion = input()
+
+                elif int(opcion) == 4:
+                    exit()
+
+                else:
+                    print("El número que ingresaste no está dentro de las opciones. Por favor intenta de nuevo")
+                    print ('{:^40}'.format(f"La red actual es {nombres[0]}"))
+                    print('{:^40}'.format(f"Escogiste la estación: {nombres[1]}"))
+                    imprimir_menu()
+                    opcion = input()
 
             else:
                 print("El texto ingresado no es válido, por favor introduce un número entre 1 y 4")
-                print ('{:^40}'.format(f"Se cargó la red {nombres[0]}"))
+                print ('{:^40}'.format(f"La red actual es {nombres[0]}"))
                 print('{:^40}'.format(f"Escogiste la estación: {nombres[1]}"))
                 imprimir_menu()
                 opcion = input()
@@ -37,3 +84,4 @@ else:
 
 
 
+print("El número que ingresaste no está dentro de las opciones. Por favor intenta de nuevo")
