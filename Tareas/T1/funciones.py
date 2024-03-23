@@ -13,6 +13,13 @@ def hay_tunel(red: list, nombres_estaciones: list, inicio: str, destino: str):
     else:
         return True
 
+def imprimir_menu():
+    print('{:^40}'.format('Menú de Opciones'))
+    print('{:^40}'.format('#1 : Mostrar red'))
+    print('{:^40}'.format('#2 : Encontrar ciclo más corto'))
+    print('{:^40}'.format('#3 : Asegurar ruta'))
+    print('{:^40}'.format('#4 : Salir del programa'))
+    print('{:^40}'.format('Eliga su opción; 1, 2, 3 o 4'))
 
 
 
