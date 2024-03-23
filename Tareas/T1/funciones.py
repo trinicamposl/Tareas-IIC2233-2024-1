@@ -14,6 +14,7 @@ def hay_tunel(red: list, nombres_estaciones: list, inicio: str, destino: str):
         return True
 
 def imprimir_menu():
+    #esto imprime mi menú (lo hice para que fuera más ordenado el main.py)
     print('{:^40}'.format('Menú de Opciones'))
     print('{:<40}'.format('      #1 : Mostrar red'))
     print('{:<40}'.format('      #2 : Encontrar ciclo más corto'))
