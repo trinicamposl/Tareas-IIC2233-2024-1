@@ -24,6 +24,7 @@ if existe:
             if opcion.isnumeric():
                 if int(opcion) == 1:
                     imprimir_red(metro.red, metro.estaciones)
+                    print ('{:^40}'.format("*********************************"))
                     print ('{:^40}'.format(f"La red actual es {nombres[0]}"))
                     print('{:^40}'.format(f"Escogiste la estación: {nombres[1]}"))
                     imprimir_menu()
@@ -35,6 +36,8 @@ if existe:
                         print ('{:^40}'.format(f"El ciclo más corto es de {metodo}"))
                     else:
                         print ('{:^40}'.format("No existe el ciclo pedido"))
+
+                    print ('{:^40}'.format("*********************************"))
                     print ('{:^40}'.format(f"La red actual es {nombres[0]}"))
                     print('{:^40}'.format(f"Escogiste la estación: {nombres[1]}"))
                     imprimir_menu()
@@ -47,13 +50,15 @@ if existe:
                     p_intermedias = int(input())
                     asegurar = metro.asegurar_ruta(estacion, destino, p_intermedias)
                     if len(asegurar) == 0:
-                        print("No se pudo asegurar la ruta solicitada")
+                        print("No se puede asegurar la ruta solicitada")
+                        print ('{:^40}'.format("*********************************"))
                         print ('{:^40}'.format(f"La red actual es {nombres[0]}"))
                         print('{:^40}'.format(f"Escogiste la estación: {nombres[1]}"))
                         imprimir_menu()
                         opcion = input()
                     else:
                         print ("La ruta que solicitó se puede asegurar")
+                        print ('{:^40}'.format("*********************************"))
                         print ('{:^40}'.format(f"La red actual es {nombres[0]}"))
                         print('{:^40}'.format(f"Escogiste la estación: {nombres[1]}"))
                         imprimir_menu()
@@ -63,7 +68,9 @@ if existe:
                     exit()
 
                 else:
-                    print("El número que ingresaste no está dentro de las opciones. Por favor intenta de nuevo")
+                    print("El número que ingresaste no está dentro de las opciones.")
+                    print("Por favor ingresa un número válido:")
+                    print ('{:^40}'.format("*********************************"))
                     print ('{:^40}'.format(f"La red actual es {nombres[0]}"))
                     print('{:^40}'.format(f"Escogiste la estación: {nombres[1]}"))
                     imprimir_menu()
@@ -78,10 +85,10 @@ if existe:
         
 
     else:
-        print("La estación que escogiste no se encuentra en la red solicitada, intenta de nuevo")
+        print("La estación que escogiste no se encuentra en la red solicitada.")
+        print("Intenta correr el programa de nuevo")
+        print ('{:^40}'.format("*********************************"))
 else: 
     print("El archivo que escogiste no existe, intenta de nuevo")
-
-
-
-print("El número que ingresaste no está dentro de las opciones. Por favor intenta de nuevo")
+    print("Intenta correr el programa de nuevo")
+    print ('{:^40}'.format("*********************************"))
