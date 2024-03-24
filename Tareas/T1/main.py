@@ -32,11 +32,7 @@ if existe:
                 
                 elif int(opcion) == 2:
                     metodo = metro.ciclo_mas_corto(estacion)
-                    if metodo != -1:
-                        print ('{:^40}'.format(f"El ciclo más corto es de {metodo}"))
-                    else:
-                        print ('{:^40}'.format("No existe el ciclo pedido"))
-
+                    print (metodo)
                     print ('{:^40}'.format("*********************************"))
                     print ('{:^40}'.format(f"La red actual es {nombres[0]}"))
                     print('{:^40}'.format(f"Escogiste la estación: {nombres[1]}"))
@@ -49,20 +45,12 @@ if existe:
                     print ('{:^40}'.format("¿Cuántas estaciones intermedias desea?"))
                     p_intermedias = int(input())
                     asegurar = metro.asegurar_ruta(estacion, destino, p_intermedias)
-                    if len(asegurar) == 0:
-                        print("No se puede asegurar la ruta solicitada")
-                        print ('{:^40}'.format("*********************************"))
-                        print ('{:^40}'.format(f"La red actual es {nombres[0]}"))
-                        print('{:^40}'.format(f"Escogiste la estación: {nombres[1]}"))
-                        imprimir_menu()
-                        opcion = input()
-                    else:
-                        print ("La ruta que solicitó se puede asegurar")
-                        print ('{:^40}'.format("*********************************"))
-                        print ('{:^40}'.format(f"La red actual es {nombres[0]}"))
-                        print('{:^40}'.format(f"Escogiste la estación: {nombres[1]}"))
-                        imprimir_menu()
-                        opcion = input()
+                    print(asegurar)
+                    print ('{:^40}'.format("*********************************"))
+                    print ('{:^40}'.format(f"La red actual es {nombres[0]}"))
+                    print('{:^40}'.format(f"Escogiste la estación: {nombres[1]}"))
+                    imprimir_menu()
+                    opcion = input()
 
                 elif int(opcion) == 4:
                     exit()
