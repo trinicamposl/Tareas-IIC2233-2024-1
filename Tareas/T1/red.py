@@ -207,19 +207,19 @@ class RedMetro:
                     return nueva_red
             return []
         if p_intermedias == 3:
-
+           
             salen = []
             for numero in range(len(self.estaciones)):
                 if self.red[numero_inicio][numero] == 1:
                     salen.append(numero) #toma los caminos a donde se puede salir del inicio
-
+           
             salen_2 = []
             for numero in range (len(salen)):
                 est_2 = salen[numero]
                 for estacion in range (len(self.estaciones)):
                     if self.red[est_2][estacion] == 1:
                         salen_2.append([numero_inicio, est_2, estacion])
-            
+
             salen_3 = []
             for numero in range (len(salen_2)):
                 for estacion in range (len(self.estaciones)):
