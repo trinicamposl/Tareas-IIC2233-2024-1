@@ -63,6 +63,8 @@ Cree una lista con todas las estaciones a las que se podía llegar desde el inic
 Después de filtrar si el archivo existía o no, abrí la primera linea considerandola como "n" y tomando ese número las siguientes n, para agregarlas a una lista de las estaciones. Luego la última línea le separé las comas, pasé todos los strings a números y los separé en la n listas de n componentes. (esto fue lo que saqué de internet)
 
 ##### 🟠 Asegurar rutas
+No supe programar las rutas totales que tenía cada estación por lo que sólo logré programar esta función hasta 3 rutas intermedias :(
+    
 
 
 
@@ -78,7 +80,7 @@ Mis pruebas funcionaron y mi menú fue a base de prints. Hice una función que i
 ##### ✅ Modularización:
 Separé en distintos archivos para que los archivos principales no estuviesen tan cargados de códigos, creando algunas funciones que se repetían mucho a lo largo de la tarea, cómo sacar el índice de la estación.
 
-##### ❌✅🟠 PEP8:
+##### ✅ PEP8:
 *Creo* que logré seguir todo lo pedido. Traté de escribir variables claras, excepto para algunos ```for i in range``` que el *i* no significaba nada específico, sólo que se recorrían números.
 
 
