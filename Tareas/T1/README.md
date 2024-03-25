@@ -11,10 +11,7 @@ Un buen ```README.md``` no tiene por que ser muy extenso tampoco, hay que ser **
 
 ## Consideraciones generales :octocat:
 
-Mi código logra (*se supone*) que casi todas las funciones pedidas *funcionen*. La función asegurar_ruta no funciona completamente bien, ya que sólo logra funcionar completamente si es que el número de túneles intermedios es menor a 4.
-<Descripción de lo que hace y que **_no_** hace la tarea que entregaron junto
-con detalles de último minuto y consideraciones como por ejemplo cambiar algo
-en cierta línea del código o comentar una función>
+Mi código logra (*se supone*) que casi todas las funciones pedidas *funcionen*. La función asegurar_ruta no funciona completamente bien, ya que sólo logra funcionar completamente si es que el número de túneles intermedios es menor a 4, y la situación no es muy rara o un caso borde.
 
 
 ### Cosas implementadas y no implementadas :white_check_mark: :x:
@@ -63,8 +60,8 @@ Cree una lista con todas las estaciones a las que se podía llegar desde el inic
 Después de filtrar si el archivo existía o no, abrí la primera linea considerandola como "n" y tomando ese número las siguientes n, para agregarlas a una lista de las estaciones. Luego la última línea le separé las comas, pasé todos los strings a números y los separé en la n listas de n componentes. (esto fue lo que saqué de internet)
 
 ##### 🟠 Asegurar rutas
-No supe programar las rutas totales que tenía cada estación por lo que sólo logré programar esta función hasta 3 rutas intermedias :(
-    
+No supe programar las rutas totales que tenía cada estación por lo que sólo logré programar esta función hasta 4 rutas intermedias :(. A pesar de esto, los casos bordes como que la estación llega a si misma, no los puedo resolver.
+
 
 
 
@@ -104,6 +101,7 @@ Por otro lado, los módulos que fueron creados fueron los siguientes:
 
 1. ```funciones```: Contiene las funciones ```hay_tunel```, ```indice``` e ```imprimir_menu``` e para simplificar el código en ```red.py``` y en ``main.py`` (están explicadas en el archivo)
 
+
 ## Supuestos y consideraciones adicionales :thinking:
 Los supuestos que realicé durante la tarea son los siguientes:
  
@@ -111,37 +109,6 @@ Los supuestos que realicé durante la tarea son los siguientes:
 2. Cómo no se explicitaba qué había que hacer con el archivo ```ejemplos.py```, asumí que no era necesario agregarlo al .gitignore, y lo eliminé.
  
 
-
-
-
--------
-
-
-
-**EXTRA:** si van a explicar qué hace específicamente un método, no lo coloquen en el README mismo. Pueden hacerlo directamente comentando el método en su archivo. Por ejemplo:
-
-```python
-class Corrector:
-
-    def __init__(self):
-          pass
-
-    # Este método coloca un 6 en las tareas que recibe
-    def corregir(self, tarea):
-        tarea.nota  = 6
-        return tarea
-```
-
-Si quieren ser más formales, pueden usar alguna convención de documentación. Google tiene la suya, Python tiene otra y hay muchas más. La de Python es la [PEP287, conocida como reST](https://www.python.org/dev/peps/pep-0287/). Lo más básico es documentar así:
-
-```python
-def funcion(argumento):
-    """
-    Mi función hace X con el argumento
-    """
-    return argumento_modificado
-```
-Lo importante es que expliquen qué hace la función y que si saben que alguna parte puede quedar complicada de entender o tienen alguna función mágica usen los comentarios/documentación para que el ayudante entienda sus intenciones.
 
 ## Referencias de código externo :book:
 
