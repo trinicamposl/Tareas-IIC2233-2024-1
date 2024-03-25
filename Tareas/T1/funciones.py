@@ -21,3 +21,10 @@ def imprimir_menu():
     print('{:<40}'.format('      #3 : Asegurar ruta'))
     print('{:<40}'.format('      #4 : Salir del programa'))
     print('{:^40}'.format('Eliga su opción; 1, 2, 3 o 4'))
+
+def conexiones(red: list, estacion: int):
+    salen = []
+    for numero in range (len(red)):
+        if red[estacion][numero] == 1:
+            salen.append(numero)
+    return salen

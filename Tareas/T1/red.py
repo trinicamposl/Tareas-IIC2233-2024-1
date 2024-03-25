@@ -147,7 +147,6 @@ class RedMetro:
         numero_inicio = indice(self.estaciones, inicio)
         numero_final = indice(self.estaciones, destino)
         nueva_red = self.red[:]
-        red_pedida = elevar_matriz(self.red, p_intermedias + 1)
         if p_intermedias == 0:
             if self.red[numero_inicio][numero_final] == 1:
                 return nueva_red
@@ -199,38 +198,130 @@ class RedMetro:
                 nueva_red[numero_inicio][int_1] = 1
                 nueva_red[int_1][int_2] = 1
                 nueva_red[int_2][numero_final] = 1
+                for i in range (p_intermedias):
+                    matriz = elevar_matriz(nueva_red, i+1)
+                    hay = alcanzable(matriz, numero_inicio, numero_final)
+                    if hay:
+                        return []
                 if alcanzable(nueva_red, numero_inicio, numero_final):
                     return nueva_red
             return []
         if p_intermedias == 3:
+
             salen = []
-            for numero in range (len(self.estaciones)):
+            for numero in range(len(self.estaciones)):
                 if self.red[numero_inicio][numero] == 1:
                     salen.append(numero) #toma los caminos a donde se puede salir del inicio
-            llegan = []
-            for numero in range (len(self.estaciones)):
-                if self.red[numero][numero_final] == 1:
-                    llegan.append(numero) #toma todos los caminos que pueden llegar al final
-            rutas = []
-            for tren in salen:
-                for metro in llegan:
-                    if self.red[tren][metro] == 1:
-                        estacion_1 = self.estaciones[tren]
-                        estacion_2 = self.estaciones[metro]
-                        rutas.append([estacion_1, estacion_2]) #lista de intermedias 
+
+            salen_2 = []
+            for numero in range (len(salen)):
+                est_2 = salen[numero]
+                for estacion in range (len(self.estaciones)):
+                    if self.red[est_2][estacion] == 1:
+                        salen_2.append([numero_inicio, est_2, estacion])
+            
+            salen_3 = []
+            for numero in range (len(salen_2)):
+                for estacion in range (len(self.estaciones)):
+                    est_2 = salen_2[numero][1]
+                    est_3 = salen_2[numero][2]
+                    if self.red[est_3][estacion] == 1:
+                        salen_3.append([numero_inicio, est_2, est_3, estacion])
+
+            salen_4 = []
+            for numero in range (len(salen_3)):
+                est_2 = salen_3[numero][1]
+                est_3 = salen_3[numero][2]
+                est_4 = salen_3[numero][3]
+                if self.red[est_4][numero_final] == 1:
+                    salen_4.append([numero_inicio, est_2, est_3, est_4, numero_final])
+
             for columna in range (len(self.estaciones)):
                 for fila in range (len(self.estaciones)):
                     nueva_red[columna][fila] = 0 #acá reseteo toda la lista a 0
-            for elemento in rutas:
-                intermedio_1 = elemento[0]
-                intermedio_2 = elemento[1]
-                int_1 = indice(self.estaciones, intermedio_1)
-                int_2 = indice(self.estaciones, intermedio_2)
-                nueva_red[numero_inicio][int_1] = 1
-                nueva_red[int_1][int_2] = 1
-                nueva_red[int_2][numero_final] = 1
+
+            for elemento in range(len(salen_4)):
+                est_1 = salen_4[elemento][0]
+                est_2 = salen_4[elemento][1]
+                est_3 = salen_4[elemento][2]
+                est_4 = salen_4[elemento][3]
+                nueva_red[est_1][est_2] = 1
+                nueva_red[est_2][est_3] = 1
+                nueva_red[est_3][est_4] = 1
+                nueva_red[est_4][numero_final] = 1
+                for i in range (p_intermedias):
+                    matriz = elevar_matriz(nueva_red, i+1)
+                    hay = alcanzable(matriz, numero_inicio, numero_final)
+                    if hay:
+                        return []
                 if alcanzable(nueva_red, numero_inicio, numero_final):
                     return nueva_red
+            return []
+        if p_intermedias == 4:
+
+            salen = []
+            for numero in range(len(self.estaciones)):
+                if self.red[numero_inicio][numero] == 1:
+                    salen.append(numero) #toma los caminos a donde se puede salir del inicio
+
+            salen_2 = []
+            for numero in range (len(salen)):
+                est_2 = salen[numero]
+                for estacion in range (len(self.estaciones)):
+                    if self.red[est_2][estacion] == 1:
+                        salen_2.append([numero_inicio, est_2, estacion])
+            
+            salen_3 = []
+            for numero in range (len(salen_2)):
+                for estacion in range (len(self.estaciones)):
+                    est_2 = salen_2[numero][1]
+                    est_3 = salen_2[numero][2]
+                    if self.red[est_3][estacion] == 1:
+                        salen_3.append([numero_inicio, est_2, est_3, estacion])
+
+            salen_4 = []
+            for numero in range (len(salen_3)):
+                for estacion in range (len(self.estaciones)):
+                    est_2 = salen_3[numero][1]
+                    est_3 = salen_3[numero][2]
+                    est_4 = salen_3[numero][3]
+                    if self.red[est_4][numero] == 1:
+                        salen_4.append([numero_inicio, est_2, est_3, est_4, numero])
+            
+            salen_5 = []
+            for numero in range (len(salen_4)):
+                for estacion in range (len(self.estaciones)):
+                    est_2 = salen_4[numero][1]
+                    est_3 = salen_4[numero][2]
+                    est_4 = salen_4[numero][3]
+                    est_5 = salen_4[numero][4]
+                    if self.red[est_4][numero_final] == 1:
+                        salen_4.append([numero_inicio, est_2, est_3, est_4, est_5, numero_final])
+
+            for columna in range (len(self.estaciones)):
+                for fila in range (len(self.estaciones)):
+                    nueva_red[columna][fila] = 0 #acá reseteo toda la lista a 0
+
+            for elemento in range(len(salen_5)):
+                est_1 = salen_5[elemento][0]
+                est_2 = salen_5[elemento][1]
+                est_3 = salen_5[elemento][2]
+                est_4 = salen_5[elemento][3]
+                est_4 = salen_5[elemento][4]
+                nueva_red[est_1][est_2] = 1
+                nueva_red[est_2][est_3] = 1
+                nueva_red[est_3][est_4] = 1
+                nueva_red[est_4][est_5] = 1
+                nueva_red[est_5][numero_final] = 1
+                for i in range (p_intermedias):
+                    matriz = elevar_matriz(nueva_red, i+1)
+                    hay = alcanzable(matriz, numero_inicio, numero_final)
+                    if hay:
+                        return []
+                if alcanzable(nueva_red, numero_inicio, numero_final):
+                    return nueva_red
+            return []
+        else:
             return []
 
                
