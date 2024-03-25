@@ -198,11 +198,6 @@ class RedMetro:
                 nueva_red[numero_inicio][int_1] = 1
                 nueva_red[int_1][int_2] = 1
                 nueva_red[int_2][numero_final] = 1
-                for i in range (p_intermedias):
-                    matriz = elevar_matriz(nueva_red, i+1)
-                    hay = alcanzable(matriz, numero_inicio, numero_final)
-                    if hay:
-                        return []
                 if alcanzable(nueva_red, numero_inicio, numero_final):
                     return nueva_red
             return []
@@ -249,11 +244,6 @@ class RedMetro:
                 nueva_red[est_2][est_3] = 1
                 nueva_red[est_3][est_4] = 1
                 nueva_red[est_4][numero_final] = 1
-                for i in range (p_intermedias):
-                    matriz = elevar_matriz(nueva_red, i+1)
-                    hay = alcanzable(matriz, numero_inicio, numero_final)
-                    if hay:
-                        return []
                 if alcanzable(nueva_red, numero_inicio, numero_final):
                     return nueva_red
             return []
@@ -313,11 +303,6 @@ class RedMetro:
                 nueva_red[est_3][est_4] = 1
                 nueva_red[est_4][est_5] = 1
                 nueva_red[est_5][numero_final] = 1
-                for i in range (p_intermedias):
-                    matriz = elevar_matriz(nueva_red, i+1)
-                    hay = alcanzable(matriz, numero_inicio, numero_final)
-                    if hay:
-                        return []
                 if alcanzable(nueva_red, numero_inicio, numero_final):
                     return nueva_red
             return []
