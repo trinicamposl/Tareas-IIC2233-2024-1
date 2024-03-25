@@ -148,14 +148,91 @@ class RedMetro:
         numero_final = indice(self.estaciones, destino)
         nueva_red = self.red[:]
         red_pedida = elevar_matriz(self.red, p_intermedias + 1)
-        cuantas = red_pedida[numero_inicio][numero_final]
-        if cuantas > 0:
-            for i in range(0, p_intermedias): #aquí recorro todas las rutas menores
-                matriz = elevar_matriz(self.red, i + 1)
-                if hay_tunel(matriz, self.estaciones, inicio, destino):
-                    nueva_red[numero_inicio][numero_final] = 0
-            return nueva_red
-                
-        else:
+        if p_intermedias == 0:
+            if self.red[numero_inicio][numero_final] == 1:
+                return nueva_red
+            else:
+                return []
+        if p_intermedias == 1:
+            lista = []
+            for numero in range (len(self.estaciones)):
+                if self.red[numero_inicio][numero] == 1:
+                    lista.append(numero) #esto toma todos los caminos que pueden salir del inicio
+            lista_intermedios = []
+            for estacion in lista:
+                if self.red[estacion][numero_final] == 1:
+                    lista_intermedios.append(self.estaciones[estacion]) #esto toma los que llegan
+            for columna in range (len(self.estaciones)):
+                for fila in range (len(self.estaciones)):
+                    nueva_red[columna][fila] = 0 #acá reseteo toda la lista a 0
+            for i in range (len(lista_intermedios) +1):
+                intermedio = indice(self.estaciones, lista_intermedios[i])
+                nueva_red[numero_inicio][intermedio] = 1
+                nueva_red[intermedio][numero_final] = 1
+                if alcanzable(nueva_red, numero_inicio, numero_final):
+                    return nueva_red
             return []
-        
+        if p_intermedias == 2:
+            salen = []
+            for numero in range (len(self.estaciones)):
+                if self.red[numero_inicio][numero] == 1:
+                    salen.append(numero) #toma los caminos a donde se puede salir del inicio
+            llegan = []
+            for numero in range (len(self.estaciones)):
+                if self.red[numero][numero_final] == 1:
+                    llegan.append(numero) #toma todos los caminos que pueden llegar al final
+            rutas = []
+            for tren in salen:
+                for metro in llegan:
+                    if self.red[tren][metro] == 1:
+                        estacion_1 = self.estaciones[tren]
+                        estacion_2 = self.estaciones[metro]
+                        rutas.append([estacion_1, estacion_2]) #lista de intermedias 
+            for columna in range (len(self.estaciones)):
+                for fila in range (len(self.estaciones)):
+                    nueva_red[columna][fila] = 0 #acá reseteo toda la lista a 0
+            for elemento in rutas:
+                intermedio_1 = elemento[0]
+                intermedio_2 = elemento[1]
+                int_1 = indice(self.estaciones, intermedio_1)
+                int_2 = indice(self.estaciones, intermedio_2)
+                nueva_red[numero_inicio][int_1] = 1
+                nueva_red[int_1][int_2] = 1
+                nueva_red[int_2][numero_final] = 1
+                if alcanzable(nueva_red, numero_inicio, numero_final):
+                    return nueva_red
+            return []
+        if p_intermedias == 3:
+            salen = []
+            for numero in range (len(self.estaciones)):
+                if self.red[numero_inicio][numero] == 1:
+                    salen.append(numero) #toma los caminos a donde se puede salir del inicio
+            llegan = []
+            for numero in range (len(self.estaciones)):
+                if self.red[numero][numero_final] == 1:
+                    llegan.append(numero) #toma todos los caminos que pueden llegar al final
+            rutas = []
+            for tren in salen:
+                for metro in llegan:
+                    if self.red[tren][metro] == 1:
+                        estacion_1 = self.estaciones[tren]
+                        estacion_2 = self.estaciones[metro]
+                        rutas.append([estacion_1, estacion_2]) #lista de intermedias 
+            for columna in range (len(self.estaciones)):
+                for fila in range (len(self.estaciones)):
+                    nueva_red[columna][fila] = 0 #acá reseteo toda la lista a 0
+            for elemento in rutas:
+                intermedio_1 = elemento[0]
+                intermedio_2 = elemento[1]
+                int_1 = indice(self.estaciones, intermedio_1)
+                int_2 = indice(self.estaciones, intermedio_2)
+                nueva_red[numero_inicio][int_1] = 1
+                nueva_red[int_1][int_2] = 1
+                nueva_red[int_2][numero_final] = 1
+                if alcanzable(nueva_red, numero_inicio, numero_final):
+                    return nueva_red
+            return []
+
+               
+    
+                

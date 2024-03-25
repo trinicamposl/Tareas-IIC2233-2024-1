@@ -11,7 +11,7 @@ Un buen ```README.md``` no tiene por que ser muy extenso tampoco, hay que ser **
 
 ## Consideraciones generales :octocat:
 
-Mi código logra (*se supone*) que todas las funciones pedidas *funcionen*, eso si la función de ciclo_mas_corto en algunos tests me tiraba que existía un loop pero aún así funcionaba. La función asegurar_ruta no funciona completamente bien.
+Mi código logra (*se supone*) que casi todas las funciones pedidas *funcionen*. La función asegurar_ruta no funciona completamente bien, ya que sólo logra funcionar completamente si es que el número de túneles intermedios es menor a 4.
 <Descripción de lo que hace y que **_no_** hace la tarea que entregaron junto
 con detalles de último minuto y consideraciones como por ejemplo cambiar algo
 en cierta línea del código o comentar una función>
@@ -49,7 +49,7 @@ Utilicé la función que había creado para ver si existía un túnel, sumado co
 ##### ✅ Rutas posibles
 Utilicé la función elevar_matriz y la elevé al valor pedido + 1, ya que así se obtenía el valor pedido de estaciones intermedias. Luego saqué el indice de la red, que me indicaba la cantidad de caminos y lo retorné.
 
-##### 🟠 Ciclos más cortos
+##### ✅ Ciclos más cortos
 Pasé por todos los número hasta el máximo pedido, con un ```for```, elevando la matriz cada vez y utilizando la función para ver si existía algun túnel, y si es que se terminaba ese rango, entonces no existía una ruta y se retornaba -1.
 
 ##### ✅ Estaciones intermedias
@@ -62,25 +62,31 @@ Cree una lista con todas las estaciones a las que se podía llegar desde el inic
 ##### ✅ Cambiar planos
 Después de filtrar si el archivo existía o no, abrí la primera linea considerandola como "n" y tomando ese número las siguientes n, para agregarlas a una lista de las estaciones. Luego la última línea le separé las comas, pasé todos los strings a números y los separé en la n listas de n componentes. (esto fue lo que saqué de internet)
 
-##### ❌✅🟠 Asegurar rutas
+##### 🟠 Asegurar rutas
 
 
 
 
 ### Parte 2:
 #### Menú: 13 pts (21,7%)
-##### ❌✅🟠 Consola
-##### ❌✅🟠 Menú de Acciones
-##### ❌✅🟠 Modularización
-##### ❌✅🟠 PEP8
+##### ✅ Consola:
+De lo que probé yo, todo funcionaba correctamente
+
+##### ✅ Menú de Acciones:
+Mis pruebas funcionaron y mi menú fue a base de prints. Hice una función que imprimía lo que no se alteraba del menú (que está en ```funciones.py```) para que el código en ```main.py``` no estuviese tan engorroso.
+
+##### ✅ Modularización:
+Separé en distintos archivos para que los archivos principales no estuviesen tan cargados de códigos, creando algunas funciones que se repetían mucho a lo largo de la tarea, cómo sacar el índice de la estación.
+
+##### ❌✅🟠 PEP8:
+*Creo* que logré seguir todo lo pedido. Traté de escribir variables claras, excepto para algunos ```for i in range``` que el *i* no significaba nada específico, sólo que se recorrían números.
 
 
 
 ## Ejecución :computer:
 El módulo principal de la tarea a ejecutar es  ```main.py```. Además se debe crear los siguientes archivos y directorios adicionales:
 1. ```funciones.py``` en ```T1```
-2. ```directorio``` en ```ubicación```
-3. ...
+2. ```red.py``` en ```T1``` (esto no sabía si era necesario explicitarlo)
 
 
 ## Librerías :books:
@@ -89,7 +95,7 @@ La lista de librerías externas que utilicé fue la siguiente:
 
 1. ```os```: ```path.join``` y ```path.exists``` 
 2. ```sys```: ```argv``` y  ```exit``` 
-3. ...
+
 
 ### Librerías propias
 Por otro lado, los módulos que fueron creados fueron los siguientes:
@@ -100,10 +106,10 @@ Por otro lado, los módulos que fueron creados fueron los siguientes:
 Los supuestos que realicé durante la tarea son los siguientes:
  
 1. Para el desarrollo de la función **nivel_conexiones** asumí que el hecho que se podía o pedía usar la función alcanzable **no implicaba que no se podían usar las demás funciones** de dcciudad, por lo que **usé la función elevar_matriz**
-2. Para la **opción 2 del menú**, asumí que con imprimir el resultado en la consola, **asumí que se refería a imprimir el significado real del resultado**, no sólo imprimir los números, sino si es que existe un camino o no, ya que esto tiene mucho más sentido pensado si es que alguien lo quisiera usar realmente. 
-3. Para la **opción 3 del menú**, asumí que con imprimir el resultado en la consola, **asumí que se refería a imprimir el significado real del resultado**, no sólo imprimir la lista, sino si era posible asegurar la ruta o no, ya que esto tiene mucho más sentido pensado si es que alguien lo quisiera usar realmente. 
+2. Cómo no se explicitaba qué había que hacer con el archivo ```ejemplos.py```, asumí que no era necesario agregarlo al .gitignore, y lo eliminé.
+ 
 
-PD: tengan piedad por favor **:D**>
+
 
 
 -------
