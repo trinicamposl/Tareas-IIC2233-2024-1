@@ -1,4 +1,4 @@
-# Tarea X: Nombre de la tarea :school_satchel:
+# Tarea 2: DCCombatientes 🐈⚔️
 
 
 Un buen ```README.md``` puede marcar una gran diferencia en la facilidad con la que corregimos una tarea, y consecuentemente cómo funciona su programa, por lo en general, entre más ordenado y limpio sea éste, mejor será 
@@ -17,14 +17,37 @@ en cierta línea del código o comentar una función>
 
 ### Cosas implementadas y no implementadas :white_check_mark: :x:
 
-* <Nombre item pauta<sub>1</sub>>: Hecha completa
-* <Nombre item pauta<sub>2</sub>>: Me faltó hacer <insertar qué cosa faltó>
-    * <Nombre subitem pauta<sub>2.1</sub>>: Hecha completa 
-    * <Nombre subitem pauta<sub>2.2</sub>>: Me faltó hacer <insertar qué cosa faltó>
-    * ...
-* <Nombre item pauta<sub>3</sub>>: Me faltó hacer <insertar qué cosa faltó>
-* ...
-* <Nombre item pauta<sub>n</sub>>: Me faltó hacer <insertar qué cosa faltó>
+Explicación: mantén el emoji correspondiente, de manera honesta, para cada item. Si quieres, también puedes agregarlos a los títulos:
+- ❌ si **NO** completaste lo pedido
+- ✅ si completaste **correctamente** lo pedido
+- 🟠 si el item está **incompleto** o tiene algunos errores
+
+**⚠️⚠️NO BASTA CON SOLO PONER EL COLOR DE LO IMPLEMENTADO**,
+SINO QUE SE DEBERÁ EXPLICAR QUÉ SE REALIZO DETALLADAMENTE EN CADA ITEM.
+⚠️⚠️
+
+#### Programación Orientada a Objetos: 12 pts (10%)
+##### ❌✅🟠 Definición de clases, herencia y *properties*
+
+#### Preparación del programa: 10 pts (8%)
+##### ❌✅🟠 Inicio de la partida
+
+#### Entidades: 56 pts (47%)
+##### ❌✅🟠 Ejército
+##### ❌✅🟠 Combatientes
+##### ❌✅🟠 Ítems
+
+#### Flujo del programa: 30 pts (25%)
+##### ❌✅🟠 Menú de Inicio
+##### ❌✅🟠 Menú Tienda
+##### ❌✅🟠 Selección de gato
+##### ❌✅🟠 Fin del Juego
+##### ❌✅🟠 Robustez
+
+#### Archivos: 12 pts (10%)
+##### ❌✅🟠 Archivos .txt
+##### ❌✅🟠 parametros.py
+
 
 ## Ejecución :computer:
 El módulo principal de la tarea a ejecutar es  ```archivo.py```. Además se debe crear los siguientes archivos y directorios adicionales:
@@ -91,3 +114,6 @@ Lo importante es que expliquen qué hace la función y que si saben que alguna p
 
 Para realizar mi tarea saqué código de:
 1. \<link de código>: este hace \<lo que hace> y está implementado en el archivo <nombre.py> en las líneas <número de líneas> y hace <explicación breve de que hace>
+
+## Descuentos
+La guía de descuentos se encuentra [link](https://github.com/IIC2233/Syllabus/blob/main/Tareas/Bases%20Generales%20de%20Tareas%20-%20IIC2233.pdf).
