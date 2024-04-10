@@ -2,7 +2,7 @@ def Ejercito():
     pass
 
 def Combatientes(self, nombre, vida_maxima, vida, poder, defensa, agilidad, resistencia):
-    def __init__(self):
+    def __init__():
         self.nombre = nombre
         self.vida_maxima = vida_maxima
         self.vida = vida
