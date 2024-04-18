@@ -16,4 +16,9 @@ prob_mag = 30
 red_mag = 45
 atq_mag = 30
 aum_pal = 55
+prob_pal = 20
+prob_mdb = 34
+def_mdb = 20
+prob_car = 43
+
 

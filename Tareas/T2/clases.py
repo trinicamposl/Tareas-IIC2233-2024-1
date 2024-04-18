@@ -1,10 +1,10 @@
 from parametros import oro_inicial, cansancio, prob_cab, red_cab, atq_cab, prob_mag
-from parametros import red_mag,atq_mag
+from parametros import red_mag,atq_mag, prob_pal, aum_pal, prob_mdb, def_mdb
 from abc import ABC, abstractmethod
 import random
 
 
-def Ejercito():
+class Ejercito():
     def __init__(self):
         self.combatientes = []
         self.oro = oro_inicial
@@ -22,12 +22,11 @@ def Ejercito():
         for combatiente in self.combatientes:
             presentarse(combatiente)
             
-
-def Combatientes(ABC):
+class Combatientes(ABC):
     def __init__(self,nombre, vida_maxima, vida, poder, defensa, agilidad, resistencia):
         self.nombre = nombre
         self.vida_maxima = vida_maxima
-        self._vida = vida
+        self._vida = vida, vida_maxima #revisar
         self.poder = poder
         self.defensa = defensa
         self.agilidad = agilidad
@@ -56,9 +55,7 @@ def Combatientes(ABC):
     def evolucionar(self):
         pass
 
-
-
-def Guerrero(Combatiente):
+class Guerrero(Combatientes):
     def __init__(self, tipo, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tipo = "Gato Guerrero"  
@@ -69,7 +66,7 @@ def Guerrero(Combatiente):
                      ataque y {self.defensa} de defensa")
     
     def presentarse(self):
-        return __str__(self)
+        self.__str__()
     
     def atacar(enemigo, self):
         self.agilidad -= self.agilidad*(1-cansancio/100)
@@ -79,7 +76,7 @@ def Guerrero(Combatiente):
     def evolucionar(self):
         pass
 
-def Caballero(Combatiente):
+class Caballero(Combatientes):
     def __init__(self, tipo, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tipo = "Gato Caballero"  
@@ -90,7 +87,7 @@ def Caballero(Combatiente):
                      ataque y {self.defensa} de defensa")
     
     def presentarse(self):
-        return __str__(self)
+        self.__str__()
     
     def atacar(enemigo, self):
         if random.randint(0,100)<prob_cab:
@@ -103,7 +100,7 @@ def Caballero(Combatiente):
     def evolucionar(self):
         pass
     
-def Mago(Combatiente):
+class Mago(Combatientes):
     def __init__(self, tipo, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tipo = "Gato Mago"  
@@ -114,7 +111,7 @@ def Mago(Combatiente):
                      ataque y {self.defensa} de defensa")
     
     def presentarse(self):
-        return __str__(self)
+        self.__str__()
     
     def atacar(enemigo, self):
         if random.randint(0,100)<prob_mag:
@@ -129,8 +126,8 @@ def Mago(Combatiente):
     def evolucionar(self):
         pass
 
-def Paladin(Guerrero, Caballero):
-    def __init__(self, tipo, *args, **kwargs): #revisar??
+class Paladin(Guerrero, Caballero):
+    def __init__(self, *args, **kwargs): 
         super().__init__(*args, **kwargs)
         self.tipo = "Gato Paladin"  
     
@@ -140,21 +137,65 @@ def Paladin(Guerrero, Caballero):
                      ataque y {self.defensa} de defensa")
     
     def presentarse(self):
-        return __str__(self)
+        self.__str__()
     
     def atacar(enemigo, self):
-        if random.randint(0,100)<prob_mag:
-            enemigo.defensa = round(self.ataque*(atq_mag/100) - enemigo.defensa*(100 - red_mag)/100)    
+        if random.randint(0,100)<prob_pal:
+            Caballero.atacar(enemigo, self)    
         else:
-            self.agilidad -= self.agilidad*(1-cansancio/100)
-            enemigo.vida -= round (self.ataque - enemigo.defensa)
-        self.resistencia = self.resistencia*(1-cansancio/100)
-        self.agilidad = self.agilidad*(1-cansancio/100)
-
+            Guerrero.atacar(enemigo, self)
+        self.resistencia = self.resistencia*(1+aum_pal/100)
 
     def evolucionar(self):
         pass
 
+class MagoDeBatalla(Guerrero, Mago):
+    def __init__(self, *args, **kwargs): 
+        super().__init__(*args, **kwargs)
+        self.tipo = "Gato Mago de Batalla"  
+    
+    def __str__(self):
+        print(f"¡Hola! Soy {self.nombre}, un {self.tipo} con
+                   {self.vida}/ {self.vida_maxima} de vida, {self.ataque} de
+                     ataque y {self.defensa} de defensa")
+    
+    def presentarse(self):
+        self.__str__()
+    
+    def atacar(enemigo, self):
+        if random.randint(0,100)<prob_mdb:
+            Mago.atacar(enemigo, self)    
+        else:
+            Guerrero.atacar(enemigo, self)
+        self.agilidad = self.agilidad*(1-cansancio/100)
+        self.defensa = self.defensa*(1+def_mdb/100)
+
+    def evolucionar(self):
+        pass
+
+class CaballeroArcano(Caballero, Mago):
+    def __init__(self, *args, **kwargs): 
+        super().__init__(*args, **kwargs)
+        self.tipo = "Gato Caballero Arcano"  
+    
+    def __str__(self):
+        print(f"¡Hola! Soy {self.nombre}, un {self.tipo} con
+                   {self.vida}/ {self.vida_maxima} de vida, {self.ataque} de
+                     ataque y {self.defensa} de defensa")
+    
+    def presentarse(self):
+        self.__str__()
+    
+    def atacar(enemigo, self):
+        if random.randint(0,100)<prob_mdb:
+            Mago.atacar(enemigo, self)    
+        else:
+            Guerrero.atacar(enemigo, self)
+        self.agilidad = self.agilidad*(1-cansancio/100)
+        self.defensa = self.defensa*(1+def_mdb/100)
+
+    def evolucionar(self):
+        pass
 
     
 
