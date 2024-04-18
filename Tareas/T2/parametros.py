@@ -20,5 +20,6 @@ prob_pal = 20
 prob_mdb = 34
 def_mdb = 20
 prob_car = 43
+aum_car = 27
 
 

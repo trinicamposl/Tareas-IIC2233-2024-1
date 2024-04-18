@@ -1,5 +1,5 @@
 from parametros import oro_inicial, cansancio, prob_cab, red_cab, atq_cab, prob_mag
-from parametros import red_mag,atq_mag, prob_pal, aum_pal, prob_mdb, def_mdb
+from parametros import red_mag,atq_mag, prob_pal, aum_pal, prob_mdb, def_mdb, prob_car, aum_car
 from abc import ABC, abstractmethod
 import random
 
@@ -187,7 +187,7 @@ class CaballeroArcano(Caballero, Mago):
         self.__str__()
     
     def atacar(enemigo, self):
-        if random.randint(0,100)<prob_mdb:
+        if random.randint(0,100)<prob_car:
             Mago.atacar(enemigo, self)    
         else:
             Guerrero.atacar(enemigo, self)
