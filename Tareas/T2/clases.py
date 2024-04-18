@@ -2,7 +2,7 @@ from parametros import oro_inicial, cansancio, prob_cab, red_cab, atq_cab, prob_
 from parametros import red_mag,atq_mag, prob_pal, aum_pal, prob_mdb, def_mdb, prob_car, aum_car
 from abc import ABC, abstractmethod
 import random
-
+from funciones import convertir_gato
 
 class Ejercito():
     def __init__(self):
@@ -14,13 +14,19 @@ class Ejercito():
 
     @property
     def presentarse(self):
-        return __str__(self)
+        self.__str__()
  
 
     def __str__(self):
         print("Este es tu ejército actual:")
         for combatiente in self.combatientes:
-            presentarse(combatiente)
+            self.presentarse(combatiente) # revisar!!
+        print(f"Te quedan {len(self.combatientes)}. ¡Éxito en la batalla!")
+    
+    def agregar_ejercito (self, gato):
+        self.combatientes.append(gato)
+        
+        
             
 class Combatientes(ABC):
     def __init__(self,nombre, vida_maxima, vida, poder, defensa, agilidad, resistencia):
@@ -152,7 +158,7 @@ class Paladin(Guerrero, Caballero):
 class MagoDeBatalla(Guerrero, Mago):
     def __init__(self, *args, **kwargs): 
         super().__init__(*args, **kwargs)
-        self.tipo = "Gato Mago de Batalla"  
+        self.tipo = "Gato Mago De Batalla"  
     
     def __str__(self):
         print(f"¡Hola! Soy {self.nombre}, un {self.tipo} con
@@ -188,18 +194,47 @@ class CaballeroArcano(Caballero, Mago):
     
     def atacar(enemigo, self):
         if random.randint(0,100)<prob_car:
-            Mago.atacar(enemigo, self)    
-        else:
+            Mago.atacar(enemigo, self)
+            self.agilidad = self.agilidad*(1-cansancio/100)
+            self.defensa = self.defensa*(1+def_mdb/100)    
+        elif random.randint(0,100)<(100-prob_cab):
             Guerrero.atacar(enemigo, self)
-        self.agilidad = self.agilidad*(1-cansancio/100)
-        self.defensa = self.defensa*(1+def_mdb/100)
+            self.agilidad = self.agilidad*(1-cansancio/100)
+            self.defensa = self.defensa*(1+def_mdb/100)
 
     def evolucionar(self):
         pass
 
-    
+class Items():
+    def __init__(self, nombre, valor):
+        self.nombre = nombre
+        self.valor = valor #revisar!!
 
+    def evolucionar_gato(self, gato):
+        if self.nombre == "Pergamino":
+            if gato.tipo == "Gato Guerrero":
+                nuevo_gato = convertir_gato(gato, "Gato Mago De Batalla")
+                return nuevo_gato            
+            elif gato.tipo == "Gato Caballero":
+                nuevo_gato = convertir_gato(gato, "Gato Caballero Arcano")
+                return nuevo_gato
         
-    
-        
+        elif self.nombre == "Lanza":
+            if gato.tipo == "Gato Mago":
+                nuevo_gato = convertir_gato(gato, "Gato Mago De Batalla")
+                return nuevo_gato            
+            elif gato.tipo == "Gato Caballero":
+                nuevo_gato = convertir_gato(gato, "Gato Paladin")
+                return nuevo_gato
+            
+        elif self.nombre == "Armadura":
+            if gato.tipo == "Gato Mago":
+                nuevo_gato = convertir_gato(gato, "Gato Caballero Arcano")
+                return nuevo_gato            
+            elif gato.tipo == "Gato Guerrero":
+                nuevo_gato = convertir_gato(gato, "Gato Paladin")
+                return nuevo_gato
+
+
+
 

@@ -33,7 +33,10 @@ def revisar_parametros(vida_maxima, vida, poder, defensa, agilidad, resistencia)
             if poder in rango10:
                 if defensa in rango20:
                     if agilidad in rango10:
-                        return True
+                        if resistencia in rango10:
+                            return True
+                        else:
+                            return False
                     else:
                         return False
                 else:
@@ -45,8 +48,19 @@ def revisar_parametros(vida_maxima, vida, poder, defensa, agilidad, resistencia)
     else:
         return False
 
-
-
+def convertir_gato(gato, clase):
+    vida_maxima = gato.vida_maxima
+    vida = gato.vida
+    poder = gato.poder
+    defensa = gato.defensa
+    agilidad = gato.agilidad
+    resistencia = gato.resistencia
+    clase_real = clase[5:].split(" ")
+    clase_oficial = ""
+    for palabra in clase_real:
+        clase_oficial = clase_oficial + palabra
+        nuevo_gato = f"{clase_real}"(vida_maxima, vida, poder, defensa, agilidad, resistencia)
+    return nuevo_gato
 
 
     
