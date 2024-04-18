@@ -14,3 +14,6 @@ def Combatientes(self, nombre, vida_maxima, vida, poder, defensa, agilidad, resi
         denominador = self.poder + self.agilidad + self.resistencia
         self.ataque = round((denominador*2*self.vida)/self.vida_maxima)
 
+
+        
+
