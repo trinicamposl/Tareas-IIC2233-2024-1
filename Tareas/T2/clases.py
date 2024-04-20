@@ -8,7 +8,6 @@ class Ejercito():
     def __init__(self):
         self.combatientes = []
         self.oro = oro_inicial
-        self.items = []
     
     def combatir(enemigo):
         pass
@@ -20,9 +19,12 @@ class Ejercito():
 
     def __str__(self):
         print("Este es tu ejército actual:")
-        for combatiente in self.combatientes:
-            self.presentarse(combatiente) # revisar!!
-        print(f"Te quedan {len(self.combatientes)}. ¡Éxito en la batalla!")
+        if len(self.combatientes) != 0:
+            for combatiente in self.combatientes:
+                self.presentarse(combatiente) # revisar!!
+            print(f"Te quedan {len(self.combatientes)}. ¡Éxito en la batalla!")
+        else:
+            print("No tienes ningún combatiente. Te recomiendo comprar alguno para la batalla!")
     
     def agregar_ejercito (self, gato):
         self.combatientes.append(gato)
@@ -33,7 +35,7 @@ class Combatientes(ABC):
     def __init__(self,nombre, vida_maxima, vida, poder, defensa, agilidad, resistencia):
         self.nombre = nombre
         self.vida_maxima = vida_maxima
-        self._vida = vida, vida_maxima #revisar
+        self._vida = vida #revisar
         self.poder = poder
         self.defensa = defensa
         self.agilidad = agilidad

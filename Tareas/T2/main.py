@@ -2,6 +2,7 @@ from sys import argv
 from sys import exit
 import os
 from funciones import archivo_correcto
+from juego import comienzo_juego
 
 nombres = argv
 dificultad = nombres[1]
@@ -13,7 +14,7 @@ if existe:
     if len(nombres) == 2: #me dieron la cantidad correcta de parametros
         if dificultad == "facil":
             if archivo_correcto(camino)[0]:
-                pass
+                comienzo_juego()
 
             else:
                 print(archivo_correcto(camino)[1])
@@ -21,7 +22,7 @@ if existe:
 
         elif dificultad == "intermedia":
             if archivo_correcto(camino)[0]:
-                pass
+                comienzo_juego()
 
             else:
                 print(archivo_correcto(camino)[1])
@@ -29,7 +30,7 @@ if existe:
 
         elif dificultad == "dificil":
             if archivo_correcto(camino)[0]:
-                pass
+                comienzo_juego()
 
             else:
                 print(archivo_correcto(camino)[1])
