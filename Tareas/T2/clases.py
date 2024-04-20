@@ -8,6 +8,7 @@ class Ejercito():
     def __init__(self):
         self.combatientes = []
         self.oro = oro_inicial
+        self.items = []
     
     def combatir(enemigo):
         pass

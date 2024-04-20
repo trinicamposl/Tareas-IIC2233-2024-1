@@ -1,13 +1,13 @@
 import random
-oro_inicial = random.randint(1,1000)
-precio_guerrero = random.randint(1,1000)
-precio_mago = 0
-precio_caballero = 0
-precio_armadura = ''
-precio_pergamino = 0
-precio_lanza = 0
-precio_cura = ""
-curar_vida = 0
+oro_inicial = 450
+precio_gue = 100
+precio_mag = 100
+precio_cab = 100
+precio_armadura = 50
+precio_pergamino = 50
+precio_lanza = 50
+precio_cura = 70
+curar_vida = 37
 cansancio = 20
 prob_cab = 40
 red_cab = 50

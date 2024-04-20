@@ -1,4 +1,6 @@
 import os
+from parametros import precio_cab, precio_mag, precio_gue, precio_armadura
+from parametros import precio_cura, precio_lanza, precio_pergamino
 
 def archivo_correcto(archivo):
     camino = os.path.join("data", archivo)
@@ -61,6 +63,41 @@ def convertir_gato(gato, clase):
         clase_oficial = clase_oficial + palabra
         nuevo_gato = f"{clase_real}"(vida_maxima, vida, poder, defensa, agilidad, resistencia)
     return nuevo_gato
+
+def menu_de_tienda(plata):
+    from parametros import precio_cab, precio_mag, precio_gue, precio_armadura ##revisar!!!!
+    from parametros import precio_cura, precio_lanza, precio_pergamino
+    #esto imprime mi menú de inicio (lo hice para que fuera más ordenado el main.py)
+    print('{:^48}'.format('Tienda'))
+    print("")
+    print('{:^48}'.format(f"Oro disponible: {plata}"))
+    print("                                    Precio")  
+    print('{:<40}'.format(f'      #1 : Gato Mago                   {precio_mag}'))
+    print('{:<40}'.format(f'      #2 : Gato Guerrero               {precio_gue}'))
+    print('{:<40}'.format(f'      #3 : Gato Caballero              {precio_cab}'))
+    print('{:<40}'.format(f'      #4 : Ítem Armadura               {precio_armadura}'))
+    print('{:<40}'.format(f'      #5 : Ítem Pergamino              {precio_pergamino}'))
+    print('{:<40}'.format(f'      #6 : Ítem Lanza                  {precio_lanza}'))
+    print('{:<40}'.format(f'      #7 : Curar Ejército              {precio_cura}'))
+    print("")
+    print('{:<40}'.format('      #8 : Volver al Menú de Inicio'))
+    print("")
+    print('{:^40}'.format('Elige tu opción; 1, 2, 3, 4, 5, 6, 7 ó 8'))
+
+def menu_de_inicio(plata, ronda):
+    #esto imprime mi menú de inicio (lo hice para que fuera más ordenado el main.py)
+    print('{:^40}'.format('Menú de Inicio'))
+    print("")
+    print('{:^40}'.format(f"Oro disponible: {plata}"))
+    print('{:^38}'.format(f"Ronda actual: {ronda}"))
+    print("")  
+    print('{:<40}'.format('      #1 : Tienda'))
+    print('{:<40}'.format('      #2 : Ejército'))
+    print('{:<40}'.format('      #3 : Combatir'))
+    print("")
+    print('{:<40}'.format('      #4 : Salir del programa'))
+    print("")
+    print('{:^40}'.format('Elige tu opción; 1, 2, 3 ó 4'))
 
 
     
