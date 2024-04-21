@@ -157,10 +157,6 @@ def seleccion_gato(lista):
     
     print('{:^40}'.format('Elige tu opción;'))
 
-def indice(gato, lista):
-    for i in range (len(lista)):
-        if lista[i].nombre == gato.nombre:
-            return i
 
 
 
