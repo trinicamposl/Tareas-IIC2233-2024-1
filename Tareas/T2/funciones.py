@@ -108,7 +108,6 @@ def menu_de_tienda(plata):
     print('{:^40}'.format('Elige tu opción; 1, 2, 3, 4, 5, 6, 7 ó 8'))
     print("*"*40)
 
-
 def revisar_unidades():
     """
     Esta función revisa si los gatos que puedo comprar están permitidos y tienens 

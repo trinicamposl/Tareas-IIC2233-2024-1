@@ -74,18 +74,26 @@ La lista de librerías externas que utilicé fue la siguiente:
 ### Librerías propias :pencil2:
 Por otro lado, los módulos que fueron creados fueron los siguientes:
 
-1. ```clases.py```: Contiene todas las clases creadas, incluyendo herencia, polimorfismo (creo), properties y clases abstractas. Contiene clases como  ```Ejercito```, ```Items```, ```Guerrero```, entre otras
+1. ```clases.py```: Contiene todas las clases creadas, incluyendo herencia, polimorfismo (creo), properties y clases abstractas. Contiene clases como  ```Ejercito```, ```Items```, ```Guerrero```, entre otras (contiene una función que no logré ponerla en otro archivo sin crear problemas para importar archivos entre sí.)
 
 2. ```funciones```: Hecha para facilitar y limpiar un poco los códigos, tiene funciones que se tenía que utilizar mucho y ocupaban muchas líneas, como ```revisar_parametros```, ```revisar_unidades```, etc. (Las funciones suelen ser autoexplicativas con el nombre, sino tienen una pequeña descripción)
 
-3. ```funciones```
+3. ```momento compras```: Contiene sólo el método para la compra de artículos y combatientes en la función ```comprar()```
+
+4. ```juego```: Contiene la una función que se concentra en el inicio del juego y deriva al módulo ```momento compras``` en el caso de que el jugador quiera comprar cosas.
+
+5. ```parametros```: contiene todos los parámetros necesarios para evitar Hard Coding
 
 ## Supuestos y consideraciones adicionales :thinking:
 Los supuestos que realicé durante la tarea son los siguientes:
 
-1. <Descripción/consideración 1 y justificación del por qué es válido/a> 
-2. <Descripción/consideración 2 y justificación del por qué es válido/a>
-3. ...
+1. Consideré que para la compra de combatientes, **el stock era ilimitado**, pero al evolucionar algun gato que esté repetido, sólo se evolucionaría el primero que aparezca en la lista de combatientes con el nombre del que se quiere evolucionar. Esto lo hice tomando como base la **issue #176**, donde se habla un poco de la interpretación de esta situación. 
+
+2. Asumí que **activar un poder** significaba **atacar como el poder activado**, es decir, si activo mi poder como guerrero, ataco como guerrero, incluyendo todas las implicancias que tiene el ataque del guerrero. Se habla de esto en la **issue #171**
+
+3. Asumí que en las clases mixtas como ```Paladín``` y ```Mago De Batalla```, en el caso que no se cumpliera la probabilidad especificada en el enunciado, el combatiente atacaba como la otra clase padre. (por ejemplo en el paladin cuando no se cumplía la probabilidad de paladín para atacar como Caballero, entonces atacaba como Guerrero). Esto también se habla en la **issue #171**
+
+
 
 PD: Mi computador murió como por 6 días del periodo de la tarea asi que porfa ten piedadddd :pensive:
 

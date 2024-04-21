@@ -94,7 +94,7 @@ class Caballero(Combatientes):
         self.__str__()
     
     def atacar(enemigo, self):
-        if random.randint(0,100)<prob_cab:
+        if random.randint(0,100)<=prob_cab:
             enemigo.poder = enemigo.poder(1-red_cab/100)
             enemigo._vida =  round(self.ataque*(atq_cab/100) - enemigo.defensa)    
         else:
@@ -117,14 +117,13 @@ class Mago(Combatientes):
         self.__str__()
     
     def atacar(enemigo, self):
-        if random.randint(0,100)<prob_mag:
+        if random.randint(0,100)<=prob_mag:
             enemigo.defensa = round(self.ataque*(atq_mag/100) - enemigo.defensa*(100 - red_mag)/100)    
         else:
             self.agilidad -= self.agilidad*(1-cansancio/100)
             enemigo._vida -= round (self.ataque - enemigo.defensa)
         self.resistencia = self.resistencia*(1-cansancio/100)
         self.agilidad = self.agilidad*(1-cansancio/100)
-
 
     def evolucionar(self, pieza):
         return Items(pieza).evolucionar_gato(self)
@@ -142,11 +141,11 @@ class Paladin(Guerrero, Caballero):
         self.__str__()
     
     def atacar(enemigo, self):
-        if random.randint(0,100)<prob_pal:
+        if random.randint(0,100)<=prob_pal:
             Caballero.atacar(enemigo, self)    
         else:
             Guerrero.atacar(enemigo, self)
-        self.resistencia = self.resistencia*(1+aum_pal/100)
+        self.resistencia = self.resistencia*(1+(aum_pal/100))
 
     def evolucionar(self):
         print("Yo no puedo evolucionar :(")
@@ -164,7 +163,7 @@ class MagoDeBatalla(Guerrero, Mago):
         self.__str__()
     
     def atacar(enemigo, self):
-        if random.randint(0,100)<prob_mdb:
+        if random.randint(0,100)<=prob_mdb:
             Mago.atacar(enemigo, self)    
         else:
             Guerrero.atacar(enemigo, self)
@@ -187,11 +186,11 @@ class CaballeroArcano(Caballero, Mago):
         self.__str__()
     
     def atacar(enemigo, self):
-        if random.randint(0,100)<prob_car:
+        if random.randint(0,100)<=prob_car:
             Mago.atacar(enemigo, self)
             self.agilidad = self.agilidad*(1-cansancio/100)
             self.defensa = self.defensa*(1+def_mdb/100)    
-        elif random.randint(0,100)<(100-prob_cab):
+        else:
             Guerrero.atacar(enemigo, self)
             self.agilidad = self.agilidad*(1-cansancio/100)
             self.defensa = self.defensa*(1+def_mdb/100)
