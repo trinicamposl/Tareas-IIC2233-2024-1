@@ -8,13 +8,34 @@ class Ejercito():
         self.combatientes = []
         self.oro = oro_inicial
     
-    def combatir(enemigo):
-        pass
+    def combatir(self, enemigo):
+        while len(enemigo.combatientes) != 0 or len(self.combatientes) != 0:
+            for i in range(len(self.combatientes)):
+                jugador = self.combatientes(i)
+                contrincante = enemigo.combatiente(i)
+                mi_vida = jugador.vida
+                su_vida = contrincante.vida
+                while mi_vida != 0 or su_vida != 0:
+                    jugador.atacar(enemigo, self)
+                    contrincante.atacar(self, enemigo)
+                    mi_vida = jugador.vida
+                    su_vida = contrincante.vida
+                if mi_vida == 0:
+                  self.combatientes.pop(indice(jugador, self.combatientes))
+                if su_vida == 0:
+                    enemigo.combatientes.pop(indice(contrincante, enemigo.combatientes))  
+                break
+        if len(enemigo.combatientes) == 0:
+            if len(self.combatientes) != 0: 
+                return(True, "Ganaste esta ronda! :D")
+            else:
+                return(False, "Murieron todos tus gatos. Perdiste el juego D:")       
+        else:
+                return(False, "Murieron todos tus gatos. Perdiste el juego D:")     
 
     @property
     def presentarse(self):
         self.__str__()
- 
 
     def __str__(self):
         print("Este es tu ejército actual:")
@@ -76,7 +97,6 @@ class Guerrero(Combatientes):
     def atacar(enemigo, self):
         self.agilidad -= self.agilidad*(1-cansancio/100)
         enemigo._vida -= round (self.ataque - enemigo.defensa)
-
 
     def evolucionar(self, pieza):
         return Items(pieza).evolucionar_gato(self)
@@ -238,3 +258,7 @@ def convertir_gato(gato):
     resistencia = gato.resistencia
     return [nombre, vida_maxima, poder, defensa, agilidad, resistencia]
 
+def indice(gato, lista):
+    for i in range (len(lista)):
+        if lista[i].nombre == gato.nombre:
+            return i
