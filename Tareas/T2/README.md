@@ -90,29 +90,18 @@ Por otro lado, los módulos que fueron creados fueron los siguientes:
 ## Supuestos y consideraciones adicionales :thinking:
 Los supuestos que realicé durante la tarea son los siguientes:
 
-1. Consideré que para la compra de combatientes, **el stock era ilimitado**, pero al evolucionar algun gato que esté repetido, sólo se evolucionaría el primero que aparezca en la lista de combatientes con el nombre del que se quiere evolucionar. Esto lo hice tomando como base la **issue #176**, donde se habla un poco de la interpretación de esta situación. 
+1. Consideré que para la compra de combatientes, **_el stock era ilimitado_**, pero al evolucionar algun gato que esté repetido, sólo se evolucionaría el primero que aparezca en la lista de combatientes con el nombre del que se quiere evolucionar. Esto lo hice tomando como base la **issue #176**, donde se habla un poco de la interpretación de esta situación. 
 
-2. Asumí que **activar un poder** significaba **atacar como el poder activado**, es decir, si activo mi poder como guerrero, ataco como guerrero, incluyendo todas las implicancias que tiene el ataque del guerrero. Se habla de esto en la **issue #171**
+2. Asumí que **_activar un poder_** significaba **_atacar como el poder activado_**, es decir, si activo mi poder como guerrero, ataco como guerrero, incluyendo todas las implicancias que tiene el ataque del guerrero. Se habla de esto en la **issue #171**
 
 3. Asumí que en las clases mixtas como ```Paladín``` y ```Mago De Batalla```, en el caso que no se cumpliera la probabilidad especificada en el enunciado, el combatiente atacaba como la otra clase padre. (por ejemplo en el paladin cuando no se cumplía la probabilidad de paladín para atacar como Caballero, entonces atacaba como Guerrero). Esto también se habla en la **issue #171**
 
+4. Asumí que en el ataque, **_atacaba primero el jugador_**, teniendo cierta ventaja sobre el oponente, debido a que esto no se explicita en la tarea (y así era más fácil). Esto se ahonda en la **issue #243** 
 
+5. Asumí que los **_ataques a los stats del otro jugador eran permanentes_** (así era más fácil), ya que no se explicita en la tarea si es que son para el 1v1 o si son por siempre. Esto se habla en la **issue #248**
 
 PD: Mi computador murió como por 6 días del periodo de la tarea asi que porfa ten piedadddd :pensive:
 
-
--------
-
-Si quieren ser más formales, pueden usar alguna convención de documentación. Google tiene la suya, Python tiene otra y hay muchas más. La de Python es la [PEP287, conocida como reST](https://www.python.org/dev/peps/pep-0287/). Lo más básico es documentar así:
-
-```python
-def funcion(argumento):
-    """
-    Mi función hace X con el argumento
-    """
-    return argumento_modificado
-```
-Lo importante es que expliquen qué hace la función y que si saben que alguna parte puede quedar complicada de entender o tienen alguna función mágica usen los comentarios/documentación para que el ayudante entienda sus intenciones.
 
 ## Referencias de código externo :book:
 
