@@ -209,34 +209,32 @@ class CaballeroArcano(Caballero, Mago):
         pass
 
 class Items():
-    def __init__(self, nombre, valor):
+    def __init__(self, nombre):
         self.nombre = nombre
-        self.valor = valor #revisar!!
 
     def evolucionar_gato(self, gato):
         if self.nombre == "Pergamino":
             if gato.tipo == "Gato Guerrero":
-                nuevo_gato = convertir_gato(gato, "Gato Mago De Batalla")
+                nuevo_gato = MagoDeBatalla(convertir_gato(gato))
                 return nuevo_gato            
             elif gato.tipo == "Gato Caballero":
-                nuevo_gato = convertir_gato(gato, "Gato Caballero Arcano")
-                return nuevo_gato
-        
+                nuevo_gato = CaballeroArcano(convertir_gato(gato))
+                return nuevo_gato        
         elif self.nombre == "Lanza":
             if gato.tipo == "Gato Mago":
-                nuevo_gato = convertir_gato(gato, "Gato Mago De Batalla")
+                nuevo_gato = MagoDeBatalla(convertir_gato(gato))
                 return nuevo_gato            
             elif gato.tipo == "Gato Caballero":
-                nuevo_gato = convertir_gato(gato, "Gato Paladin")
+                nuevo_gato = Paladin(convertir_gato(gato))
                 return nuevo_gato
             
         elif self.nombre == "Armadura":
             if gato.tipo == "Gato Mago":
-                nuevo_gato = convertir_gato(gato, "Gato Caballero Arcano")
+                nuevo_gato = CaballeroArcano(convertir_gato(gato))
                 return nuevo_gato            
             elif gato.tipo == "Gato Guerrero":
-                nuevo_gato = convertir_gato(gato, "Gato Paladin")
-                return nuevo_gato
+                nuevo_gato = Guerrero(convertir_gato(gato))
+                return nuevo_gatoS
 
 
 

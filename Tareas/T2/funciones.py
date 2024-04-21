@@ -47,8 +47,7 @@ def revisar_parametros(vida_maxima, poder, defensa, agilidad, resistencia):
     else:
         return False
 
-
-def convertir_gato(gato, clase):
+def convertir_gato(gato):
     nombre = gato.nombre
     vida_maxima = gato.vida_maxima
     vida = gato._vida
@@ -56,12 +55,7 @@ def convertir_gato(gato, clase):
     defensa = gato.defensa
     agilidad = gato.agilidad
     resistencia = gato.resistencia
-    clase_real = clase[5:].split(" ")
-    clase_oficial = ""
-    for palabra in clase_real:
-        clase_oficial = clase_oficial + palabra
-        nuevo_gato = f"{clase_real}"(nombre, vida_maxima, vida, poder, defensa, agilidad, resistencia)
-    return nuevo_gato
+    return [nombre, vida_maxima, vida, poder, defensa, agilidad, resistencia]
 
 def menu_de_inicio(plata, ronda):
     #esto imprime mi menú de inicio (lo hice para que fuera más ordenado el main.py)
@@ -135,6 +129,18 @@ def lista_gatos(): #esta funcion me agrupa los gatos según el tipo en una lista
             elif gato[1] == "GUE":
                 guerreros.append(Guerrero(variables))
     return (magos, caballeros, guerreros)
+
+def seleccion_gato(lista):
+    print('{:^40}'.format('*** Selecciona un gato***'))
+    print("")
+    for i in range(len(lista)):
+        gato = lista[i]
+        print('{:<40}'.format(f'      #{i+1} : {gato.tipo}, llamado {gato.nombre}'))
+    
+    print('{:^40}'.format('Elige tu opción;'))
+
+
+
 
 
 
