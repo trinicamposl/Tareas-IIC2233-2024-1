@@ -82,7 +82,7 @@ Por otro lado, los módulos que fueron creados fueron los siguientes:
 
 4. ```juego```: Contiene la una función que se concentra en el inicio del juego y deriva al módulo ```momento compras``` en el caso de que el jugador quiera comprar cosas.
 
-5. ```parametros```: contiene todos los parámetros necesarios para evitar Hard Coding
+5. ```parametros```: contiene todos los parámetros necesarios para evitar _Hard Coding_
 
 ## Supuestos y consideraciones adicionales :thinking:
 Los supuestos que realicé durante la tarea son los siguientes:
