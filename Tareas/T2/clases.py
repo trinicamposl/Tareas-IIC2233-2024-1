@@ -227,8 +227,10 @@ class Items():
                 nuevo_gato = Guerrero(*convertir_gato(gato))
                 return nuevo_gato
 
-
 def convertir_gato(gato):
+    """
+    Esta funcion me da una lista con datos para poder hacer la clase nueva de manera más eficiente
+    """
     nombre = gato.nombre
     vida_maxima = gato.vida_maxima
     poder = gato.poder

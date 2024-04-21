@@ -1,4 +1,5 @@
 from funciones import menu_de_tienda, revisar_unidades, lista_gatos, seleccion_gato, menu_de_inicio
+from funciones import indice
 from parametros import precio_cab, precio_mag, precio_gue, precio_armadura
 from parametros import precio_cura, precio_lanza, precio_pergamino, curar_vida
 from sys import exit
@@ -100,8 +101,11 @@ def compra(ejercito, ronda):
                                 compra = opciones[int(decision)-1]
                                 for elemento in ejercito.combatientes:
                                     if elemento.nombre == compra.nombre:
-                                        elemento = elemento.evolucionar("Armadura")
-                                        tipo_nuevo = elemento.tipo
+                                        cual = indice(elemento, ejercito.combatientes)
+                                        ejercito.combatientes.pop(cual)
+                                        nuevo = elemento.evolucionar("Armadura")
+                                        ejercito.combatientes.append(nuevo)
+                                        tipo_nuevo = nuevo.tipo
                                 print(f"Has evolucionado tu {compra.tipo} a {tipo_nuevo}")
                                 ejercito.oro -= precio_armadura
                                 print("*"*20)
@@ -216,3 +220,5 @@ def compra(ejercito, ronda):
                 eleccion = input()
     
     menu_de_inicio(ejercito.oro, ronda)        
+
+#ARREGLAR EL TEMA DE LA EVOLUCIÖN!!!!!!

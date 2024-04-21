@@ -71,7 +71,7 @@ La lista de librerías externas que utilicé fue la siguiente:
 2. ```os```: para el control de los parámetros por consola y para terminar el juego (```exit()``` y ```args```)
 3. ```random```: para casos aleatorios y el uso de probabilidades (principalmente ```random.randint()```)
 
-### Librerías propias
+### Librerías propias :pencil2:
 Por otro lado, los módulos que fueron creados fueron los siguientes:
 
 1. ```clases.py```: Contiene todas las clases creadas, incluyendo herencia, polimorfismo (creo), properties y clases abstractas. Contiene clases como  ```Ejercito```, ```Items```, ```Guerrero```, entre otras
@@ -87,26 +87,10 @@ Los supuestos que realicé durante la tarea son los siguientes:
 2. <Descripción/consideración 2 y justificación del por qué es válido/a>
 3. ...
 
-PD: Mi computador murió como por 6 días del periodo de la tarea asi que porfa ten piedadddd :sad:
+PD: Mi computador murió como por 6 días del periodo de la tarea asi que porfa ten piedadddd :pensive:
 
 
 -------
-
-
-
-**EXTRA:** si van a explicar qué hace específicamente un método, no lo coloquen en el README mismo. Pueden hacerlo directamente comentando el método en su archivo. Por ejemplo:
-
-```python
-class Corrector:
-
-    def __init__(self):
-          pass
-
-    # Este método coloca un 6 en las tareas que recibe
-    def corregir(self, tarea):
-        tarea.nota  = 6
-        return tarea
-```
 
 Si quieren ser más formales, pueden usar alguna convención de documentación. Google tiene la suya, Python tiene otra y hay muchas más. La de Python es la [PEP287, conocida como reST](https://www.python.org/dev/peps/pep-0287/). Lo más básico es documentar así:
 

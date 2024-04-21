@@ -87,7 +87,7 @@ def menu_de_inicio(plata, ronda):
 def menu_de_tienda(plata):
     from parametros import precio_cab, precio_mag, precio_gue, precio_armadura ##revisar!!!!
     from parametros import precio_cura, precio_lanza, precio_pergamino
-    #esto imprime mi menú de inicio (lo hice para que fuera más ordenado el main.py)
+    #esto imprime mi menú de tienda (lo hice para que fuera más ordenado el main.py)
     print('{:^48}'.format('Tienda'))
     print("")
     print('{:^48}'.format(f"Oro disponible: {plata}"))
@@ -105,6 +105,11 @@ def menu_de_tienda(plata):
     print('{:^40}'.format('Elige tu opción; 1, 2, 3, 4, 5, 6, 7 ó 8'))
 
 def revisar_unidades():
+    """
+    Esta función revisa si los gatos que puedo comprar están permitidos y tienens 
+    sus parámetros correctos
+
+    """
     camino = os.path.join("data", "unidades.txt")
     with open((camino), "rt") as texto:
         lineas = texto.readlines()
@@ -149,6 +154,11 @@ def seleccion_gato(lista):
         print('{:<40}'.format(f'      #{i+1} : {gato.tipo}, llamado {gato.nombre}'))
     
     print('{:^40}'.format('Elige tu opción;'))
+
+def indice(gato, lista):
+    for i in range (len(lista)):
+        if lista[i].nombre == gato.nombre:
+            return i
 
 
 
