@@ -16,32 +16,32 @@ def comienzo_juego():
             print("Por favor indica un NÚMERO del 1 al 4")
             menu_de_inicio(ejercito.oro, ronda)
             decision = input()
-            print("*"*20)
+            print("*"*40)
 
         else:
             if decision in ["1","2","3"]:
                 if decision == "1":
-                    print("*"*20)
                     menu_de_tienda(ejercito.oro)
                     compra(ejercito, ronda)
                     decision = input()
-                    print("*"*20)
+                    print("*"*40)
 
                 elif decision == "2":
-                    print("*"*20)
+                    print("*"*40)
                     ejercito.__str__()
-                    print("*"*20)
+                    print("*"*40)
                     menu_de_inicio(ejercito.oro, ronda)
                     decision = input()
-                    print("*"*20)
+                    print("*"*40)
 
                 elif decision == "3":
                     combatir()
 
             else:
+                print("*"*40)
                 print("Por favor elige un número entero ENTRE LAS OPCIONES")
                 decision = input()
-                print("*"*20)
+                print("*"*40)
     
     print("Hasta el próximo combate :D")
     exit()

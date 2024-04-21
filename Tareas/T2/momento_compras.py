@@ -9,14 +9,15 @@ def compra(ejercito, ronda):
     eleccion = input()
     while eleccion != "8":
         if not eleccion.isnumeric():
+            print("*"*40)
             print("Por favor indica un NÚMERO del 1 al 8")
+            print("*"*40)
             eleccion = input()
 
         else:
             if eleccion in ["1","2","3","4","5","6","7"]:
                 #lista de gatos tiene (magos, caballeros, guerreros)
                 if eleccion == "1": #mago
-                    print("*"*20)
                     if revisar_unidades()[0]:
                         if ejercito.oro >= precio_mag:
                             ejercito.oro -= precio_mag
@@ -24,12 +25,11 @@ def compra(ejercito, ronda):
                             gato = lista_gatos()[0][aleatorio]
                             ejercito.combatientes.append(gato)
                             print(f"Has adquirido a {gato.nombre}, un {gato.tipo}")
-                            print("*"*20)
                             menu_de_tienda(ejercito.oro)
                             eleccion = input()
                         else:
+                            print("*"*40)
                             print("No tienes oro suficiente para comprar un Gato Mago D:")
-                            print("*"*20)
                             menu_de_tienda(ejercito.oro)
                             eleccion = input()
                     else:
@@ -37,7 +37,6 @@ def compra(ejercito, ronda):
                         exit()
 
                 elif eleccion == "2": #guerrero
-                    print("*"*20)
                     if revisar_unidades()[0]:
                         if ejercito.oro >= precio_gue:
                             ejercito.oro -= precio_gue
@@ -45,13 +44,12 @@ def compra(ejercito, ronda):
                             gato = lista_gatos()[2][aleatorio]
                             ejercito.combatientes.append(gato)
                             print(f"Has adquirido a {gato.nombre}, un {gato.tipo}")
-                            print("*"*20)
                             menu_de_tienda(ejercito.oro)
                             eleccion = input()
 
                         else:
+                            print("*"*40)
                             print("No tienes oro suficiente para comprar un Gato Guerrero D:")
-                            print("*"*20)
                             menu_de_tienda(ejercito.oro)
                             eleccion = input()
                     else:
@@ -59,7 +57,6 @@ def compra(ejercito, ronda):
                         exit()
                 
                 elif eleccion == "3": #caballero
-                    print("*"*20)
                     if revisar_unidades()[0]:
                         if ejercito.oro >= precio_cab:
                             ejercito.oro -= precio_cab
@@ -67,13 +64,12 @@ def compra(ejercito, ronda):
                             gato = lista_gatos()[1][aleatorio]
                             ejercito.combatientes.append(gato)
                             print(f"Has adquirido a {gato.nombre}, un {gato.tipo}")
-                            print("*"*20)
                             menu_de_tienda(ejercito.oro)
                             eleccion = input()
 
                         else:
+                            print("*"*40)
                             print("No tienes oro suficiente para comprar un Gato Mago D:")
-                            print("*"*20)
                             menu_de_tienda(ejercito.oro)
                             eleccion = input()
                     else:
@@ -92,11 +88,12 @@ def compra(ejercito, ronda):
                             if not decision.isnumeric():
                                 while not decision.isnumeric():
                                     print("Elige un NÚMERO!")
+                                    print("*"*40)
                                     decision = input()
                             else:
                                 while int(decision) in list(range(1, len(opciones) + 1)) == False:
                                     print("Elige un número DENTRO DE LAS OPCIONES")
-                                    print("*"*20)
+                                    print("*"*40)
                                     decision = input()
                                 compra = opciones[int(decision)-1]
                                 for elemento in ejercito.combatientes:
@@ -106,13 +103,15 @@ def compra(ejercito, ronda):
                                         nuevo = elemento.evolucionar("Armadura")
                                         ejercito.combatientes.append(nuevo)
                                         tipo_nuevo = nuevo.tipo
+                                        break
+                                print("*"*40)
                                 print(f"Has evolucionado tu {compra.tipo} a {tipo_nuevo}")
                                 ejercito.oro -= precio_armadura
-                                print("*"*20)
                                 menu_de_tienda(ejercito.oro)
                                 eleccion = input()
                                
                         else:
+                            print("*"*40)
                             print("No tienes suficiente oro para comprar una armadura D:")
                             menu_de_tienda(ejercito.oro)
                             eleccion = input()
@@ -134,30 +133,37 @@ def compra(ejercito, ronda):
                             if not decision.isnumeric():
                                 while not decision.isnumeric():
                                     print("Elige un NÚMERO!")
+                                    print("*"*40)
                                     decision = input()
                             else:
                                 while int(decision) not in list(range(1, len(opciones) + 1)):
                                     print("Elige un número DENTRO DE LAS OPCIONES!")
-                                    print("*"*20)
+                                    print("*"*40)
                                     decision = input()
                                 compra = opciones[int(decision)-1]
                                 for elemento in ejercito.combatientes:
                                     if elemento.nombre == compra.nombre:
-                                        elemento = elemento.evolucionar("Pergamino")
-                                        tipo_nuevo = elemento.tipo
+                                        cual = indice(elemento, ejercito.combatientes)
+                                        ejercito.combatientes.pop(cual)
+                                        nuevo = elemento.evolucionar("Pergamino")
+                                        ejercito.combatientes.append(nuevo)
+                                        tipo_nuevo = nuevo.tipo
+                                        break
+                                print("*"*40)
                                 print(f"Has evolucionado tu {compra.tipo} a {tipo_nuevo}")
                                 ejercito.oro -= precio_pergamino
-                                print("*"*20)
                                 menu_de_tienda(ejercito.oro)
                                 eleccion = input()
                                
                         else:
+                            print("*"*40)
                             print("No tienes suficiente oro para comprar un pergamino D:")
                             menu_de_tienda(ejercito.oro)
                             eleccion = input()
                         
                     else:
                         print("No puedes utilizar este item con tu ejército actual")
+                        print("*"*40)
                         menu_de_tienda(ejercito.oro)
                         eleccion = input()
 
@@ -173,24 +179,30 @@ def compra(ejercito, ronda):
                             if not decision.isnumeric():
                                 while not decision.isnumeric():
                                     print("Elige un número!")
+                                    print("*"*40)
                                     decision = input()
                             else:
                                 while int(decision) not in list(range(1, len(opciones) + 1)):
                                     print("Elige un número DENTRO DE LAS OPCIONES!")
-                                    print("*"*20)
+                                    print("*"*40)
                                     decision = input()
                                 compra = opciones[int(decision)-1]
                                 for elemento in ejercito.combatientes:
                                     if elemento.nombre == compra.nombre:
-                                        elemento = elemento.evolucionar("Lanza")
-                                        tipo_nuevo = elemento.tipo
+                                        cual = indice(elemento, ejercito.combatientes)
+                                        ejercito.combatientes.pop(cual)
+                                        nuevo = elemento.evolucionar("Lanza")
+                                        ejercito.combatientes.append(nuevo)
+                                        tipo_nuevo = nuevo.tipo
+                                        break
+                                print("*"*40)
                                 print(f"Has evolucionado tu {compra.tipo} a {tipo_nuevo}")
                                 ejercito.oro -= precio_lanza
-                                print("*"*20)
                                 menu_de_tienda(ejercito.oro)
                                 eleccion = input()
                                
                         else:
+                            print("*"*40)
                             print("No tienes suficiente oro para comprar una lanza D:")
                             menu_de_tienda(ejercito.oro)
                             eleccion = input()
@@ -203,20 +215,21 @@ def compra(ejercito, ronda):
                 elif eleccion == "7": #curar_ejercito
                     if ejercito.oro >= precio_cura:
                         for gato in ejercito.combatientes:
-                            gato.curarse = curar_vida #damn 
+                            gato.curarse = curar_vida #damn
+                        print("*"*40) 
                         print("Se ha curado al ejército con éxito! :D")
                         ejercito.oro -= precio_cura
-                        print("*"*20)
                         menu_de_tienda(ejercito.oro)
                         eleccion = input()
                     else:
+                        print("*"*40)
                         print("No tienes oro suficiente para curar tu ejército D:")
-                        print("*"*20)
                         menu_de_tienda(ejercito.oro)
                         eleccion = input()                        
 
             else:
                 print("Por favor elige un NÚMERO entre 1 y 8")
+                print("*"*40)
                 eleccion = input()
     
     menu_de_inicio(ejercito.oro, ronda)        
