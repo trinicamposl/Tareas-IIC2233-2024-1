@@ -30,17 +30,22 @@ SINO QUE SE DEBERÁ EXPLICAR QUÉ SE REALIZO DETALLADAMENTE EN CADA ITEM.
 ##### ❌✅🟠 Definición de clases, herencia y *properties*
 
 #### Preparación del programa: 10 pts (8%)
-##### ❌✅🟠 Inicio de la partida
+##### ✅ Inicio de la partida:
+Según lo que probé, está a prueba de errores. Eso sí tuve unos problemas con los path asi que no sé si funcionan de manera correcta :/
 
 #### Entidades: 56 pts (47%)
-##### ❌✅🟠 Ejército
-##### ❌✅🟠 Combatientes
-##### ❌✅🟠 Ítems
+##### ✅ Ejército: 
+
+##### 🟠 Combatientes:
+Desde lo que probé, todo salía bien
+##### 🟠 Ítems:
+No sé si cumple con exactamente con lo que me pedían, pero es una clase hecha y derecha.
 
 #### Flujo del programa: 30 pts (25%)
-##### ❌✅🟠 Menú de Inicio
-##### ❌✅🟠 Menú Tienda
-##### ❌✅🟠 Selección de gato
+##### ✅ Menú de Inicio:
+Creo que dentro de todo igual me quedó decente, y no logré romper el código asi que creo que es a prueba de fallas del usario.
+##### ✅ Menú Tienda
+##### ✅ Selección de gato
 ##### ❌✅🟠 Fin del Juego
 ##### ❌✅🟠 Robustez
 
@@ -50,26 +55,30 @@ SINO QUE SE DEBERÁ EXPLICAR QUÉ SE REALIZO DETALLADAMENTE EN CADA ITEM.
 
 
 ## Ejecución :computer:
-El módulo principal de la tarea a ejecutar es  ```archivo.py```. Además se debe crear los siguientes archivos y directorios adicionales:
-1. ```archivo.ext``` en ```ubicación```
-2. ```directorio``` en ```ubicación```
-3. ...
+El módulo principal de la tarea a ejecutar es  ```main.py```. Además se debe crear los siguientes archivos y directorios adicionales:
+1. ```clases.py``` en ```T2```
+2. ```funciones.py``` en ```T2``` 
+3. ```momento_compras.py``` en ```T2```
+4. ```juego.py``` en ```T2```
+5. ```parametros.py``` en ```T2```
 
 
 ## Librerías :books:
 ### Librerías externas utilizadas
 La lista de librerías externas que utilicé fue la siguiente:
 
-1. ```librería_1```: ```función() / módulo```
-2. ```librería_2```: ```función() / módulo``` (debe instalarse)
-3. ...
+1. ```abc```: básicamente para herencia y métodos abstractos (```ABC``` y ```abstractmethod```)
+2. ```os```: para el control de los parámetros por consola y para terminar el juego (```exit()``` y ```args```)
+3. ```random```: para casos aleatorios y el uso de probabilidades (principalmente ```random.randint()```)
 
 ### Librerías propias
 Por otro lado, los módulos que fueron creados fueron los siguientes:
 
-1. ```librería_1```: Contiene a ```ClaseA```, ```ClaseB```, (ser general, tampoco es necesario especificar cada una)...
-2. ```librería_2```: Hecha para <insertar descripción **breve** de lo que hace o qué contiene>
-3. ...
+1. ```clases.py```: Contiene todas las clases creadas, incluyendo herencia, polimorfismo (creo), properties y clases abstractas. Contiene clases como  ```Ejercito```, ```Items```, ```Guerrero```, entre otras
+
+2. ```funciones```: Hecha para facilitar y limpiar un poco los códigos, tiene funciones que se tenía que utilizar mucho y ocupaban muchas líneas, como ```revisar_parametros```, ```revisar_unidades```, etc. (Las funciones suelen ser autoexplicativas con el nombre, sino tienen una pequeña descripción)
+
+3. ```funciones```
 
 ## Supuestos y consideraciones adicionales :thinking:
 Los supuestos que realicé durante la tarea son los siguientes:
@@ -78,7 +87,7 @@ Los supuestos que realicé durante la tarea son los siguientes:
 2. <Descripción/consideración 2 y justificación del por qué es válido/a>
 3. ...
 
-PD: <una última consideración (de ser necesaria) o comentario hecho anteriormente que se quiera **recalcar**>
+PD: Mi computador murió como por 6 días del periodo de la tarea asi que porfa ten piedadddd :sad:
 
 
 -------

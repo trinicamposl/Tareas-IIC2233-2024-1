@@ -2,6 +2,7 @@ from funciones import menu_de_inicio, menu_de_tienda
 from momento_compras import compra 
 from sys import exit
 from clases import Ejercito
+
 def combatir():
     pass
 
