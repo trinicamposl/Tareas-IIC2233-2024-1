@@ -1,4 +1,3 @@
-import random
 oro_inicial = 450
 precio_gue = 100
 precio_mag = 100

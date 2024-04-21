@@ -23,7 +23,7 @@ def compra(ejercito, ronda):
                             ejercito.oro -= precio_mag
                             aleatorio = random.randint(0, len(lista_gatos()[0]) - 1)
                             gato = lista_gatos()[0][aleatorio]
-                            ejercito.combatientes.append(gato)
+                            ejercito.agregar_ejercito(gato)
                             print(f"Has adquirido a {gato.nombre}, un {gato.tipo}")
                             menu_de_tienda(ejercito.oro)
                             eleccion = input()
@@ -42,7 +42,7 @@ def compra(ejercito, ronda):
                             ejercito.oro -= precio_gue
                             aleatorio = random.randint(0, len(lista_gatos()[2]) - 1) 
                             gato = lista_gatos()[2][aleatorio]
-                            ejercito.combatientes.append(gato)
+                            ejercito.agregar_ejercito(gato)
                             print(f"Has adquirido a {gato.nombre}, un {gato.tipo}")
                             menu_de_tienda(ejercito.oro)
                             eleccion = input()
@@ -62,7 +62,7 @@ def compra(ejercito, ronda):
                             ejercito.oro -= precio_cab
                             aleatorio = random.randint(0, len(lista_gatos()[1]) - 1)
                             gato = lista_gatos()[1][aleatorio]
-                            ejercito.combatientes.append(gato)
+                            ejercito.agregar_ejercito(gato)
                             print(f"Has adquirido a {gato.nombre}, un {gato.tipo}")
                             menu_de_tienda(ejercito.oro)
                             eleccion = input()
@@ -101,7 +101,7 @@ def compra(ejercito, ronda):
                                         cual = indice(elemento, ejercito.combatientes)
                                         ejercito.combatientes.pop(cual)
                                         nuevo = elemento.evolucionar("Armadura")
-                                        ejercito.combatientes.append(nuevo)
+                                        ejercito.agregar_ejercito(nuevo)
                                         tipo_nuevo = nuevo.tipo
                                         break
                                 print("*"*40)
@@ -146,7 +146,7 @@ def compra(ejercito, ronda):
                                         cual = indice(elemento, ejercito.combatientes)
                                         ejercito.combatientes.pop(cual)
                                         nuevo = elemento.evolucionar("Pergamino")
-                                        ejercito.combatientes.append(nuevo)
+                                        ejercito.agregar_ejercito(nuevo)
                                         tipo_nuevo = nuevo.tipo
                                         break
                                 print("*"*40)
@@ -192,7 +192,7 @@ def compra(ejercito, ronda):
                                         cual = indice(elemento, ejercito.combatientes)
                                         ejercito.combatientes.pop(cual)
                                         nuevo = elemento.evolucionar("Lanza")
-                                        ejercito.combatientes.append(nuevo)
+                                        ejercito.agregar_ejercito(nuevo)
                                         tipo_nuevo = nuevo.tipo
                                         break
                                 print("*"*40)
@@ -234,4 +234,3 @@ def compra(ejercito, ronda):
     
     menu_de_inicio(ejercito.oro, ronda)        
 
-#ARREGLAR EL TEMA DE LA EVOLUCIÖN!!!!!!
