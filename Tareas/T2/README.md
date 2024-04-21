@@ -13,7 +13,10 @@ Un buen ```README.md``` no tiene por que ser muy extenso tampoco, hay que ser **
 
 <Descripción de lo que hace y que **_no_** hace la tarea que entregaron junto
 con detalles de último minuto y consideraciones como por ejemplo cambiar algo
-en cierta línea del código o comentar una función>
+en cierta línea del código o comentar una función> 
+Mi tarea logra modelar de manera linda los menús, comprar gatos y evolucionarlos. En cuanto al combate en sí, 
+
+Cabe destacar que me costó mucho entender la tarea y me tinca que hay cosas que están mal diseñadas en el código porque no entendí bien cómo se hacían como el tema del ataque y el combate en general, y además no sabía como revisar si estaban bien definidas las clases y los métodos asi que puede que por ahí hayan cosas malas.
 
 ### Cosas implementadas y no implementadas :white_check_mark: :x:
 
@@ -117,7 +120,5 @@ Para realizar mi tarea saqué código de:
 1. \<link de código>: este hace \<lo que hace> y está implementado en el archivo <nombre.py> en las líneas <número de líneas> y hace <explicación breve de que hace>
 
 ## Descuentos
-1. Voy a asumir que me van a descontar por no importar en el archivo funciones, los parametros al inicio. La verdad es que lo intenté hacer así pero dentro de la función no me estaba tomando los valores como cosas definidas, asi que lo dejé dentro de la función. (igual espero que mi README.md me ayude a desdescontar este problema :crossed_fingers:)
-
 
 La guía de descuentos se encuentra [link](https://github.com/IIC2233/Syllabus/blob/main/Tareas/Bases%20Generales%20de%20Tareas%20-%20IIC2233.pdf).

@@ -7,6 +7,7 @@ class Ejercito():
     def __init__(self):
         self.combatientes = []
         self.oro = oro_inicial
+        self.ronda = 1
     
     def combatir(self, enemigo):
         while len(enemigo.combatientes) != 0 or len(self.combatientes) != 0:
@@ -115,8 +116,9 @@ class Caballero(Combatientes):
     
     def atacar(enemigo, self):
         if random.randint(0,100)<=prob_cab:
+            poder_antiguo = enemigo.poder
             enemigo.poder = enemigo.poder(1-red_cab/100)
-            enemigo._vida =  round(self.ataque*(atq_cab/100) - enemigo.defensa)    
+            enemigo._vida =  round(self.ataque*(atq_cab/100) - enemigo.defensa)
         else:
             self.agilidad -= self.agilidad*(1-cansancio/100)
             enemigo._vida -= round (self.ataque - enemigo.defensa)

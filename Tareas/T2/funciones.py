@@ -1,5 +1,5 @@
 import os
-from clases import Mago, Caballero, Guerrero
+from clases import Mago, Caballero, Guerrero, MagoDeBatalla, CaballeroArcano, Paladin
 
 def archivo_correcto(archivo):
     camino = os.path.join("data", archivo)
@@ -84,22 +84,20 @@ def menu_de_inicio(plata, ronda):
     print('{:^40}'.format('Elige tu opción; 1, 2, 3 ó 4'))
     print("*"*40)
 
-def menu_de_tienda(plata):
-    from parametros import precio_cab, precio_mag, precio_gue, precio_armadura ##revisar!!!!
-    from parametros import precio_cura, precio_lanza, precio_pergamino
+def menu_de_tienda(plata, mag, gue, cab, armadura, pergamino, lanza, cura):
     #esto imprime mi menú de tienda (lo hice para que fuera más ordenado el main.py)
     print("*"*40)
     print('{:^40}'.format('Tienda'))
     print("")
     print('{:^40}'.format(f"Oro disponible: {plata}"))
     print("                                Precio")  
-    print('{:<40}'.format(f'      #1 : Gato Mago              {precio_mag}'))
-    print('{:<40}'.format(f'      #2 : Gato Guerrero          {precio_gue}'))
-    print('{:<40}'.format(f'      #3 : Gato Caballero         {precio_cab}'))
-    print('{:<40}'.format(f'      #4 : Ítem Armadura          {precio_armadura}'))
-    print('{:<40}'.format(f'      #5 : Ítem Pergamino         {precio_pergamino}'))
-    print('{:<40}'.format(f'      #6 : Ítem Lanza             {precio_lanza}'))
-    print('{:<40}'.format(f'      #7 : Curar Ejército         {precio_cura}'))
+    print('{:<40}'.format(f'      #1 : Gato Mago              {mag}'))
+    print('{:<40}'.format(f'      #2 : Gato Guerrero          {gue}'))
+    print('{:<40}'.format(f'      #3 : Gato Caballero         {cab}'))
+    print('{:<40}'.format(f'      #4 : Ítem Armadura          {armadura}'))
+    print('{:<40}'.format(f'      #5 : Ítem Pergamino         {pergamino}'))
+    print('{:<40}'.format(f'      #6 : Ítem Lanza             {lanza}'))
+    print('{:<40}'.format(f'      #7 : Curar Ejército         {cura}'))
     print("")
     print('{:<40}'.format('      #8 : Volver al Menú de Inicio'))
     print("")
@@ -129,8 +127,12 @@ def revisar_unidades():
                     return (False, texto)
         return (True, 0)
 
-def lista_gatos(): #esta funcion me agrupa los gatos según el tipo en una lista de listas
-    #me devuelve la lista en orden (magos, caballeros, guerreros) asumiendo que el archivo esta bien
+def lista_gatos():
+    """" 
+    esta funcion me agrupa los gatos según el tipo en una lista de listas
+    me devuelve la lista en orden (magos, caballeros, guerreros) asumiendo que el archivo esta bien
+
+    """
     camino = os.path.join("data", "unidades.txt")
     guerreros = []
     caballeros = []
@@ -149,6 +151,7 @@ def lista_gatos(): #esta funcion me agrupa los gatos según el tipo en una lista
     return (magos, caballeros, guerreros)
 
 def seleccion_gato(lista):
+    print("*"*40)
     print('{:^40}'.format('*** Selecciona un gato***'))
     print("")
     for i in range(len(lista)):
@@ -157,6 +160,31 @@ def seleccion_gato(lista):
     
     print('{:^40}'.format('Elige tu opción;'))
 
+def archivo_a_equipo(dificultad):
+    camino = os.path.join("data", f"{dificultad}.txt")
+    ronda = []
+    rondas = []
+    with open((camino), "rt") as texto:
+        lineas = texto.readlines()
+        for linea in lineas:
+            combatientes = linea.split(";")
+            for elemento in combatientes:
+                gato = elemento.split(",")
+                variables = [gato[0], gato[2], gato[3], gato[4], gato[5], gato[6]]
+                if gato[1] == "MAG":
+                    ronda.append(Mago(*variables))
+                elif gato[1] == "CAB":
+                    ronda.append(Caballero(*variables))
+                elif gato[1] == "GUE":
+                    ronda.append(Guerrero(*variables))
+                elif gato[1] == "CAR":
+                    ronda.append(CaballeroArcano(*variables))
+                elif gato[1] == "MDB":
+                    ronda.append(MagoDeBatalla(*variables))
+                elif gato[1] == "PAL":
+                    ronda.append(Paladin(*variables))
+            rondas.append(ronda)
+    return rondas
 
 
 
