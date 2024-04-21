@@ -1,6 +1,4 @@
 import os
-from parametros import precio_cab, precio_mag, precio_gue, precio_armadura
-from parametros import precio_cura, precio_lanza, precio_pergamino
 from clases import Mago, Caballero, Guerrero
 
 def archivo_correcto(archivo):

@@ -117,4 +117,7 @@ Para realizar mi tarea saqué código de:
 1. \<link de código>: este hace \<lo que hace> y está implementado en el archivo <nombre.py> en las líneas <número de líneas> y hace <explicación breve de que hace>
 
 ## Descuentos
+1. Voy a asumir que me van a descontar por no importar en el archivo funciones, los parametros al inicio. La verdad es que lo intenté hacer así pero dentro de la función no me estaba tomando los valores como cosas definidas, asi que lo dejé dentro de la función. (igual espero que mi README.md me ayude a desdescontar este problema :crossed_fingers:)
+
+
 La guía de descuentos se encuentra [link](https://github.com/IIC2233/Syllabus/blob/main/Tareas/Bases%20Generales%20de%20Tareas%20-%20IIC2233.pdf).
