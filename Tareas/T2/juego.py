@@ -12,7 +12,7 @@ def comienzo_juego():
     decision = input()
     while decision != "4":
         if not decision.isnumeric():
-            print("Por favor indica un número del 1 al 4")
+            print("Por favor indica un NÚMERO del 1 al 4")
             menu_de_inicio(ejercito.oro, ronda)
             decision = input()
             print("*"*20)
@@ -38,12 +38,9 @@ def comienzo_juego():
                     combatir()
 
             else:
-                print("Por favor elige un número entre 1 y 4")
+                print("Por favor elige un número entero ENTRE LAS OPCIONES")
                 decision = input()
                 print("*"*20)
     
     print("Hasta el próximo combate :D")
     exit()
-            
-
-        

@@ -8,7 +8,7 @@ def compra(ejercito, ronda):
     eleccion = input()
     while eleccion != "8":
         if not eleccion.isnumeric():
-            print("Por favor indica un número del 1 al 8")
+            print("Por favor indica un NÚMERO del 1 al 8")
             eleccion = input()
 
         else:
@@ -90,11 +90,11 @@ def compra(ejercito, ronda):
                             decision = input()
                             if not decision.isnumeric():
                                 while not decision.isnumeric():
-                                    print("Elige un número!")
+                                    print("Elige un NÚMERO!")
                                     decision = input()
                             else:
                                 while int(decision) in list(range(1, len(opciones) + 1)) == False:
-                                    print("Elige un número dentro de las opciones")
+                                    print("Elige un número DENTRO DE LAS OPCIONES")
                                     print("*"*20)
                                     decision = input()
                                 compra = opciones[int(decision)-1]
@@ -129,11 +129,11 @@ def compra(ejercito, ronda):
                             decision = input()
                             if not decision.isnumeric():
                                 while not decision.isnumeric():
-                                    print("Elige un número!")
+                                    print("Elige un NÚMERO!")
                                     decision = input()
                             else:
                                 while int(decision) not in list(range(1, len(opciones) + 1)):
-                                    print("Elige un número dentro de las opciones")
+                                    print("Elige un número DENTRO DE LAS OPCIONES!")
                                     print("*"*20)
                                     decision = input()
                                 compra = opciones[int(decision)-1]
@@ -172,7 +172,7 @@ def compra(ejercito, ronda):
                                     decision = input()
                             else:
                                 while int(decision) not in list(range(1, len(opciones) + 1)):
-                                    print("Elige un número dentro de las opciones")
+                                    print("Elige un número DENTRO DE LAS OPCIONES!")
                                     print("*"*20)
                                     decision = input()
                                 compra = opciones[int(decision)-1]
@@ -212,7 +212,7 @@ def compra(ejercito, ronda):
                         eleccion = input()                        
 
             else:
-                print("Por favor elige un número entre 1 y 8")
+                print("Por favor elige un NÚMERO entre 1 y 8")
                 eleccion = input()
     
     menu_de_inicio(ejercito.oro, ronda)        
