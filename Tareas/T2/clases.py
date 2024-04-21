@@ -2,7 +2,6 @@ from parametros import oro_inicial, cansancio, prob_cab, red_cab, atq_cab, prob_
 from parametros import red_mag,atq_mag, prob_pal, aum_pal, prob_mdb, def_mdb, prob_car, aum_car
 from abc import ABC, abstractmethod
 import random
-from funciones import convertir_gato
 
 class Ejercito():
     def __init__(self):
@@ -21,28 +20,26 @@ class Ejercito():
         print("Este es tu ejército actual:")
         if len(self.combatientes) != 0:
             for combatiente in self.combatientes:
-                self.presentarse(combatiente) # revisar!!
-            print(f"Te quedan {len(self.combatientes)}. ¡Éxito en la batalla!")
+                combatiente.presentarse() # revisar!!
+            print(f"Te quedan {len(self.combatientes)} combatientes. ¡Éxito en la batalla!")
         else:
             print("No tienes ningún combatiente. Te recomiendo comprar alguno para la batalla!")
     
     def agregar_ejercito (self, gato):
         self.combatientes.append(gato)
-        
-        
-            
+                 
 class Combatientes(ABC):
-    def __init__(self,nombre, vida_maxima, vida, poder, defensa, agilidad, resistencia):
+    def __init__(self,nombre, vida_maxima, poder, defensa, agilidad, resistencia):
         self.nombre = nombre
-        self.vida_maxima = vida_maxima
-        self._vida = vida #revisar
-        self.poder = poder
-        self.defensa = defensa
-        self.agilidad = agilidad
-        self.defensa = defensa
-        self.resistencia = resistencia
+        self.vida_maxima = int(vida_maxima)
+        self._vida = int(vida_maxima) #revisar
+        self.poder = int(poder)
+        self.defensa = int(defensa)
+        self.agilidad = int(agilidad)
+        self.defensa = int(defensa)
+        self.resistencia = int(resistencia)
         denominador = self.poder + self.agilidad + self.resistencia
-        self.ataque = round((denominador*2*self.vida)/self.vida_maxima)
+        self.ataque = round((denominador*2*self._vida)/self.vida_maxima)
     
     @property
     def curarse(self):
@@ -65,35 +62,33 @@ class Combatientes(ABC):
         pass
 
 class Guerrero(Combatientes):
-    def __init__(self, tipo, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tipo = "Gato Guerrero"  
     
     def __str__(self):
-        print(f"¡Hola! Soy {self.nombre}, un {self.tipo} con
-                   {self.vida}/ {self.vida_maxima} de vida, {self.ataque} de
-                     ataque y {self.defensa} de defensa")
+        f1 = f"Hola! Soy {self.nombre}, un {self.tipo} con {self._vida}/{self.vida_maxima} de vida"
+        print(f"{f1}, {self.ataque} de ataque y {self.defensa} de defensa")
     
     def presentarse(self):
         self.__str__()
     
     def atacar(enemigo, self):
         self.agilidad -= self.agilidad*(1-cansancio/100)
-        enemigo.vida -= round (self.ataque - enemigo.defensa)
+        enemigo._vida -= round (self.ataque - enemigo.defensa)
 
 
-    def evolucionar(self):
-        pass
+    def evolucionar(self, pieza):
+        return Items(pieza).evolucionar_gato(self)
 
 class Caballero(Combatientes):
-    def __init__(self, tipo, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tipo = "Gato Caballero"  
     
     def __str__(self):
-        print(f"¡Hola! Soy {self.nombre}, un {self.tipo} con
-                   {self.vida}/ {self.vida_maxima} de vida, {self.ataque} de
-                     ataque y {self.defensa} de defensa")
+        f1 = f"Hola! Soy {self.nombre}, un {self.tipo} con {self._vida}/{self.vida_maxima} de vida"
+        print(f"{f1}, {self.ataque} de ataque y {self.defensa} de defensa")
     
     def presentarse(self):
         self.__str__()
@@ -101,24 +96,23 @@ class Caballero(Combatientes):
     def atacar(enemigo, self):
         if random.randint(0,100)<prob_cab:
             enemigo.poder = enemigo.poder(1-red_cab/100)
-            enemigo.vida =  round(self.ataque*(atq_cab/100) - enemigo.defensa)    
+            enemigo._vida =  round(self.ataque*(atq_cab/100) - enemigo.defensa)    
         else:
             self.agilidad -= self.agilidad*(1-cansancio/100)
-            enemigo.vida -= round (self.ataque - enemigo.defensa)
+            enemigo._vida -= round (self.ataque - enemigo.defensa)
 
-    def evolucionar(self):
-        pass
+    def evolucionar(self, pieza):
+        return Items(pieza).evolucionar_gato(self)
     
 class Mago(Combatientes):
-    def __init__(self, tipo, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tipo = "Gato Mago"  
     
     def __str__(self):
-        print(f"¡Hola! Soy {self.nombre}, un {self.tipo} con
-                   {self.vida}/ {self.vida_maxima} de vida, {self.ataque} de
-                     ataque y {self.defensa} de defensa")
-    
+        f1 = f"Hola! Soy {self.nombre}, un {self.tipo} con {self._vida}/{self.vida_maxima} de vida"
+        print(f"{f1}, {self.ataque} de ataque y {self.defensa} de defensa")
+
     def presentarse(self):
         self.__str__()
     
@@ -127,13 +121,13 @@ class Mago(Combatientes):
             enemigo.defensa = round(self.ataque*(atq_mag/100) - enemigo.defensa*(100 - red_mag)/100)    
         else:
             self.agilidad -= self.agilidad*(1-cansancio/100)
-            enemigo.vida -= round (self.ataque - enemigo.defensa)
+            enemigo._vida -= round (self.ataque - enemigo.defensa)
         self.resistencia = self.resistencia*(1-cansancio/100)
         self.agilidad = self.agilidad*(1-cansancio/100)
 
 
-    def evolucionar(self):
-        pass
+    def evolucionar(self, pieza):
+        return Items(pieza).evolucionar_gato(self)
 
 class Paladin(Guerrero, Caballero):
     def __init__(self, *args, **kwargs): 
@@ -141,9 +135,8 @@ class Paladin(Guerrero, Caballero):
         self.tipo = "Gato Paladin"  
     
     def __str__(self):
-        print(f"¡Hola! Soy {self.nombre}, un {self.tipo} con
-                   {self.vida}/ {self.vida_maxima} de vida, {self.ataque} de
-                     ataque y {self.defensa} de defensa")
+        f1 = f"Hola! Soy {self.nombre}, un {self.tipo} con {self._vida}/{self.vida_maxima} de vida"
+        print(f"{f1}, {self.ataque} de ataque y {self.defensa} de defensa")
     
     def presentarse(self):
         self.__str__()
@@ -156,7 +149,7 @@ class Paladin(Guerrero, Caballero):
         self.resistencia = self.resistencia*(1+aum_pal/100)
 
     def evolucionar(self):
-        pass
+        print("Yo no puedo evolucionar :(")
 
 class MagoDeBatalla(Guerrero, Mago):
     def __init__(self, *args, **kwargs): 
@@ -164,9 +157,8 @@ class MagoDeBatalla(Guerrero, Mago):
         self.tipo = "Gato Mago De Batalla"  
     
     def __str__(self):
-        print(f"¡Hola! Soy {self.nombre}, un {self.tipo} con
-                   {self.vida}/ {self.vida_maxima} de vida, {self.ataque} de
-                     ataque y {self.defensa} de defensa")
+        f1 = f"Hola! Soy {self.nombre}, un {self.tipo} con {self._vida}/{self.vida_maxima} de vida"
+        print(f"{f1}, {self.ataque} de ataque y {self.defensa} de defensa")
     
     def presentarse(self):
         self.__str__()
@@ -180,7 +172,7 @@ class MagoDeBatalla(Guerrero, Mago):
         self.defensa = self.defensa*(1+def_mdb/100)
 
     def evolucionar(self):
-        pass
+        print("Yo no puedo evolucionar :(")
 
 class CaballeroArcano(Caballero, Mago):
     def __init__(self, *args, **kwargs): 
@@ -188,10 +180,9 @@ class CaballeroArcano(Caballero, Mago):
         self.tipo = "Gato Caballero Arcano"  
     
     def __str__(self):
-        print(f"¡Hola! Soy {self.nombre}, un {self.tipo} con
-                   {self.vida}/ {self.vida_maxima} de vida, {self.ataque} de
-                     ataque y {self.defensa} de defensa")
-    
+        f1 = f"Hola! Soy {self.nombre}, un {self.tipo} con {self._vida}/{self.vida_maxima} de vida"
+        print(f"{f1}, {self.ataque} de ataque y {self.defensa} de defensa")
+
     def presentarse(self):
         self.__str__()
     
@@ -206,7 +197,7 @@ class CaballeroArcano(Caballero, Mago):
             self.defensa = self.defensa*(1+def_mdb/100)
 
     def evolucionar(self):
-        pass
+        print("Yo no puedo evolucionar :(")
 
 class Items():
     def __init__(self, nombre):
@@ -215,27 +206,34 @@ class Items():
     def evolucionar_gato(self, gato):
         if self.nombre == "Pergamino":
             if gato.tipo == "Gato Guerrero":
-                nuevo_gato = MagoDeBatalla(convertir_gato(gato))
+                nuevo_gato = MagoDeBatalla(*convertir_gato(gato))
                 return nuevo_gato            
             elif gato.tipo == "Gato Caballero":
-                nuevo_gato = CaballeroArcano(convertir_gato(gato))
+                nuevo_gato = CaballeroArcano(*convertir_gato(gato))
                 return nuevo_gato        
         elif self.nombre == "Lanza":
             if gato.tipo == "Gato Mago":
-                nuevo_gato = MagoDeBatalla(convertir_gato(gato))
+                nuevo_gato = MagoDeBatalla(*convertir_gato(gato))
                 return nuevo_gato            
             elif gato.tipo == "Gato Caballero":
-                nuevo_gato = Paladin(convertir_gato(gato))
+                nuevo_gato = Paladin(*convertir_gato(gato))
                 return nuevo_gato
             
         elif self.nombre == "Armadura":
             if gato.tipo == "Gato Mago":
-                nuevo_gato = CaballeroArcano(convertir_gato(gato))
+                nuevo_gato = CaballeroArcano(*convertir_gato(gato))
                 return nuevo_gato            
             elif gato.tipo == "Gato Guerrero":
-                nuevo_gato = Guerrero(convertir_gato(gato))
-                return nuevo_gatoS
+                nuevo_gato = Guerrero(*convertir_gato(gato))
+                return nuevo_gato
 
 
-
+def convertir_gato(gato):
+    nombre = gato.nombre
+    vida_maxima = gato.vida_maxima
+    poder = gato.poder
+    defensa = gato.defensa
+    agilidad = gato.agilidad
+    resistencia = gato.resistencia
+    return [nombre, vida_maxima, poder, defensa, agilidad, resistencia]
 

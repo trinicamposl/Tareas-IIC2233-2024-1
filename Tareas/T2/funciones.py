@@ -1,14 +1,13 @@
 import os
 from parametros import precio_cab, precio_mag, precio_gue, precio_armadura
 from parametros import precio_cura, precio_lanza, precio_pergamino
-#from clases import Mago #Revisaaaar!!!!!!
+from clases import Mago, Caballero, Guerrero
+
 def archivo_correcto(archivo):
     camino = os.path.join("data", archivo)
     with open((camino), "rt") as texto:
         lineas = texto.readlines()
         if len(lineas) == 3:
-            tres_rondas = []
-            ronda = []
             for linea in lineas:
                 jugadores = linea.split(";")
                 for jugador in jugadores:
@@ -17,8 +16,7 @@ def archivo_correcto(archivo):
                         texto = "Tu archivo no cumple con los parámetros necesario para cada"
                         return (False, (texto + " jugador. Intenta de nuevo"))
                     else:
-                        orden = [gato[2], gato[3], gato[4], gato[5], gato[6]]   
-                        if revisar_parametros(orden) == False:
+                        if not revisar_parametros(gato[2], gato[3], gato[4], gato[5], gato[6]):
                             texto = "Los parámetros del archivo no cumplen los requisitos. "
                             return (False, texto + "Intenta de nuevo")
             return (True, 0)
@@ -26,10 +24,10 @@ def archivo_correcto(archivo):
         else:
             return (False, "Tu archivo tiene más rondas de las que se permiten. Intenta de nuevo")
 
-def revisar_parametros(vida_maxima, poder, defensa, agilidad, resistencia):
-    rango100 = list(range(1,100))
-    rango20 = list(range(1,20))
-    rango10 = list(range(1,10))
+def revisar_parametros(vida_maxima, defensa, poder, agilidad, resistencia):
+    rango100 = list(range(0,101))
+    rango20 = list(range(1,21))
+    rango10 = list(range(1,11))
     if int(vida_maxima) in rango100:
         if int(poder) in rango10:
             if int(defensa) in rango20:
@@ -47,15 +45,29 @@ def revisar_parametros(vida_maxima, poder, defensa, agilidad, resistencia):
     else:
         return False
 
-def convertir_gato(gato):
-    nombre = gato.nombre
-    vida_maxima = gato.vida_maxima
-    vida = gato._vida
-    poder = gato.poder
-    defensa = gato.defensa
-    agilidad = gato.agilidad
-    resistencia = gato.resistencia
-    return [nombre, vida_maxima, vida, poder, defensa, agilidad, resistencia]
+#def revisar_parametros_unidades(tipo, vida_maxima, defensa, poder, agilidad, resistencia):
+    rango100 = list(range(0,101))
+    rango20 = list(range(1,21))
+    rango10 = list(range(1,11))
+    if int(vida_maxima) in rango100:
+        if int(poder) in rango10:
+            if int(defensa) in rango20:
+                if int(agilidad) in rango10:
+                    if int(resistencia) in rango10:
+                        if tipo == "MAG" or tipo == "CAB" or tipo =="GUE":
+                            return True
+                        else:
+                            return False
+                    else:
+                        return False
+                else:
+                    return False
+            else:
+                return False
+        else:
+            return False
+    else:
+        return False
 
 def menu_de_inicio(plata, ronda):
     #esto imprime mi menú de inicio (lo hice para que fuera más ordenado el main.py)
@@ -80,13 +92,13 @@ def menu_de_tienda(plata):
     print("")
     print('{:^48}'.format(f"Oro disponible: {plata}"))
     print("                                    Precio")  
-    print('{:<40}'.format(f'      #1 : Gato Mago                   {precio_mag}'))
-    print('{:<40}'.format(f'      #2 : Gato Guerrero               {precio_gue}'))
-    print('{:<40}'.format(f'      #3 : Gato Caballero              {precio_cab}'))
-    print('{:<40}'.format(f'      #4 : Ítem Armadura               {precio_armadura}'))
-    print('{:<40}'.format(f'      #5 : Ítem Pergamino              {precio_pergamino}'))
-    print('{:<40}'.format(f'      #6 : Ítem Lanza                  {precio_lanza}'))
-    print('{:<40}'.format(f'      #7 : Curar Ejército              {precio_cura}'))
+    print('{:<40}'.format(f'      #1 : Gato Mago                  {precio_mag}'))
+    print('{:<40}'.format(f'      #2 : Gato Guerrero              {precio_gue}'))
+    print('{:<40}'.format(f'      #3 : Gato Caballero             {precio_cab}'))
+    print('{:<40}'.format(f'      #4 : Ítem Armadura              {precio_armadura}'))
+    print('{:<40}'.format(f'      #5 : Ítem Pergamino             {precio_pergamino}'))
+    print('{:<40}'.format(f'      #6 : Ítem Lanza                 {precio_lanza}'))
+    print('{:<40}'.format(f'      #7 : Curar Ejército             {precio_cura}'))
     print("")
     print('{:<40}'.format('      #8 : Volver al Menú de Inicio'))
     print("")
@@ -101,9 +113,8 @@ def revisar_unidades():
             if len(gato) != 7:
                 texto = "Tu archivo unidades están mal hecho. No puedes jugar D:"
                 return (False, texto)                
-            else:
-                orden = [gato[1], gato[2], gato[3], gato[4], gato[5], gato[6]]   
-                if revisar_parametros(orden) == False:
+            else:  
+                if revisar_parametros(gato[2], gato[3], gato[4], gato[5], gato[6]) == False:
                     texto = "Los parámetros de tu archivo unidades no cumplen los requisitos. "
                     return (False, texto + "No puedes jugar D:")
                 if gato[1] != "CAB" and gato[1] != "MAG" and gato[1] != "GUE":
@@ -123,11 +134,11 @@ def lista_gatos(): #esta funcion me agrupa los gatos según el tipo en una lista
             gato = linea.split(",")
             variables = [gato[0], gato[2], gato[3], gato[4], gato[5], gato[6]]
             if gato[1] == "MAG":
-                magos.append(Mago(variables))
+                magos.append(Mago(*variables))
             elif gato[1] == "CAB":
-                caballeros.append(Caballero(variables))
+                caballeros.append(Caballero(*variables))
             elif gato[1] == "GUE":
-                guerreros.append(Guerrero(variables))
+                guerreros.append(Guerrero(*variables))
     return (magos, caballeros, guerreros)
 
 def seleccion_gato(lista):
@@ -138,8 +149,6 @@ def seleccion_gato(lista):
         print('{:<40}'.format(f'      #{i+1} : {gato.tipo}, llamado {gato.nombre}'))
     
     print('{:^40}'.format('Elige tu opción;'))
-
-
 
 
 
