@@ -8,15 +8,14 @@ from parametros import precio_pergamino as pergamino
 
 precio = [precio_mag, precio_gue, precio_cab, precio_armadura, precio_lanza, pergamino, precio_cura]
 
-def combatir(dificultad):
-    ejercito = ""
+def combatir(dificultad, ejercito):
     contrincantes = archivo_a_equipo(dificultad)
     enemigo = contrincantes[ejercito.ronda]
     for i in range(3):
-        if ejercito.combatir(ejercito,enemigo)[0]:
+        if ejercito.combatir(enemigo)[0]:
             ejercito.ronda += 1
         else:
-            print(ejercito.combatir[1])
+            print(ejercito.combatir(combatir)[1])
             comienzo_juego(dificultad)
 
 
@@ -51,7 +50,7 @@ def comienzo_juego(dificultad):
                     print("*"*40)
 
                 elif decision == "3":
-                    combatir(dificultad)
+                    combatir(dificultad,ejercito)
 
             else:
                 print("Por favor elige un número entero ENTRE LAS OPCIONES")

@@ -10,10 +10,10 @@ class Ejercito():
         self.ronda = 1
     
     def combatir(self, enemigo):
-        while len(enemigo.combatientes) != 0 or len(self.combatientes) != 0:
+        while len(enemigo) != 0 or len(self.combatientes) != 0:
             for i in range(len(self.combatientes)):
-                jugador = self.combatientes(i)
-                contrincante = enemigo.combatiente(i)
+                jugador = self.combatientes[i]
+                contrincante = enemigo.combatiente[i]
                 mi_vida = jugador.vida
                 su_vida = contrincante.vida
                 while mi_vida != 0 or su_vida != 0:
@@ -27,7 +27,8 @@ class Ejercito():
                     enemigo.combatientes.pop(indice(contrincante, enemigo.combatientes))  
                 break
         if len(enemigo.combatientes) == 0:
-            if len(self.combatientes) != 0: 
+            if len(self.combatientes) != 0:
+                self.ronda+=1 
                 return(True, "Ganaste esta ronda! :D")
             else:
                 return(False, "Murieron todos tus gatos. Perdiste el juego D:")       
