@@ -48,8 +48,7 @@ class Ejercito():
             print("No tienes ningún combatiente. Te recomiendo comprar alguno para la batalla!")
     
     def agregar_ejercito (self, gato):
-        self.combatientes.append(gato)
-                 
+        self.combatientes.append(gato)                 
 class Combatientes(ABC):
     def __init__(self,nombre, vida_maxima, poder, defensa, agilidad, resistencia):
         self.nombre = nombre
@@ -245,7 +244,7 @@ class Items():
                 nuevo_gato = CaballeroArcano(*convertir_gato(gato))
                 return nuevo_gato            
             elif gato.tipo == "Gato Guerrero":
-                nuevo_gato = Guerrero(*convertir_gato(gato))
+                nuevo_gato = Paladin(*convertir_gato(gato))
                 return nuevo_gato
 
 def convertir_gato(gato):

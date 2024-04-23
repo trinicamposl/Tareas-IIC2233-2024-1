@@ -1,6 +1,5 @@
 from sys import argv
 from sys import exit
-import os
 from funciones import archivo_correcto
 from juego import comienzo_juego
 
