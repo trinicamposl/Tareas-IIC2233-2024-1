@@ -251,6 +251,7 @@ def compra(ejercito, ronda):
             else:
                 print("Por favor elige un NÚMERO entre 1 y 8")
                 print("*"*40)
+                menu_de_inicio(ejercito.oro, ejercito.ronda)
                 eleccion = input()
     
     menu_de_inicio(ejercito.oro, ronda)        
