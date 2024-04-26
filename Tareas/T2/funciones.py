@@ -1,6 +1,6 @@
 import os
 from clases import Mago, Caballero, Guerrero, MagoDeBatalla, CaballeroArcano, Paladin
-
+    
 def archivo_correcto(archivo):
     camino = os.path.join("data", archivo)
     with open((camino), "rt") as texto:
@@ -43,7 +43,7 @@ def revisar_parametros(vida_maxima, defensa, poder, agilidad, resistencia):
     else:
         return False
 
-#def revisar_parametros_unidades(tipo, vida_maxima, defensa, poder, agilidad, resistencia):
+def revisar_parametros_unidades(tipo, vida_maxima, defensa, poder, agilidad, resistencia):
     rango100 = list(range(0,101))
     rango20 = list(range(1,21))
     rango10 = list(range(1,11))

@@ -1,12 +1,12 @@
 from funciones import menu_de_tienda, revisar_unidades, lista_gatos, seleccion_gato, menu_de_inicio
 from clases import indice
-from parametros import precio_cab, precio_mag, precio_gue, precio_armadura
-from parametros import precio_cura, precio_lanza, precio_cura
-from parametros import precio_pergamino as pergamino
+from parametros import PRECIO_CAB, PRECIO_MAG, PRECIO_GUE, PRECIO_ARMADURA
+from parametros import PRECIO_CURA, PRECIO_LANZA, PRECIO_CURA
+from parametros import PRECIO_PERGAMINO as pergamino
 from sys import exit
 import random
 
-precio = [precio_mag, precio_gue, precio_cab, precio_armadura, precio_lanza, pergamino, precio_cura]
+precio = [PRECIO_MAG, PRECIO_GUE, PRECIO_CAB, PRECIO_ARMADURA, PRECIO_LANZA, pergamino, PRECIO_CURA]
 
 def compra(ejercito, ronda):
     eleccion = input()
@@ -22,8 +22,8 @@ def compra(ejercito, ronda):
                 #lista de gatos tiene (magos, caballeros, guerreros)
                 if eleccion == "1": #mago
                     if revisar_unidades()[0]:
-                        if ejercito.oro >= precio_mag:
-                            ejercito.oro -= precio_mag
+                        if ejercito.oro >= PRECIO_MAG:
+                            ejercito.oro -= PRECIO_MAG
                             aleatorio = random.randint(0, len(lista_gatos()[0]) - 1)
                             gato = lista_gatos()[0][aleatorio]
                             ejercito.agregar_ejercito(gato)
@@ -41,8 +41,8 @@ def compra(ejercito, ronda):
 
                 elif eleccion == "2": #guerrero
                     if revisar_unidades()[0]:
-                        if ejercito.oro >= precio_gue:
-                            ejercito.oro -= precio_gue
+                        if ejercito.oro >= PRECIO_GUE:
+                            ejercito.oro -= PRECIO_GUE
                             aleatorio = random.randint(0, len(lista_gatos()[2]) - 1) 
                             gato = lista_gatos()[2][aleatorio]
                             ejercito.agregar_ejercito(gato)
@@ -61,8 +61,8 @@ def compra(ejercito, ronda):
                 
                 elif eleccion == "3": #caballero
                     if revisar_unidades()[0]:
-                        if ejercito.oro >= precio_cab:
-                            ejercito.oro -= precio_cab
+                        if ejercito.oro >= PRECIO_CAB:
+                            ejercito.oro -= PRECIO_CAB
                             aleatorio = random.randint(0, len(lista_gatos()[1]) - 1)
                             gato = lista_gatos()[1][aleatorio]
                             ejercito.agregar_ejercito(gato)
@@ -85,7 +85,7 @@ def compra(ejercito, ronda):
                         if gato.tipo == "Gato Guerrero" or gato.tipo == "Gato Mago":
                             opciones.append(gato)
                     if len(opciones) != 0:
-                        if ejercito.oro >= precio_armadura:
+                        if ejercito.oro >= PRECIO_ARMADURA:
                             seleccion_gato(opciones)
                             decision = input()
                             if not decision.isnumeric():
@@ -115,7 +115,7 @@ def compra(ejercito, ronda):
                                         break
                                 print("*"*40)
                                 print(f"Has evolucionado tu {compra.tipo} a {tipo_nuevo}")
-                                ejercito.oro -= precio_armadura
+                                ejercito.oro -= PRECIO_ARMADURA
                                 menu_de_tienda(ejercito.oro, *precio)
                                 eleccion = input()
                                
@@ -188,7 +188,7 @@ def compra(ejercito, ronda):
                         if gato.tipo == "Gato Mago" or gato.tipo == "Gato Caballero":
                             opciones.append(gato)
                     if len(opciones) != 0:
-                        if ejercito.oro >= precio_lanza:
+                        if ejercito.oro >= PRECIO_LANZA:
                             seleccion_gato(opciones)
                             decision = input()
                             if not decision.isnumeric():
@@ -218,7 +218,7 @@ def compra(ejercito, ronda):
                                         break
                                 print("*"*40)
                                 print(f"Has evolucionado tu {compra.tipo} a {tipo_nuevo}")
-                                ejercito.oro -= precio_lanza
+                                ejercito.oro -= PRECIO_LANZA
                                 menu_de_tienda(ejercito.oro, *precio)
                                 eleccion = input()
                                
@@ -234,12 +234,12 @@ def compra(ejercito, ronda):
                         eleccion = input()
 
                 elif eleccion == "7": #curar_ejercito
-                    if ejercito.oro >= precio_cura:
+                    if ejercito.oro >= PRECIO_CURA:
                         for gato in ejercito.combatientes:
-                            gato.curarse = precio_cura #damn
+                            gato.curarse = PRECIO_CURA #damn
                         print("*"*40) 
                         print("Se ha curado al ejército con éxito! :D")
-                        ejercito.oro -= precio_cura
+                        ejercito.oro -= PRECIO_CURA
                         menu_de_tienda(ejercito.oro, *precio)
                         eleccion = input()
                     else:

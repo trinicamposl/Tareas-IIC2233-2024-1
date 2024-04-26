@@ -1,12 +1,12 @@
-from parametros import oro_inicial, cansancio, prob_cab, red_cab, atq_cab, prob_mag
-from parametros import red_mag,atq_mag, prob_pal, aum_pal, prob_mdb, def_mdb, prob_car, aum_car
+from parametros import ORO_INICIAL, CANSANCIO, PROB_CAR, RED_CAB, ATQ_CAB, PROB_MAG
+from parametros import RED_MAG,ATQ_MAG, PROB_PAL, AUM_PAL, PROB_MDB, DEF_MDB, PROB_CAR, AUM_CAR
 from abc import ABC, abstractmethod
 import random
 
 class Ejercito():
     def __init__(self):
         self.combatientes = []
-        self.oro = oro_inicial
+        self.oro = ORO_INICIAL
         self.ronda = 1
     
     def combatir(self, enemigo):
@@ -96,7 +96,7 @@ class Guerrero(Combatientes):
         self.__str__()
     
     def atacar(enemigo, self):
-        self.agilidad -= self.agilidad*(1-cansancio/100)
+        self.agilidad -= self.agilidad*(1-CANSANCIO/100)
         enemigo._vida -= round (self.ataque - enemigo.defensa)
 
     def evolucionar(self, pieza):
@@ -115,12 +115,12 @@ class Caballero(Combatientes):
         self.__str__()
     
     def atacar(enemigo, self):
-        if random.randint(0,100)<=prob_cab:
+        if random.randint(0,100)<=PROB_CAR:
             poder_antiguo = enemigo.poder
-            enemigo.poder = enemigo.poder(1-red_cab/100)
-            enemigo._vida =  round(self.ataque*(atq_cab/100) - enemigo.defensa)
+            enemigo.poder = enemigo.poder(1-RED_CAB/100)
+            enemigo._vida =  round(self.ataque*(ATQ_CAB/100) - enemigo.defensa)
         else:
-            self.agilidad -= self.agilidad*(1-cansancio/100)
+            self.agilidad -= self.agilidad*(1-CANSANCIO/100)
             enemigo._vida -= round (self.ataque - enemigo.defensa)
 
     def evolucionar(self, pieza):
@@ -139,13 +139,13 @@ class Mago(Combatientes):
         self.__str__()
     
     def atacar(enemigo, self):
-        if random.randint(0,100)<=prob_mag:
-            enemigo.defensa = round(self.ataque*(atq_mag/100) - enemigo.defensa*(100 - red_mag)/100)    
+        if random.randint(0,100)<=PROB_MAG:
+            enemigo.defensa = round(self.ataque*(ATQ_MAG/100) - enemigo.defensa*(100 - RED_MAG)/100)    
         else:
-            self.agilidad -= self.agilidad*(1-cansancio/100)
+            self.agilidad -= self.agilidad*(1-CANSANCIO/100)
             enemigo._vida -= round (self.ataque - enemigo.defensa)
-        self.resistencia = self.resistencia*(1-cansancio/100)
-        self.agilidad = self.agilidad*(1-cansancio/100)
+        self.resistencia = self.resistencia*(1-CANSANCIO/100)
+        self.agilidad = self.agilidad*(1-CANSANCIO/100)
 
     def evolucionar(self, pieza):
         return Items(pieza).evolucionar_gato(self)
@@ -163,11 +163,11 @@ class Paladin(Guerrero, Caballero):
         self.__str__()
     
     def atacar(enemigo, self):
-        if random.randint(0,100)<=prob_pal:
+        if random.randint(0,100)<=PROB_PAL:
             Caballero.atacar(enemigo, self)    
         else:
             Guerrero.atacar(enemigo, self)
-        self.resistencia = self.resistencia*(1+(aum_pal/100))
+        self.resistencia = self.resistencia*(1+(AUM_PAL/100))
 
     def evolucionar(self):
         print("Yo no puedo evolucionar :(")
@@ -185,12 +185,12 @@ class MagoDeBatalla(Guerrero, Mago):
         self.__str__()
     
     def atacar(enemigo, self):
-        if random.randint(0,100)<=prob_mdb:
+        if random.randint(0,100)<=PROB_MDB:
             Mago.atacar(enemigo, self)    
         else:
             Guerrero.atacar(enemigo, self)
-        self.agilidad = self.agilidad*(1-cansancio/100)
-        self.defensa = self.defensa*(1+def_mdb/100)
+        self.agilidad = self.agilidad*(1-CANSANCIO/100)
+        self.defensa = self.defensa*(1+DEF_MDB/100)
 
     def evolucionar(self):
         print("Yo no puedo evolucionar :(")
@@ -208,14 +208,14 @@ class CaballeroArcano(Caballero, Mago):
         self.__str__()
     
     def atacar(enemigo, self):
-        if random.randint(0,100)<=prob_car:
+        if random.randint(0,100)<=PROB_CAR:
             Mago.atacar(enemigo, self)
-            self.agilidad = self.agilidad*(1-cansancio/100)
-            self.defensa = self.defensa*(1+def_mdb/100)    
+            self.agilidad = self.agilidad*(1-CANSANCIO/100)
+            self.defensa = self.defensa*(1+DEF_MDB/100)    
         else:
             Guerrero.atacar(enemigo, self)
-            self.agilidad = self.agilidad*(1-cansancio/100)
-            self.defensa = self.defensa*(1+def_mdb/100)
+            self.agilidad = self.agilidad*(1-CANSANCIO/100)
+            self.defensa = self.defensa*(1+DEF_MDB/100)
 
     def evolucionar(self):
         print("Yo no puedo evolucionar :(")

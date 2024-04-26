@@ -2,21 +2,28 @@ from funciones import menu_de_inicio, menu_de_tienda, archivo_a_equipo
 from momento_compras import compra 
 from sys import exit
 from clases import Ejercito
-from parametros import precio_armadura, precio_cab, precio_gue
-from parametros import precio_mag, precio_lanza, precio_cura
-from parametros import precio_pergamino as pergamino
+from parametros import PRECIO_ARMADURA, PRECIO_CAB, PRECIO_GUE
+from parametros import PRECIO_MAG, PRECIO_LANZA, PRECIO_CURA, ORO_GANADO
+from parametros import PRECIO_PERGAMINO as pergamino
 
-precio = [precio_mag, precio_gue, precio_cab, precio_armadura, precio_lanza, pergamino, precio_cura]
+precio = [PRECIO_MAG, PRECIO_GUE, PRECIO_CAB, PRECIO_ARMADURA, PRECIO_LANZA, pergamino, PRECIO_CURA]
 
 def combatir_funcion(dificultad, ejercito):
     contrincantes = archivo_a_equipo(dificultad)
     enemigo = contrincantes[ejercito.ronda]
     for i in range(3):
         if ejercito.combatir(enemigo)[0]:
+            ejercito.oro += ORO_GANADO
             ejercito.ronda += 1
+            if ejercito.ronda == 4:
+                print("Has ganado!!!!")
+                print("Lograste vencer a Gatochico, ahora puedes dormir en paz :D")
+                exit()
+
         else:
             print(ejercito.combatir(enemigo)[1])
             comienzo_juego(dificultad)
+    return enemigo
 
 
 
