@@ -91,6 +91,7 @@ def compra(ejercito, ronda):
                             if not decision.isnumeric():
                                 while not decision.isnumeric():
                                     print("Elige un NÚMERO!")
+                                    seleccion_gato(opciones)
                                     print("*"*40)
                                     decision = input()
                             if decision.isnumeric():
@@ -101,8 +102,8 @@ def compra(ejercito, ronda):
                                     decision = input()
                                     while not decision.isnumeric():
                                         print("Elige un NÚMERO!")
-                                        print("*"*40)
                                         seleccion_gato(opciones)
+                                        print("*"*40)
                                         decision = input() 
                                 compra = opciones[int(decision)-1]
                                 for elemento in ejercito.combatientes:
@@ -142,6 +143,7 @@ def compra(ejercito, ronda):
                             if not decision.isnumeric():
                                 while not decision.isnumeric():
                                     print("Elige un NÚMERO!")
+                                    seleccion_gato(opciones)
                                     print("*"*40)
                                     decision = input()
                             if decision.isnumeric():
@@ -152,8 +154,8 @@ def compra(ejercito, ronda):
                                     decision = input()
                                     while not decision.isnumeric():
                                         print("Elige un NÚMERO!")
-                                        print("*"*40)
                                         seleccion_gato(opciones)
+                                        print("*"*40)
                                         decision = input() 
                                 compra = opciones[int(decision)-1]
                                 for elemento in ejercito.combatientes:
@@ -194,6 +196,7 @@ def compra(ejercito, ronda):
                             if not decision.isnumeric():
                                 while not decision.isnumeric():
                                     print("Elige un NÚMERO!")
+                                    seleccion_gato(opciones)
                                     print("*"*40)
                                     decision = input()
                             if decision.isnumeric():
@@ -204,8 +207,8 @@ def compra(ejercito, ronda):
                                     decision = input()
                                     while not decision.isnumeric():
                                         print("Elige un NÚMERO!")
-                                        print("*"*40)
                                         seleccion_gato(opciones)
+                                        print("*"*40)
                                         decision = input() 
                                 compra = opciones[int(decision)-1]
                                 for elemento in ejercito.combatientes:
@@ -237,13 +240,13 @@ def compra(ejercito, ronda):
                     if ejercito.oro >= PRECIO_CURA:
                         lleno = True
                         for gato in ejercito.combatientes:
-                            if gato.vida_maxima != gato.vida:
+                            if gato.vida_maxima != gato._vida:
                                 lleno = False
                         if not lleno:
                             for gato in ejercito.combatientes:
-                                vida_antigua = gato.vida
+                                vida_antigua = gato._vida
                                 gato.curarse = CURAR_VIDA #damn
-                                vida_nueva = gato.vida
+                                vida_nueva = gato._vida
                                 if vida_antigua == vida_nueva:
                                     print(f"{gato.nombre} ya tenia su vida al máximo!")
                                 else: 

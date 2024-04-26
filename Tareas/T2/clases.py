@@ -10,19 +10,19 @@ class Ejercito():
         self.ronda = 1
     
     def combatir(self, enemigo):
-        while len(enemigo) != 0 or len(self.combatientes) != 0:
+        while len(enemigo.combatientes) != 0 or len(self.combatientes) != 0:
             for i in range(len(self.combatientes)):
                 jugador = self.combatientes[i]
-                contrincante = enemigo.combatiente[i]
-                mi_vida = jugador.vida
-                su_vida = contrincante.vida
+                contrincante = enemigo.combatientes[i]
+                mi_vida = jugador._vida
+                su_vida = contrincante._vida
                 while mi_vida != 0 or su_vida != 0:
-                    jugador.atacar(enemigo, self)
-                    contrincante.atacar(self, enemigo)
-                    mi_vida = jugador.vida
-                    su_vida = contrincante.vida
+                    jugador.atacar(enemigo)
+                    contrincante.atacar(enemigo)
+                    mi_vida = jugador._vida
+                    su_vida = contrincante._vida
                 if mi_vida == 0:
-                  self.combatientes.pop(indice(jugador, self.combatientes))
+                    self.combatientes.pop(indice(jugador, self.combatientes))
                 if su_vida == 0:
                     enemigo.combatientes.pop(indice(contrincante, enemigo.combatientes))  
                 break
@@ -49,7 +49,8 @@ class Ejercito():
             print("No tienes ningún combatiente. Te recomiendo comprar alguno para la batalla!")
     
     def agregar_ejercito (self, gato):
-        self.combatientes.append(gato)                 
+        self.combatientes.append(gato)      
+
 class Combatientes(ABC):
     def __init__(self,nombre, vida_maxima, poder, defensa, agilidad, resistencia):
         self.nombre = nombre
@@ -76,7 +77,7 @@ class Combatientes(ABC):
         pass
  
     @abstractmethod
-    def atacar(enemigo, self):
+    def atacar(self, enemigo):
         pass
 
     @abstractmethod
@@ -95,7 +96,7 @@ class Guerrero(Combatientes):
     def presentarse(self):
         self.__str__()
     
-    def atacar(enemigo, self):
+    def atacar(self, enemigo):
         self.agilidad -= self.agilidad*(1-CANSANCIO/100)
         enemigo._vida -= round (self.ataque - enemigo.defensa)
 
@@ -114,7 +115,7 @@ class Caballero(Combatientes):
     def presentarse(self):
         self.__str__()
     
-    def atacar(enemigo, self):
+    def atacar(self, enemigo):
         if random.randint(0,100)<=PROB_CAR:
             poder_antiguo = enemigo.poder
             enemigo.poder = enemigo.poder(1-RED_CAB/100)
@@ -138,7 +139,7 @@ class Mago(Combatientes):
     def presentarse(self):
         self.__str__()
     
-    def atacar(enemigo, self):
+    def atacar(self, enemigo):
         if random.randint(0,100)<=PROB_MAG:
             enemigo.defensa = round(self.ataque*(ATQ_MAG/100) - enemigo.defensa*(100 - RED_MAG)/100)    
         else:
@@ -162,11 +163,11 @@ class Paladin(Guerrero, Caballero):
     def presentarse(self):
         self.__str__()
     
-    def atacar(enemigo, self):
+    def atacar(self ,enemigo):
         if random.randint(0,100)<=PROB_PAL:
-            Caballero.atacar(enemigo, self)    
+            Caballero.atacar(self, enemigo)    
         else:
-            Guerrero.atacar(enemigo, self)
+            Guerrero.atacar(self, enemigo)
         self.resistencia = self.resistencia*(1+(AUM_PAL/100))
 
     def evolucionar(self):

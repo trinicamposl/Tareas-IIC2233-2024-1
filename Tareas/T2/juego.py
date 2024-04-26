@@ -11,8 +11,13 @@ precio = [PRECIO_MAG, PRECIO_GUE, PRECIO_CAB, PRECIO_ARMADURA, PRECIO_LANZA, per
 def combatir_funcion(dificultad, ejercito):
     contrincantes = archivo_a_equipo(dificultad)
     enemigo = contrincantes[ejercito.ronda]
+    enemigo_clase = Ejercito()
+    for elemento in enemigo:
+        enemigo_clase.agregar_ejercito(elemento)
+
     for i in range(3):
-        if ejercito.combatir(enemigo)[0]:
+        if ejercito.combatir(enemigo_clase)[0]:
+            print(ejercito.combatientes(enemigo_clase)[1])
             ejercito.oro += ORO_GANADO
             ejercito.ronda += 1
             if ejercito.ronda == 4:
@@ -21,7 +26,7 @@ def combatir_funcion(dificultad, ejercito):
                 exit()
 
         else:
-            print(ejercito.combatir(enemigo)[1])
+            print(ejercito.combatir(enemigo_clase)[1])
             comienzo_juego(dificultad)
     return enemigo
 
@@ -57,7 +62,10 @@ def comienzo_juego(dificultad):
                     print("*"*40)
 
                 elif decision == "3":
-                    combatir_funcion(dificultad,ejercito)
+                    if len(ejercito.combatientes) == 0:
+                        print("No tienes ningun combatiente, no puedes pelear aún")
+                        comienzo_juego(dificultad)
+                    combatir_funcion(dificultad, ejercito)
 
             else:
                 print("Por favor elige un número entero ENTRE LAS OPCIONES")
