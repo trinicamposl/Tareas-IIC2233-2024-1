@@ -1,7 +1,7 @@
 from funciones import menu_de_tienda, revisar_unidades, lista_gatos, seleccion_gato, menu_de_inicio
 from clases import indice
 from parametros import PRECIO_CAB, PRECIO_MAG, PRECIO_GUE, PRECIO_ARMADURA
-from parametros import PRECIO_CURA, PRECIO_LANZA, PRECIO_CURA
+from parametros import PRECIO_CURA, PRECIO_LANZA, PRECIO_CURA, CURAR_VIDA
 from parametros import PRECIO_PERGAMINO as pergamino
 from sys import exit
 import random
@@ -235,13 +235,30 @@ def compra(ejercito, ronda):
 
                 elif eleccion == "7": #curar_ejercito
                     if ejercito.oro >= PRECIO_CURA:
+                        lleno = True
                         for gato in ejercito.combatientes:
-                            gato.curarse = PRECIO_CURA #damn
-                        print("*"*40) 
-                        print("Se ha curado al ejército con éxito! :D")
-                        ejercito.oro -= PRECIO_CURA
-                        menu_de_tienda(ejercito.oro, *precio)
-                        eleccion = input()
+                            if gato.vida_maxima != gato.vida:
+                                lleno = False
+                        if not lleno:
+                            for gato in ejercito.combatientes:
+                                vida_antigua = gato.vida
+                                gato.curarse = CURAR_VIDA #damn
+                                vida_nueva = gato.vida
+                                if vida_antigua == vida_nueva:
+                                    print(f"{gato.nombre} ya tenia su vida al máximo!")
+                                else: 
+                                    diferencia = vida_nueva-vida_antigua
+                                    print(f"{gato.nombre} ha restaurado {diferencia} de vida :D")
+                            print("*"*40) 
+                            print("Se ha curado tu ejército con éxito! :D")
+                            ejercito.oro -= PRECIO_CURA
+                            menu_de_tienda(ejercito.oro, *precio)
+                            eleccion = input()
+                        else:
+                            print("Tu ejército ya está en sus condiciones óptimas!")
+                            print("No te descontaremos nada ;)")
+                            menu_de_tienda(ejercito.oro, *precio)
+                            eleccion = input()
                     else:
                         print("*"*40)
                         print("No tienes oro suficiente para curar tu ejército D:")
