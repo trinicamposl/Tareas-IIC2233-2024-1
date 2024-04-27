@@ -34,7 +34,7 @@ if len(nombres) == 2: #me dieron la cantidad correcta de parametros
     
     else:
         print("El nivel de dificultad que escogiste no está correcto. Intenta de nuevo")
-        print("Recuerda que la dificultad puede ser 'facil', 'intermedio' o 'dificil")
+        print("Recuerda que la dificultad puede ser 'facil', 'intermedio' o 'dificil'")
 
         exit()
 
