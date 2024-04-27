@@ -240,7 +240,7 @@ def compra(ejercito, ronda):
                     if ejercito.oro >= PRECIO_CURA:
                         lleno = True
                         for gato in ejercito.combatientes:
-                            if gato.vida_maxima != gato._vida:
+                            if gato._vida_maxima != gato._vida:
                                 lleno = False
                         if not lleno:
                             for gato in ejercito.combatientes:

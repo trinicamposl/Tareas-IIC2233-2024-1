@@ -16,16 +16,21 @@ class Ejercito():
                 contrincante = enemigo.combatientes[i]
                 mi_vida = jugador._vida
                 su_vida = contrincante._vida
-                while mi_vida != 0 or su_vida != 0:
-                    jugador.atacar(enemigo)
-                    contrincante.atacar(enemigo)
+                while mi_vida != 0 and su_vida != 0:
+                    jugador.atacar(contrincante)
+                    texto = f"{jugador.nombre} le ha hecho un ataque de {jugador.ataque} a "
+                    texto_2 = f"{contrincante.nombre} dejandolo con {contrincante._vida} de vida"
+                    print(texto + texto_2)
+                    contrincante.atacar(jugador)
+                    texto = f"{contrincante.nombre} le ha hecho un ataque de {contrincante.ataque}"
+                    print(texto + f" a {jugador.nombre} dejandolo con {jugador._vida} de vida")
                     mi_vida = jugador._vida
                     su_vida = contrincante._vida
                 if mi_vida == 0:
                     self.combatientes.pop(indice(jugador, self.combatientes))
                 if su_vida == 0:
                     enemigo.combatientes.pop(indice(contrincante, enemigo.combatientes))  
-                break
+                    break
         if len(enemigo.combatientes) == 0:
             if len(self.combatientes) != 0:
                 self.ronda+=1 
@@ -52,17 +57,16 @@ class Ejercito():
         self.combatientes.append(gato)      
 
 class Combatientes(ABC):
-    def __init__(self,nombre, vida_maxima, poder, defensa, agilidad, resistencia):
+    def __init__(self, nombre, vida_maxima, poder, defensa, agilidad, resistencia):
         self.nombre = nombre
-        self.vida_maxima = int(vida_maxima)
+        self._vida_maxima = int(vida_maxima)
         self._vida = int(vida_maxima) #revisar
-        self.poder = int(poder)
-        self.defensa = int(defensa)
-        self.agilidad = int(agilidad)
-        self.defensa = int(defensa)
-        self.resistencia = int(resistencia)
-        denominador = self.poder + self.agilidad + self.resistencia
-        self.ataque = round((denominador*2*self._vida)/self.vida_maxima)
+        self._poder = int(poder)
+        self._defensa = int(defensa)
+        self._agilidad = int(agilidad)
+        self._resistencia = int(resistencia)
+        denominador = self._poder + self._agilidad + self._resistencia
+        self.ataque = round((denominador*2*self._vida)/self._vida_maxima)
     
     @property
     def curarse(self):
@@ -70,8 +74,53 @@ class Combatientes(ABC):
     
     @curarse.setter
     def curarse(self, cantidad):
-        self._vida = min(self._vida + cantidad, self.vida_maxima)
+        self._vida = min(self._vida + cantidad, self._vida_maxima)
+        self._vida = max(self._vida, 0)
 
+    @property
+    def vida(self):
+        return self._vida
+    
+    @vida.setter
+    def vida(self, cantidad):
+        self._vida = min(cantidad, self._vida_maxima)
+        self._vida = max(cantidad, 0)
+
+    @property
+    def vida_maxima(self):
+        return self._vida_maxima
+    
+    @vida_maxima.setter
+    def vida_maxima(self, cantidad):
+        self._vida_maxima = min(cantidad, 100)
+        self._vida_maxima = max(cantidad, 0)
+    
+    @property
+    def poder(self):
+        return self._poder
+    
+    @poder.setter
+    def poder(self, cantidad):
+        self._poder = min(cantidad, 10)
+        self._poder = max(cantidad, 1)
+
+    @property
+    def defensa(self):
+        return self._defensa
+    
+    @defensa.setter
+    def defensa(self, cantidad):
+        self._defensa = min(cantidad, 20)
+        self._defensa = max(cantidad, 1)
+    
+    @property
+    def agilidad(self):
+        return self._agilidad
+    
+    @agilidad.setter
+    def agilidad(self, cantidad):
+        self._agilidad = min(cantidad, 10)
+        self._agilidad = max(cantidad, 1)
     @abstractmethod
     def presentarse(self):
         pass
@@ -90,15 +139,15 @@ class Guerrero(Combatientes):
         self.tipo = "Gato Guerrero"  
     
     def __str__(self):
-        f1 = f"Hola! Soy {self.nombre}, un {self.tipo} con {self._vida}/{self.vida_maxima} de vida"
-        print(f"{f1}, {self.ataque} de ataque y {self.defensa} de defensa")
+        f1 = f"Hola! Soy {self.nombre}, un {self.tipo} con {self._vida}/{self._vida_maxima} de vida"
+        print(f"{f1}, {self.ataque} de ataque y {self._defensa} de defensa")
     
     def presentarse(self):
         self.__str__()
     
     def atacar(self, enemigo):
-        self.agilidad -= self.agilidad*(1-CANSANCIO/100)
-        enemigo._vida -= round (self.ataque - enemigo.defensa)
+        self._agilidad -= self._agilidad*(1-CANSANCIO/100)
+        enemigo._vida -= round(self.ataque - enemigo._defensa)
 
     def evolucionar(self, pieza):
         return Items(pieza).evolucionar_gato(self)
@@ -109,20 +158,19 @@ class Caballero(Combatientes):
         self.tipo = "Gato Caballero"  
     
     def __str__(self):
-        f1 = f"Hola! Soy {self.nombre}, un {self.tipo} con {self._vida}/{self.vida_maxima} de vida"
-        print(f"{f1}, {self.ataque} de ataque y {self.defensa} de defensa")
+        f1 = f"Hola! Soy {self.nombre}, un {self.tipo} con {self._vida}/{self._vida_maxima} de vida"
+        print(f"{f1}, {self.ataque} de ataque y {self._defensa} de defensa")
     
     def presentarse(self):
         self.__str__()
     
     def atacar(self, enemigo):
         if random.randint(0,100)<=PROB_CAR:
-            poder_antiguo = enemigo.poder
-            enemigo.poder = enemigo.poder(1-RED_CAB/100)
-            enemigo._vida =  round(self.ataque*(ATQ_CAB/100) - enemigo.defensa)
+            enemigo._poder = enemigo._poder*(1-RED_CAB/100)
+            enemigo._vida = round(self.ataque*(ATQ_CAB/100) - enemigo._defensa)
         else:
-            self.agilidad -= self.agilidad*(1-CANSANCIO/100)
-            enemigo._vida -= round (self.ataque - enemigo.defensa)
+            self._agilidad -= self._agilidad*(1-CANSANCIO/100)
+            enemigo._vida -= round(self.ataque - enemigo._defensa)
 
     def evolucionar(self, pieza):
         return Items(pieza).evolucionar_gato(self)
@@ -133,20 +181,20 @@ class Mago(Combatientes):
         self.tipo = "Gato Mago"  
     
     def __str__(self):
-        f1 = f"Hola! Soy {self.nombre}, un {self.tipo} con {self._vida}/{self.vida_maxima} de vida"
-        print(f"{f1}, {self.ataque} de ataque y {self.defensa} de defensa")
+        f1 = f"Hola! Soy {self.nombre}, un {self.tipo} con {self._vida}/{self._vida_maxima} de vida"
+        print(f"{f1}, {self.ataque} de ataque y {self._defensa} de defensa")
 
     def presentarse(self):
         self.__str__()
     
     def atacar(self, enemigo):
         if random.randint(0,100)<=PROB_MAG:
-            enemigo.defensa = round(self.ataque*(ATQ_MAG/100) - enemigo.defensa*(100 - RED_MAG)/100)    
+            enemigo._defensa = round(self.ataque*(ATQ_MAG/100)-enemigo._defensa*(100 - RED_MAG)/100)    
         else:
-            self.agilidad -= self.agilidad*(1-CANSANCIO/100)
-            enemigo._vida -= round (self.ataque - enemigo.defensa)
-        self.resistencia = self.resistencia*(1-CANSANCIO/100)
-        self.agilidad = self.agilidad*(1-CANSANCIO/100)
+            self._agilidad -= self._agilidad*(1-CANSANCIO/100)
+            enemigo._vida -= round(self.ataque - enemigo._defensa)
+        self._resistencia = self._resistencia*(1-CANSANCIO/100)
+        self._agilidad = self._agilidad*(1-CANSANCIO/100)
 
     def evolucionar(self, pieza):
         return Items(pieza).evolucionar_gato(self)
@@ -157,8 +205,8 @@ class Paladin(Guerrero, Caballero):
         self.tipo = "Gato Paladin"  
     
     def __str__(self):
-        f1 = f"Hola! Soy {self.nombre}, un {self.tipo} con {self._vida}/{self.vida_maxima} de vida"
-        print(f"{f1}, {self.ataque} de ataque y {self.defensa} de defensa")
+        f1 = f"Hola! Soy {self.nombre}, un {self.tipo} con {self._vida}/{self._vida_maxima} de vida"
+        print(f"{f1}, {self.ataque} de ataque y {self._defensa} de defensa")
     
     def presentarse(self):
         self.__str__()
@@ -168,7 +216,7 @@ class Paladin(Guerrero, Caballero):
             Caballero.atacar(self, enemigo)    
         else:
             Guerrero.atacar(self, enemigo)
-        self.resistencia = self.resistencia*(1+(AUM_PAL/100))
+        self._resistencia = self._resistencia*(1+(AUM_PAL/100))
 
     def evolucionar(self):
         print("Yo no puedo evolucionar :(")
@@ -179,8 +227,8 @@ class MagoDeBatalla(Guerrero, Mago):
         self.tipo = "Gato Mago De Batalla"  
     
     def __str__(self):
-        f1 = f"Hola! Soy {self.nombre}, un {self.tipo} con {self._vida}/{self.vida_maxima} de vida"
-        print(f"{f1}, {self.ataque} de ataque y {self.defensa} de defensa")
+        f1 = f"Hola! Soy {self.nombre}, un {self.tipo} con {self._vida}/{self._vida_maxima} de vida"
+        print(f"{f1}, {self.ataque} de ataque y {self._defensa} de defensa")
     
     def presentarse(self):
         self.__str__()
@@ -190,8 +238,8 @@ class MagoDeBatalla(Guerrero, Mago):
             Mago.atacar(enemigo, self)    
         else:
             Guerrero.atacar(enemigo, self)
-        self.agilidad = self.agilidad*(1-CANSANCIO/100)
-        self.defensa = self.defensa*(1+DEF_MDB/100)
+        self._agilidad = self._agilidad*(1-CANSANCIO/100)
+        self._defensa = self._defensa*(1+DEF_MDB/100)
 
     def evolucionar(self):
         print("Yo no puedo evolucionar :(")
@@ -202,8 +250,8 @@ class CaballeroArcano(Caballero, Mago):
         self.tipo = "Gato Caballero Arcano"  
     
     def __str__(self):
-        f1 = f"Hola! Soy {self.nombre}, un {self.tipo} con {self._vida}/{self.vida_maxima} de vida"
-        print(f"{f1}, {self.ataque} de ataque y {self.defensa} de defensa")
+        f1 = f"Hola! Soy {self.nombre}, un {self.tipo} con {self._vida}/{self._vida_maxima} de vida"
+        print(f"{f1}, {self.ataque} de ataque y {self._defensa} de defensa")
 
     def presentarse(self):
         self.__str__()
@@ -211,12 +259,12 @@ class CaballeroArcano(Caballero, Mago):
     def atacar(enemigo, self):
         if random.randint(0,100)<=PROB_CAR:
             Mago.atacar(enemigo, self)
-            self.agilidad = self.agilidad*(1-CANSANCIO/100)
-            self.defensa = self.defensa*(1+DEF_MDB/100)    
+            self._agilidad = self._agilidad*(1-CANSANCIO/100)
+            self._defensa = self._defensa*(1+DEF_MDB/100)    
         else:
             Guerrero.atacar(enemigo, self)
-            self.agilidad = self.agilidad*(1-CANSANCIO/100)
-            self.defensa = self.defensa*(1+DEF_MDB/100)
+            self._agilidad = self._agilidad*(1-CANSANCIO/100)
+            self._defensa = self._defensa*(1+DEF_MDB/100)
 
     def evolucionar(self):
         print("Yo no puedo evolucionar :(")
@@ -254,11 +302,11 @@ def convertir_gato(gato):
     Esta funcion me da una lista con datos para poder hacer la clase nueva de manera más eficiente
     """
     nombre = gato.nombre
-    vida_maxima = gato.vida_maxima
-    poder = gato.poder
-    defensa = gato.defensa
-    agilidad = gato.agilidad
-    resistencia = gato.resistencia
+    vida_maxima = gato._vida_maxima
+    poder = gato._poder
+    defensa = gato._defensa
+    agilidad = gato._agilidad
+    resistencia = gato._resistencia
     return [nombre, vida_maxima, poder, defensa, agilidad, resistencia]
 
 def indice(gato, lista):

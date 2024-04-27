@@ -24,7 +24,6 @@ def combatir_funcion(dificultad, ejercito):
                 print("Has ganado!!!!")
                 print("Lograste vencer a Gatochico, ahora puedes dormir en paz :D")
                 exit()
-
         else:
             print(ejercito.combatir(enemigo_clase)[1])
             comienzo_juego(dificultad)
