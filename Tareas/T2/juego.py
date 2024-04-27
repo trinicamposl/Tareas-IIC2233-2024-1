@@ -64,7 +64,7 @@ def comienzo_juego(dificultad, ejercito):
                 elif decision == "3":
                     if len(ejercito.combatientes) == 0:
                         print("No tienes ningun combatiente, no puedes pelear aún")
-                        comienzo_juego(dificultad)
+                        comienzo_juego(dificultad, ejercito)
                     combatir_funcion(dificultad, ejercito)
 
             else:
