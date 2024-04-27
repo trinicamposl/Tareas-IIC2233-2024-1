@@ -43,30 +43,6 @@ def revisar_parametros(vida_maxima, defensa, poder, agilidad, resistencia):
     else:
         return False
 
-def revisar_parametros_unidades(tipo, vida_maxima, defensa, poder, agilidad, resistencia):
-    rango100 = list(range(0,101))
-    rango20 = list(range(1,21))
-    rango10 = list(range(1,11))
-    if int(vida_maxima) in rango100:
-        if int(poder) in rango10:
-            if int(defensa) in rango20:
-                if int(agilidad) in rango10:
-                    if int(resistencia) in rango10:
-                        if tipo == "MAG" or tipo == "CAB" or tipo =="GUE":
-                            return True
-                        else:
-                            return False
-                    else:
-                        return False
-                else:
-                    return False
-            else:
-                return False
-        else:
-            return False
-    else:
-        return False
-
 def menu_de_inicio(plata, ronda):
     #esto imprime mi menú de inicio (lo hice para que fuera más ordenado el main.py)
     print("*"*40)
@@ -106,7 +82,7 @@ def menu_de_tienda(plata, mag, gue, cab, armadura, pergamino, lanza, cura):
 
 def revisar_unidades():
     """
-    Esta función revisa si los gatos que puedo comprar están permitidos y tienens 
+    Esta función revisa si los gatos que puedo comprar están permitidos y tienen
     sus parámetros correctos
 
     """
