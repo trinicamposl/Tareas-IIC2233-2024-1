@@ -12,8 +12,8 @@ class Ejercito():
     def combatir(self, enemigo):
         while len(enemigo.combatientes) != 0 or len(self.combatientes) != 0:
             for i in range(len(self.combatientes)):
-                jugador = self.combatientes[i]
-                contrincante = enemigo.combatientes[i]
+                jugador = self.combatientes[0]
+                contrincante = enemigo.combatientes[0]
                 mi_vida = jugador._vida
                 su_vida = contrincante._vida
                 while mi_vida != 0 and su_vida != 0:
@@ -83,8 +83,14 @@ class Combatientes(ABC):
     
     @vida.setter
     def vida(self, cantidad):
-        self._vida = min(cantidad, self._vida_maxima)
-        self._vida = max(self._vida, 0)
+        if cantidad > self._vida_maxima:
+            self._vida = self._vida_maxima
+        if cantidad < 0:
+            self._vida = 0
+        else:
+            self._vida = cantidad
+        #self._vida = min(cantidad, self._vida_maxima)
+        #self._vida = max(self._vida, 0)
 
     @property
     def vida_maxima(self):
