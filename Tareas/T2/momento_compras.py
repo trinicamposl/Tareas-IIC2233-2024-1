@@ -36,7 +36,7 @@ def compra(ejercito, ronda):
                             menu_de_tienda(ejercito.oro, *precio)
                             eleccion = input()
                     else:
-                        print(revisar_unidades[1])
+                        print(revisar_unidades()[1])
                         exit()
 
                 elif eleccion == "2": #guerrero
@@ -56,7 +56,7 @@ def compra(ejercito, ronda):
                             menu_de_tienda(ejercito.oro, *precio)
                             eleccion = input()
                     else:
-                        print(revisar_unidades[1])
+                        print(revisar_unidades()[1])
                         exit()
 
                 elif eleccion == "3": #caballero
@@ -76,7 +76,7 @@ def compra(ejercito, ronda):
                             menu_de_tienda(ejercito.oro, *precio)
                             eleccion = input()
                     else:
-                        print(revisar_unidades[1])
+                        print(revisar_unidades()[1])
                         exit()
 
                 elif eleccion == "4": #armadura
