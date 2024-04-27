@@ -20,6 +20,7 @@ def combatir_funcion(dificultad, ejercito):
             print(ejercito.combatientes(enemigo_clase)[1])
             ejercito.oro += ORO_GANADO
             ejercito.ronda += 1
+            print("RONDA:", ejercito.ronda)
             if ejercito.ronda == 4:
                 print("Has ganado!!!!")
                 print("Lograste vencer a Gatochico, ahora puedes dormir en paz :D")

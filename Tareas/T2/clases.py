@@ -10,27 +10,50 @@ class Ejercito():
         self.ronda = 1
     
     def combatir(self, enemigo):
-        while len(enemigo.combatientes) != 0 or len(self.combatientes) != 0:
+        while len(enemigo.combatientes) > 0 and len(self.combatientes) > 0:
+
+            # @dev-note: Esto esta aquí para depurar el código.
+            print("=" * 20)
+            print("Mis combatientes:")
+            for peleador in self.combatientes:
+                print(peleador.nombre)
+            print("-" * 20)
+
+            print("=" * 20)
+            print("Enemigo combatientes:")
+            for peleador in enemigo.combatientes:
+                print(peleador.nombre)
+            print("-" * 20)
+
             for i in range(len(self.combatientes)):
                 jugador = self.combatientes[0]
                 contrincante = enemigo.combatientes[0]
                 mi_vida = jugador._vida
                 su_vida = contrincante._vida
-                while mi_vida != 0 and su_vida != 0:
+
+                # Intercambio de daño.
+                while mi_vida > 0 and su_vida > 0:
+                    # Ataque del jugador.
                     jugador.atacar(contrincante)
                     texto = f"{jugador.nombre} ha atacado a {contrincante.nombre} dejandolo con "
                     texto_2 = f"{contrincante._vida} de vida"
                     print(texto + texto_2)
+
+                    # Ataque del enemigo.
                     contrincante.atacar(jugador)
                     texto = f"{contrincante.nombre} ha atacado a {jugador.nombre} dejandolo con"
                     print(texto + f"  {jugador._vida} de vida")
+
+                    # Resultado del intercambio.
                     mi_vida = jugador._vida
                     su_vida = contrincante._vida
-                    if mi_vida == 0:
+
+                    if mi_vida < 0:
                         self.combatientes.pop(indice(jugador, self.combatientes))
-                    if su_vida == 0:
-                        enemigo.combatientes.pop(indice(contrincante, enemigo.combatientes))  
-                        break
+                    if su_vida < 0:
+                        enemigo.combatientes.pop(indice(contrincante, enemigo.combatientes))
+                        break;
+
         if len(enemigo.combatientes) == 0:
             if len(self.combatientes) != 0:
                 self.ronda+=1 
