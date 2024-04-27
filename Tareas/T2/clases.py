@@ -18,19 +18,19 @@ class Ejercito():
                 su_vida = contrincante._vida
                 while mi_vida != 0 and su_vida != 0:
                     jugador.atacar(contrincante)
-                    texto = f"{jugador.nombre} le ha hecho un ataque de {jugador.ataque} a "
-                    texto_2 = f"{contrincante.nombre} dejandolo con {contrincante._vida} de vida"
+                    texto = f"{jugador.nombre} ha atacado a {contrincante.nombre} dejandolo con "
+                    texto_2 = f"{contrincante._vida} de vida"
                     print(texto + texto_2)
                     contrincante.atacar(jugador)
-                    texto = f"{contrincante.nombre} le ha hecho un ataque de {contrincante.ataque}"
-                    print(texto + f" a {jugador.nombre} dejandolo con {jugador._vida} de vida")
+                    texto = f"{contrincante.nombre} ha atacado a {jugador.nombre} dejandolo con"
+                    print(texto + f"  {jugador._vida} de vida")
                     mi_vida = jugador._vida
                     su_vida = contrincante._vida
-                if mi_vida == 0:
-                    self.combatientes.pop(indice(jugador, self.combatientes))
-                if su_vida == 0:
-                    enemigo.combatientes.pop(indice(contrincante, enemigo.combatientes))  
-                    break
+                    if mi_vida == 0:
+                        self.combatientes.pop(indice(jugador, self.combatientes))
+                    if su_vida == 0:
+                        enemigo.combatientes.pop(indice(contrincante, enemigo.combatientes))  
+                        break
         if len(enemigo.combatientes) == 0:
             if len(self.combatientes) != 0:
                 self.ronda+=1 
@@ -84,7 +84,7 @@ class Combatientes(ABC):
     @vida.setter
     def vida(self, cantidad):
         self._vida = min(cantidad, self._vida_maxima)
-        self._vida = max(cantidad, 0)
+        self._vida = max(self._vida, 0)
 
     @property
     def vida_maxima(self):
@@ -181,8 +181,8 @@ class Mago(Combatientes):
         self.tipo = "Gato Mago"  
     
     def __str__(self):
-        f1 = f"Hola! Soy {self.nombre}, un {self.tipo} con {self._vida}/{self._vida_maxima} de vida"
-        print(f"{f1}, {self.ataque} de ataque y {self._defensa} de defensa")
+        f = f"Hola! Soy {self.nombre}, un {self.tipo} con {self._vida}/{self._vida_maxima} de vida"
+        print(f"{f}, {self.ataque} de ataque y {self._defensa} de defensa")
 
     def presentarse(self):
         self.__str__()

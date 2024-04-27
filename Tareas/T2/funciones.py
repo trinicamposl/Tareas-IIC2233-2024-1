@@ -189,5 +189,3 @@ def archivo_a_equipo(dificultad):
 
 
 
-
-
