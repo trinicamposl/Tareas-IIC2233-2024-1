@@ -3,37 +3,43 @@ from parametros import RED_MAG,ATQ_MAG, PROB_PAL, AUM_PAL, PROB_MDB, DEF_MDB, PR
 from abc import ABC, abstractmethod
 import random
 
-class Ejercito():
+class Ejercito(ABC):
     def __init__(self):
         self.combatientes = []
         self.oro = ORO_INICIAL
         self.ronda = 1
     
     def combatir(self, enemigo):
-        while len(enemigo.combatientes) != 0 or len(self.combatientes) != 0:
+        while len(enemigo.combatientes) != 0 and len(self.combatientes) != 0:
             for i in range(len(self.combatientes)):
                 jugador = self.combatientes[0]
+                if len(enemigo.combatientes) == 0:
+                    if len(self.combatientes) != 0:
+                        return(True, "Ganaste esta ronda! :D")
+                    break
                 contrincante = enemigo.combatientes[0]
                 mi_vida = jugador._vida
                 su_vida = contrincante._vida
                 while mi_vida != 0 and su_vida != 0:
+                    #acá ataco yo
                     jugador.atacar(contrincante)
-                    texto = f"{jugador.nombre} ha atacado a {contrincante.nombre} dejandolo con "
-                    texto_2 = f"{contrincante._vida} de vida"
-                    print(texto + texto_2)
-                    contrincante.atacar(jugador)
-                    texto = f"{contrincante.nombre} ha atacado a {jugador.nombre} dejandolo con"
-                    print(texto + f"  {jugador._vida} de vida")
-                    mi_vida = jugador._vida
                     su_vida = contrincante._vida
-                    if mi_vida == 0:
-                        self.combatientes.pop(indice(jugador, self.combatientes))
-                    if su_vida == 0:
-                        enemigo.combatientes.pop(indice(contrincante, enemigo.combatientes))  
-                        break
+                    if su_vida <= 0:
+                        su_vida = 0
+                        enemigo.combatientes.pop(0)          
+                    texto = f"{jugador.nombre} ha atacado a {contrincante.nombre}, dejandolo con"
+                    texto_2 = f" {su_vida} de vida"
+                    print(texto + texto_2)
+                    #acá ataca el otro
+                    contrincante.atacar(jugador)
+                    mi_vida = jugador._vida
+                    if mi_vida <= 0:
+                        mi_vida = 0
+                        self.combatientes.pop(0)
+                    texto = f"{contrincante.nombre} ha atacado a {jugador.nombre}, dejandolo con"
+                    print(texto + f"  {mi_vida} de vida")
         if len(enemigo.combatientes) == 0:
             if len(self.combatientes) != 0:
-                self.ronda+=1 
                 return(True, "Ganaste esta ronda! :D")
             else:
                 return(False, "Murieron todos tus gatos. Perdiste el juego D:")       
@@ -59,7 +65,7 @@ class Ejercito():
 class Combatientes(ABC):
     def __init__(self, nombre, vida_maxima, poder, defensa, agilidad, resistencia):
         self.nombre = nombre
-        self._vida_maxima = int(vida_maxima)
+        self.vida_maxima = int(vida_maxima)
         self._vida = int(vida_maxima) #revisar
         self._poder = int(poder)
         self._defensa = int(defensa)
@@ -69,28 +75,26 @@ class Combatientes(ABC):
         self.ataque = round((denominador*2*self._vida)/self._vida_maxima)
     
     @property
-    def curarse(self):
-        return self._vida
-    
-    @curarse.setter
-    def curarse(self, cantidad):
-        self._vida = min(self._vida + cantidad, self._vida_maxima)
-        self._vida = max(self._vida, 0)
-
-    @property
     def vida(self):
         return self._vida
     
     @vida.setter
     def vida(self, cantidad):
-        if cantidad > self._vida_maxima:
-            self._vida = self._vida_maxima
-        if cantidad < 0:
+        if cantidad > self.vida_maxima:
+            self._vida = self.vida_maxima
+        elif cantidad < 0:
             self._vida = 0
         else:
             self._vida = cantidad
-        #self._vida = min(cantidad, self._vida_maxima)
-        #self._vida = max(self._vida, 0)
+
+    @property
+    def curarse(self):
+        return self._vida
+
+    @curarse.setter
+    def curarse(self, cantidad):
+        self._vida = min(self._vida + cantidad, self._vida_maxima)
+        self._vida = max(self._vida, 0)
 
     @property
     def vida_maxima(self):
@@ -139,7 +143,7 @@ class Combatientes(ABC):
     def evolucionar(self):
         pass
 
-class Guerrero(Combatientes):
+class Guerrero(Combatientes, ABC):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tipo = "Gato Guerrero"  
@@ -158,7 +162,7 @@ class Guerrero(Combatientes):
     def evolucionar(self, pieza):
         return Items(pieza).evolucionar_gato(self)
 
-class Caballero(Combatientes):
+class Caballero(Combatientes, ABC):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tipo = "Gato Caballero"  
@@ -181,7 +185,7 @@ class Caballero(Combatientes):
     def evolucionar(self, pieza):
         return Items(pieza).evolucionar_gato(self)
     
-class Mago(Combatientes):
+class Mago(Combatientes, ABC):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tipo = "Gato Mago"  
@@ -205,7 +209,7 @@ class Mago(Combatientes):
     def evolucionar(self, pieza):
         return Items(pieza).evolucionar_gato(self)
 
-class Paladin(Guerrero, Caballero):
+class Paladin(Guerrero, Caballero, ABC):
     def __init__(self, *args, **kwargs): 
         super().__init__(*args, **kwargs)
         self.tipo = "Gato Paladin"  
@@ -227,7 +231,7 @@ class Paladin(Guerrero, Caballero):
     def evolucionar(self):
         print("Yo no puedo evolucionar :(")
 
-class MagoDeBatalla(Guerrero, Mago):
+class MagoDeBatalla(Guerrero, Mago, ABC):
     def __init__(self, *args, **kwargs): 
         super().__init__(*args, **kwargs)
         self.tipo = "Gato Mago De Batalla"  
@@ -250,7 +254,7 @@ class MagoDeBatalla(Guerrero, Mago):
     def evolucionar(self):
         print("Yo no puedo evolucionar :(")
 
-class CaballeroArcano(Caballero, Mago):
+class CaballeroArcano(Caballero, Mago, ABC):
     def __init__(self, *args, **kwargs): 
         super().__init__(*args, **kwargs)
         self.tipo = "Gato Caballero Arcano"  
