@@ -44,7 +44,7 @@ def compra(ejercito, ronda):
                     if revisar_unidades()[0]:
                         if ejercito.oro >= PRECIO_GUE:
                             ejercito.oro -= PRECIO_GUE
-                            aleatorio = random.randint(0, len(lista_gatos()[2]) - 1) 
+                            aleatorio = random.randint(0, len(lista_gatos()[2]) - 1)
                             gato = lista_gatos()[2][aleatorio]
                             ejercito.agregar_ejercito(gato)
                             print(f"Has adquirido a {gato.nombre}, un {gato.tipo}")
@@ -272,7 +272,7 @@ def compra(ejercito, ronda):
             else:
                 print("Por favor elige un NÚMERO entre 1 y 8")
                 print("*"*40)
-                menu_de_inicio(ejercito.oro, ejercito.ronda)
+                menu_de_tienda(ejercito.oro, *precio)
                 eleccion = input()
 
     menu_de_inicio(ejercito.oro, ronda)
