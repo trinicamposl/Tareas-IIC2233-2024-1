@@ -10,7 +10,7 @@ class Ejercito(ABC):
         self.ronda = 1
 
     def combatir(self, enemigo):
-        while len(enemigo.combatientes) != 0 and len(self.combatientes) != 0:
+        while len(enemigo.combatientes) > 0 and len(self.combatientes) > 0:
             for i in range(len(self.combatientes)):
                 jugador = self.combatientes[0]
                 if len(enemigo.combatientes) == 0:

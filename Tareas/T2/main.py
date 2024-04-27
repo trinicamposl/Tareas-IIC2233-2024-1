@@ -40,7 +40,7 @@ if len(nombres) == 2: #me dieron la cantidad correcta de parametros
 
 else: #me faltó la dificultad o me dieron más parámetros
     print("La cantidad de parámetros no coincide con la pedida, por favor intenta de nuevo")
-    print("Recuerda que la dificultad puede ser 'facil', 'intermedio' o 'dificil")
+    print("Recuerda que la dificultad puede ser 'facil', 'intermedio' o 'dificil'")
     exit()
 
 
