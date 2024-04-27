@@ -31,14 +31,14 @@ if len(nombres) == 2: #me dieron la cantidad correcta de parametros
         else:
             print(archivo_correcto(archivo)[1])
             exit()
-    
+
     else:
         print("El nivel de dificultad que escogiste no está correcto. Intenta de nuevo")
         print("Recuerda que la dificultad puede ser 'facil', 'intermedio' o 'dificil")
 
         exit()
 
-else: #me faltó la dificultad o me dieron más parámetros 
+else: #me faltó la dificultad o me dieron más parámetros
     print("La cantidad de parámetros no coincide con la pedida, por favor intenta de nuevo")
     print("Recuerda que la dificultad puede ser 'facil', 'intermedio' o 'dificil")
     exit()

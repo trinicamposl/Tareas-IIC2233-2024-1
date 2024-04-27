@@ -1,5 +1,5 @@
 from funciones import menu_de_inicio, menu_de_tienda, archivo_a_equipo
-from momento_compras import compra 
+from momento_compras import compra
 from sys import exit
 from clases import Ejercito
 from parametros import PRECIO_ARMADURA, PRECIO_CAB, PRECIO_GUE
@@ -23,7 +23,7 @@ def combatir_funcion(dificultad, ejercito):
             print("Lograste vencer a Gatochico, ahora puedes dormir en paz :D")
             exit()
         comienzo_juego(dificultad, ejercito)
-        
+
     else:
         print(ejercito.combatir(enemigo_clase)[1])
         comienzo_juego(dificultad, 0)
@@ -72,6 +72,6 @@ def comienzo_juego(dificultad, ejercito):
                 menu_de_inicio(ejercito.oro, ejercito.ronda)
                 decision = input()
                 print("*"*40)
-    
+
     print("Hasta el próximo combate :D")
     exit()
