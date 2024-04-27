@@ -10,7 +10,7 @@ if len(nombres) == 2: #me dieron la cantidad correcta de parametros
     archivo = nombres[1] + ".txt"
     if dificultad == "facil":
         if archivo_correcto(archivo)[0]:
-            comienzo_juego(dificultad)
+            comienzo_juego(dificultad, 0)
 
         else:
             print(archivo_correcto(archivo)[1])
@@ -18,7 +18,7 @@ if len(nombres) == 2: #me dieron la cantidad correcta de parametros
 
     elif dificultad == "intermedio":
         if archivo_correcto(archivo)[0]:
-            comienzo_juego(dificultad)
+            comienzo_juego(dificultad, 0)
 
         else:
             print(archivo_correcto(archivo)[1])
@@ -26,7 +26,7 @@ if len(nombres) == 2: #me dieron la cantidad correcta de parametros
 
     elif dificultad == "dificil":
         if archivo_correcto(archivo)[0]:
-            comienzo_juego(dificultad)
+            comienzo_juego(dificultad, 0)
 
         else:
             print(archivo_correcto(archivo)[1])
