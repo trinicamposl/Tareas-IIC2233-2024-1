@@ -53,7 +53,7 @@ El módulo principal de la tarea a ejecutar es  ```main.py```. Además se debe c
 4. ```juego.py``` en ```T2```
 5. ```parametros.py``` en ```T2```
 
-**además tiene que haber un archivo llamado ```unidades.txt``` (de texto) para poder importar los gatos que se pueden comprar dentro de la carpeta data/ y los distintos archivos para las dificultades dentro de esta misma carpeta en el formato ```"dificultad_escogida".txt```**
+Además tiene que haber un archivo llamado ```unidades.txt``` (de texto) para poder importar los gatos que se pueden comprar dentro de la carpeta data/ y los distintos archivos para las dificultades dentro de esta misma carpeta en el formato ```"dificultad_escogida".txt```
 
 
 ## Librerías :books:
