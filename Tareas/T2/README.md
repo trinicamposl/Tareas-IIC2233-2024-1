@@ -9,11 +9,6 @@ Cabe destacar que me costó mucho entender la tarea y me tinca que hay cosas que
 
 ### Cosas implementadas y no implementadas :white_check_mark: :x:
 
-Explicación: mantén el emoji correspondiente, de manera honesta, para cada item. Si quieres, también puedes agregarlos a los títulos:
-- ❌ si **NO** completaste lo pedido
-- ✅ si completaste **correctamente** lo pedido
-- 🟠 si el item está **incompleto** o tiene algunos errores
-
 #### Programación Orientada a Objetos: 12 pts (10%)
 ##### 🟠 Definición de clases, herencia y *properties*
 Usé tanto herencia, como clases y properties aunque no sé si logré definir bien algunas properties como la vida, que me creo algunos problemas
@@ -57,6 +52,7 @@ El módulo principal de la tarea a ejecutar es  ```main.py```. Además se debe c
 3. ```momento_compras.py``` en ```T2```
 4. ```juego.py``` en ```T2```
 5. ```parametros.py``` en ```T2```
+
 **además tiene que haber un archivo llamado ```unidades.txt``` (de texto) para poder importar los gatos que se pueden comprar dentro de la carpeta data/ y los distintos archivos para las dificultades dentro de esta misma carpeta en el formato ```"dificultad_escogida".txt```**
 
 
@@ -98,11 +94,7 @@ Los supuestos que realicé durante la tarea son los siguientes:
 PD: Mi computador murió como por 6 días del periodo de la tarea asi que porfa ten piedadddd :pensive:
 
 
-## Referencias de código externo :book:
-
-Para realizar mi tarea saqué código de:
-1. \<link de código>: este hace \<lo que hace> y está implementado en el archivo <nombre.py> en las líneas <número de líneas> y hace <explicación breve de que hace>
-
 ## Descuentos
+Puede que tenga problemas con las properties y si realmente está funcionando bien el combate :(
 
 La guía de descuentos se encuentra [link](https://github.com/IIC2233/Syllabus/blob/main/Tareas/Bases%20Generales%20de%20Tareas%20-%20IIC2233.pdf).
