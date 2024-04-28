@@ -1,5 +1,5 @@
 from funciones import menu_de_inicio, menu_de_tienda, archivo_a_equipo
-from momento_compras import compra 
+from momento_compras import compra
 from sys import exit
 from clases import Ejercito
 from parametros import PRECIO_ARMADURA, PRECIO_CAB, PRECIO_GUE
@@ -10,10 +10,19 @@ precio = [PRECIO_MAG, PRECIO_GUE, PRECIO_CAB, PRECIO_ARMADURA, PRECIO_LANZA, per
 
 def combatir_funcion(dificultad, ejercito):
     contrincantes = archivo_a_equipo(dificultad)
-    enemigo = contrincantes[ejercito.ronda]
+    enemigo = contrincantes[ejercito.ronda - 1]
     enemigo_clase = Ejercito()
     for elemento in enemigo:
         enemigo_clase.agregar_ejercito(elemento)
+    if ejercito.combatir(enemigo_clase)[0]:
+        print((ejercito.combatir(enemigo_clase))[1])
+        ejercito.oro += ORO_GANADO
+        ejercito.ronda += 1
+        if ejercito.ronda == 4:
+            print("Has ganado!!!!")
+            print("Lograste vencer a Gatochico, ahora puedes dormir en paz :D")
+            exit()
+        comienzo_juego(dificultad, ejercito)
 
     for i in range(3):
         if ejercito.combatir(enemigo_clase)[0]:
@@ -27,14 +36,15 @@ def combatir_funcion(dificultad, ejercito):
                 exit()
         else:
             print(ejercito.combatir(enemigo_clase)[1])
-            comienzo_juego(dificultad)
+            comienzo_juego(dificultad, 0)
     return enemigo
 
 
 
 
-def comienzo_juego(dificultad):
-    ejercito = Ejercito()
+def comienzo_juego(dificultad, ejercito):
+    if ejercito == 0:
+        ejercito = Ejercito()
     menu_de_inicio(ejercito.oro, ejercito.ronda)
     decision = input()
     while decision != "4":
@@ -72,6 +82,6 @@ def comienzo_juego(dificultad):
                 menu_de_inicio(ejercito.oro, ejercito.ronda)
                 decision = input()
                 print("*"*40)
-    
+
     print("Hasta el próximo combate :D")
     exit()

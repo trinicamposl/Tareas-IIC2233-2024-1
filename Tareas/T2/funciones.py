@@ -1,6 +1,6 @@
 import os
 from clases import Mago, Caballero, Guerrero, MagoDeBatalla, CaballeroArcano, Paladin
-    
+
 def archivo_correcto(archivo):
     camino = os.path.join("data", archivo)
     with open((camino), "rt") as texto:
@@ -18,7 +18,7 @@ def archivo_correcto(archivo):
                             texto = "Los parámetros del archivo no cumplen los requisitos. "
                             return (False, texto + "Intenta de nuevo")
             return (True, 0)
-                        
+
         else:
             return (False, "Tu archivo tiene más rondas de las que se permiten. Intenta de nuevo")
 
@@ -43,30 +43,6 @@ def revisar_parametros(vida_maxima, defensa, poder, agilidad, resistencia):
     else:
         return False
 
-def revisar_parametros_unidades(tipo, vida_maxima, defensa, poder, agilidad, resistencia):
-    rango100 = list(range(0,101))
-    rango20 = list(range(1,21))
-    rango10 = list(range(1,11))
-    if int(vida_maxima) in rango100:
-        if int(poder) in rango10:
-            if int(defensa) in rango20:
-                if int(agilidad) in rango10:
-                    if int(resistencia) in rango10:
-                        if tipo == "MAG" or tipo == "CAB" or tipo =="GUE":
-                            return True
-                        else:
-                            return False
-                    else:
-                        return False
-                else:
-                    return False
-            else:
-                return False
-        else:
-            return False
-    else:
-        return False
-
 def menu_de_inicio(plata, ronda):
     #esto imprime mi menú de inicio (lo hice para que fuera más ordenado el main.py)
     print("*"*40)
@@ -74,7 +50,7 @@ def menu_de_inicio(plata, ronda):
     print("")
     print('{:^40}'.format(f"Oro disponible: {plata}"))
     print('{:^38}'.format(f"Ronda actual: {ronda}"))
-    print("")  
+    print("")
     print('{:<40}'.format('      #1 : Tienda'))
     print('{:<40}'.format('      #2 : Ejército'))
     print('{:<40}'.format('      #3 : Combatir'))
@@ -90,7 +66,7 @@ def menu_de_tienda(plata, mag, gue, cab, armadura, pergamino, lanza, cura):
     print('{:^40}'.format('Tienda'))
     print("")
     print('{:^40}'.format(f"Oro disponible: {plata}"))
-    print("                                Precio")  
+    print("                                Precio")
     print('{:<40}'.format(f'      #1 : Gato Mago              {mag}'))
     print('{:<40}'.format(f'      #2 : Gato Guerrero          {gue}'))
     print('{:<40}'.format(f'      #3 : Gato Caballero         {cab}'))
@@ -106,7 +82,7 @@ def menu_de_tienda(plata, mag, gue, cab, armadura, pergamino, lanza, cura):
 
 def revisar_unidades():
     """
-    Esta función revisa si los gatos que puedo comprar están permitidos y tienens 
+    Esta función revisa si los gatos que puedo comprar están permitidos y tienen
     sus parámetros correctos
 
     """
@@ -117,8 +93,8 @@ def revisar_unidades():
             gato = linea.split(",")
             if len(gato) != 7:
                 texto = "Tu archivo unidades están mal hecho. No puedes jugar D:"
-                return (False, texto)                
-            else:  
+                return (False, texto)
+            else:
                 if revisar_parametros(gato[2], gato[3], gato[4], gato[5], gato[6]) == False:
                     texto = "Los parámetros de tu archivo unidades no cumplen los requisitos. "
                     return (False, texto + "No puedes jugar D:")
@@ -128,7 +104,7 @@ def revisar_unidades():
         return (True, 0)
 
 def lista_gatos():
-    """" 
+    """"
     esta funcion me agrupa los gatos según el tipo en una lista de listas
     me devuelve la lista en orden (magos, caballeros, guerreros) asumiendo que el archivo esta bien
 
@@ -157,7 +133,7 @@ def seleccion_gato(lista):
     for i in range(len(lista)):
         gato = lista[i]
         print('{:<40}'.format(f'      #{i+1} : {gato.tipo}, llamado {gato.nombre}'))
-    
+
     print('{:^40}'.format('Elige tu opción;'))
 
 def archivo_a_equipo(dificultad):
