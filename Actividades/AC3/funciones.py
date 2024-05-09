@@ -17,16 +17,16 @@ from utilidades import (
 
 def cargar_peliculas(ruta: str) -> Generator:
     with open(ruta, "r") as archivo:
-        
-
-        yeild linea
-    # TODO: Completar
-    pass
+        for linea in archivo:
+            elementos = linea.split(",")
+            yield Pelicula(*elementos)
 
 
 def cargar_generos(ruta: str) -> Generator:
-    # TODO: Completar
-    pass
+    with open(ruta, "r") as archivo:
+        for linea in archivo:
+            elementos = linea.split(",")
+            yield Genero(*elementos)
 
 
 # ----------------------------------------------------------------------------
@@ -34,13 +34,16 @@ def cargar_generos(ruta: str) -> Generator:
 # ----------------------------------------------------------------------------
 
 def obtener_directores(generador_peliculas: Generator) -> set:
-    # TODO: Completar
-    pass
+    directores = map(lambda dato: dato.director, generador_peliculas)
+    return obtener_unicos(directores)
 
 
 def obtener_str_titulos(generador_peliculas: Generator) -> str:
-    # TODO: Completar
-    pass
+    ##revisar esto
+    titulos = map(lambda x: x.titulo + ", ", generador_peliculas)
+    frase = reduce(lambda x, y: x + y)
+    frase_final = frase[:len(frase)-2]
+    return frase_final
 
 
 def filtrar_peliculas(
@@ -49,7 +52,12 @@ def filtrar_peliculas(
     rating_min: float | None = None,
     rating_max: float | None = None
 ) -> filter:
-    # TODO: Completar
+    if director.__class__ == str:
+        filter(lambda y: y.director == True , generador_peliculas)
+
+
+
+
     pass
 
 
