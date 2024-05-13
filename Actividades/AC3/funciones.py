@@ -60,14 +60,25 @@ def filtrar_peliculas(
     rating_min: float | None = None,
     rating_max: float | None = None
 ) -> filter:
+
     if director.__class__ == str:
-        return filter(lambda x: x.director == director, generador_peliculas)
+        if rating_max.__class__ != float and rating_min.__class__ != float:
+            return filter(lambda x: x.director == director, generador_peliculas)
+        elif rating_max.__class__ == float and rating_min.__class__ != float:
+            return filter(lambda x: x.director == director and x.rating <= rating_max, generador_peliculas)
+        elif rating_max.__class__ != float and rating_min.__class__ == float:
+            return filter(lambda x: x.director == director and x.rating >= rating_min, generador_peliculas)
+        else:
+            return filter(lambda x: x.director == director and x.rating >= rating_min and x.rating <= rating_max, generador_peliculas)
 
-    elif rating_min.__class__ == float:
-        return filter(lambda x: x.rating >= rating_min, generador_peliculas)
-
-    elif rating_max.__class__ == float:
-        return filter(lambda x: x.rating <= rating_max, generador_peliculas)
+    else:
+        if rating_max.__class__ == float:
+            if rating_min.__class__ != float:
+                return filter(lambda x: x.rating <= rating_max, generador_peliculas)
+            else:
+                return filter(lambda x: x.rating >= rating_min and x.rating <= rating_max, generador_peliculas)
+        else:
+            return filter(lambda x: x.rating >= rating_min, generador_peliculas)
 
 
 
@@ -77,24 +88,15 @@ def filtrar_peliculas_por_genero(
     genero: str | None = None
 ) -> Generator:
     if genero.__class__ == str:
-        id_genero = map(lambda x : x.id_pelicula, generador_generos)
-        id_peliculas = map(lambda x : x.id_pelicula, generador_peliculas)
-        mezcla = product(id_peliculas, id_genero)
-        primer_filtro = filter(lambda x: x[:int((len(x)/2))]*2 == x, mezcla)
-        arreglo = map(lambda x: x[:int((len(x)/2))], primer_filtro) #peliculas que sirven
-        estan = filter(lambda x: x.id_pelicula in arreglo, generador_peliculas)
-        segundo_filtro = filter(lambda x: x.genero == genero, estan)
-        return segundo_filtro
+        mezcla = product(generador_peliculas, generador_generos)
+        primer_filtro = filter(lambda x: x[0].id_pelicula == x[1].id_pelicula and x[1].genero == genero, mezcla)
+        return primer_filtro
 
     else:
-        id_genero = map(lambda x : x.id_pelicula, generador_generos)
-        id_peliculas = map(lambda x : x.id_pelicula, generador_peliculas)
-        mezcla = product(id_peliculas, id_genero)
-        primer_filtro = filter(lambda x: x[:int((len(x)/2))]*2 == x, mezcla)
-        arreglo = map(lambda x: x[:int((len(x)/2))], primer_filtro)
-        arreglo_2 = map(lambda x: x, arreglo)
-        estan = filter(lambda x: x.id_pelicula in arreglo, generador_peliculas)
-        return arreglo_2
+        mezcla = product(generador_peliculas, generador_generos)
+        primer_filtro = filter(lambda x: x[0].id_pelicula == x[1].id_pelicula, mezcla)
+        return primer_filtro
+
 # ----------------------------------------------------------------------------
 # Parte 3: Iterables
 # ----------------------------------------------------------------------------
@@ -118,6 +120,7 @@ class IteradorDCCMax:
         if len(self.peliculas) == 0:
             raise StopIteration()
         else:
+            self.peliculas.sort(key = lambda x: (x.estreno, -x.rating))
             pelicula = self.peliculas.pop(0)
             return pelicula
 
