@@ -17,15 +17,23 @@ from utilidades import (
 
 def cargar_peliculas(ruta: str) -> Generator:
     with open(ruta, "r") as archivo:
+        #id,titulo,director,año_estreno,rating_promedio
+        archivo.readline()
         for linea in archivo:
-            elementos = linea.split(",")
+            elementos = linea.strip().split(",")
+            elementos[0] = int(elementos[0])
+            elementos[3] = int(elementos[3])
+            elementos[4] = float(elementos[4])
             yield Pelicula(*elementos)
 
 
 def cargar_generos(ruta: str) -> Generator:
     with open(ruta, "r") as archivo:
+        #genero,id_pelicula
+        archivo.readline()
         for linea in archivo:
-            elementos = linea.split(",")
+            elementos = linea.strip().split(",")
+            elementos[1] = int(elementos[1])
             yield Genero(*elementos)
 
 
@@ -41,7 +49,7 @@ def obtener_directores(generador_peliculas: Generator) -> set:
 def obtener_str_titulos(generador_peliculas: Generator) -> str:
     ##revisar esto
     titulos = map(lambda x: x.titulo + ", ", generador_peliculas)
-    frase = reduce(lambda x, y: x + y)
+    frase = reduce(lambda x, y: x + y, titulos, "")
     frase_final = frase[:len(frase)-2]
     return frase_final
 
@@ -53,12 +61,14 @@ def filtrar_peliculas(
     rating_max: float | None = None
 ) -> filter:
     if director.__class__ == str:
-        filter(lambda y: y.director == True , generador_peliculas)
+        return filter(lambda x: x.director == director, generador_peliculas)
 
+    elif rating_min.__class__ == float:
+        return filter(lambda x: x.rating >= rating_min, generador_peliculas)
 
+    elif rating_max.__class__ == float:
+        return filter(lambda x: x.rating <= rating_max, generador_peliculas)
 
-
-    pass
 
 
 def filtrar_peliculas_por_genero(
@@ -66,10 +76,25 @@ def filtrar_peliculas_por_genero(
     generador_generos: Generator,
     genero: str | None = None
 ) -> Generator:
-    # TODO: Completar
-    pass
+    if genero.__class__ == str:
+        id_genero = map(lambda x : x.id_pelicula, generador_generos)
+        id_peliculas = map(lambda x : x.id_pelicula, generador_peliculas)
+        mezcla = product(id_peliculas, id_genero)
+        primer_filtro = filter(lambda x: x[:int((len(x)/2))]*2 == x, mezcla)
+        arreglo = map(lambda x: x[:int((len(x)/2))], primer_filtro) #peliculas que sirven
+        estan = filter(lambda x: x.id_pelicula in arreglo, generador_peliculas)
+        segundo_filtro = filter(lambda x: x.genero == genero, estan)
+        return segundo_filtro
 
-
+    else:
+        id_genero = map(lambda x : x.id_pelicula, generador_generos)
+        id_peliculas = map(lambda x : x.id_pelicula, generador_peliculas)
+        mezcla = product(id_peliculas, id_genero)
+        primer_filtro = filter(lambda x: x[:int((len(x)/2))]*2 == x, mezcla)
+        arreglo = map(lambda x: x[:int((len(x)/2))], primer_filtro)
+        arreglo_2 = map(lambda x: x, arreglo)
+        estan = filter(lambda x: x.id_pelicula in arreglo, generador_peliculas)
+        return arreglo_2
 # ----------------------------------------------------------------------------
 # Parte 3: Iterables
 # ----------------------------------------------------------------------------
@@ -79,8 +104,7 @@ class DCCMax:
         self.peliculas = peliculas
 
     def __iter__(self):
-        # TODO: Completar
-        pass
+        return IteradorDCCMax(self.peliculas)
 
 
 class IteradorDCCMax:
@@ -88,14 +112,14 @@ class IteradorDCCMax:
         self.peliculas = copy(iterable_peliculas)
 
     def __iter__(self):
-        # TODO: Completar
-        pass
+        return self
 
     def __next__(self) -> tuple:
-        # TODO: Completar
-
-        # Se levanta la excepción correspondiente
-        raise StopIteration()
+        if len(self.peliculas) == 0:
+            raise StopIteration()
+        else:
+            pelicula = self.peliculas.pop(0)
+            return pelicula
 
 
 if __name__ == '__main__':
