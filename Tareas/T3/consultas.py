@@ -1,6 +1,6 @@
 from typing import Generator
-from os import join
-from utilidades
+from os import path
+from funciones import arreglo, cambio
 # ----------------------------------------------------------------------
 # COMPLETAR
 # ----------------------------------------------------------------------
@@ -8,18 +8,20 @@ from utilidades
 # CARGA DE DATOS
 
 def cargar_datos(tipo_generator: str, tamano: str):
-    nombre = f"{tipo_generator}".cvs
-    ruta = join("test_publicos", "data", tamano, nombre)
-    tipo = tipo_generator[0].uppercase() + tipo_generator[1:]
-    with open(ruta, "r", encoding = latin-1) as archivo:
-        #id,titulo,director,año_estreno,rating_promedio
+    nombre = f"{tipo_generator}.csv"
+    ruta = path.join("data", tamano, nombre)
+    with open(ruta, "r", encoding="latin-1") as archivo:
         archivo.readline()
-        for linea in archivo:
-            elementos = linea.strip().split(",")
-            elementos[0] = int(elementos[0])
-            elementos[3] = int(elementos[3])
-            elementos[4] = float(elementos[4])
-            yield tipo(*elementos)
+        if tipo_generator != "distrito":
+            for linea in archivo:
+                elementos = linea.strip().split(",")
+                yield cambio(map(arreglo, elementos), tipo_generator)
+        else:
+            separacion = linea.strip().split("[")
+            lista = separacion[1][:-1].split[","]
+            datos = separacion[0][:-1].split[","]
+            yield cambio(map(arreglo, datos.append(lista)), tipo_generator)
+
 
 # 1 GENERADOR
 
@@ -30,7 +32,7 @@ def animales_segun_edad(generador_animales: Generator,
 
 
 def animales_que_votaron_por(generador_votos: Generator,
-    id_candidato: int) -> Generator:    
+    id_candidato: int) -> Generator:
     # COMPLETAR
     pass
 
