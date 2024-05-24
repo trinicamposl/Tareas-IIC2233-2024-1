@@ -2,7 +2,8 @@ from typing import Generator
 from os import path
 from funciones import arreglo, cambio
 from functools import reduce
-
+from collections import Counter
+from itertools import combinations
 # CARGA DE DATOS
 
 def cargar_datos(tipo_generator: str, tamano: str):
@@ -45,36 +46,36 @@ def cantidad_votos_candidato(generador_votos: Generator,
     return (reduce(lambda x, y: x + y, a, 0))
 
 def ciudades_distritos(generador_distritos: Generator) -> Generator:
-    # COMPLETAR
-    pass
-
+    yield from {x.provincia for x in generador_distritos}
 
 def especies_postulantes(generador_candidatos: Generator,
-    postulantes: int) ->Generator:
-    # COMPLETAR
-    pass
+    postulantes: int) -> Generator:
+
 
 
 def pares_candidatos(generador_candidatos: Generator) -> Generator:
-    # COMPLETAR
-    pass
-
+    lista = combinations([i.nombre for i in generador_candidatos], 2)
+    arreglo = filter(lambda x: len(x) > 1, lista)
+    yield from arreglo
 
 def votos_alcalde_en_local(generador_votos: Generator, candidato: int,
     local: int) -> Generator:
-    # COMPLETAR
-    pass
+    gen = generador_votos
+    yield from filter(lambda x: x.id_candidato == candidato and x.id_local == local, gen)
 
 
 def locales_mas_votos_comuna (generador_locales: Generator,
     cantidad_minima_votantes: int, id_comuna: int) -> Generator:
-    # COMPLETAR
-    pass
+    min = cantidad_minima_votantes
+    comuna = filter(lambda x: x.id_comuna == id_comuna and sum(x)>= min, generador_locales)
+    yield from comuna
 
 
 def votos_candidato_mas_votado(generador_votos: Generator) -> Generator:
-    # COMPLETAR 
-    pass
+    votos = map(lambda x: x.id_candidato, generador_votos)
+    mayores = Counter(votos).most_common(3)
+    mayor = reduce(lambda x, y : max(x, y), mayores[0], 0)
+    yield map(lambda x: x.id_voto, filter(lambda x: x.id_candidato == mayor, generador_votos))
 
 
 def animales_segun_edad_humana(generador_animales: Generator,
