@@ -52,7 +52,8 @@ def especies_postulantes(generador_candidatos: Generator,
     postulantes: int) -> Generator: #listo?
     cantidad = Counter(x.especie for x in generador_candidatos)
     especies = (str(tipo) for tipo, cant in cantidad.items() if cant >= postulantes)
-    return {x for x in especies}
+    for especie in especies:
+        yield especie
 
 def pares_candidatos(generador_candidatos: Generator) -> Generator: #listo
     lista = combinations([i.nombre for i in generador_candidatos], 2)
