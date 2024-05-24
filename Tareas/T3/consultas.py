@@ -1,9 +1,7 @@
 from typing import Generator
 from os import path
 from funciones import arreglo, cambio
-# ----------------------------------------------------------------------
-# COMPLETAR
-# ----------------------------------------------------------------------
+from functools import reduce
 
 # CARGA DE DATOS
 
@@ -12,36 +10,39 @@ def cargar_datos(tipo_generator: str, tamano: str):
     ruta = path.join("data", tamano, nombre)
     with open(ruta, "r", encoding="latin-1") as archivo:
         archivo.readline()
-        if tipo_generator != "distrito":
+        if tipo_generator != "locales":
             for linea in archivo:
                 elementos = linea.strip().split(",")
-                yield cambio(map(arreglo, elementos), tipo_generator)
+                yield cambio(list(map(arreglo, elementos)), tipo_generator)
         else:
-            separacion = linea.strip().split("[")
-            lista = separacion[1][:-1].split[","]
-            datos = separacion[0][:-1].split[","]
-            yield cambio(map(arreglo, datos.append(lista)), tipo_generator)
-
+            for linea in archivo:
+                separacion = linea.strip().split("[")
+                lista = list(map(arreglo, separacion[1][:-1].split(", ")))
+                datos = list(map(arreglo, separacion[0][:-1].split(",")))
+                datos.append(lista)
+                yield cambio(datos, tipo_generator)
 
 # 1 GENERADOR
 
 def animales_segun_edad(generador_animales: Generator,
     comparador: str, edad: int) -> Generator:
-    # COMPLETAR
-    pass
-
+    if comparador == ">":
+        yield from map(lambda x: x.nombre, filter(lambda x: x.edad > edad, generador_animales))
+    elif comparador == "<":
+        yield from map(lambda x: x.nombre, filter(lambda x: x.edad < edad, generador_animales))
+    else:
+        yield from map(lambda x: x.nombre, filter(lambda x: x.edad  == edad, generador_animales))
 
 def animales_que_votaron_por(generador_votos: Generator,
     id_candidato: int) -> Generator:
-    # COMPLETAR
-    pass
-
+    gen = generador_votos
+    m = map(lambda x: x.id_animal_votante, filter(lambda x: x.id_candidato == id_candidato, gen))
+    yield from m
 
 def cantidad_votos_candidato(generador_votos: Generator,
     id_candidato: int) -> int:
-    # COMPLETAR
-    pass
-
+    a = map(lambda x: 1, (filter(lambda x: x.id_candidato == id_candidato, generador_votos)))
+    return (reduce(lambda x, y: x + y, a, 0))
 
 def ciudades_distritos(generador_distritos: Generator) -> Generator:
     # COMPLETAR
