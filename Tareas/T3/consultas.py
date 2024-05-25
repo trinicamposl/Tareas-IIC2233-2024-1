@@ -142,15 +142,13 @@ def hallar_region(generador_distritos: Generator,
 
 def max_locales_distrito(generador_distritos: Generator,
                          generador_locales: Generator) -> Generator:  # revisar!!!!!
-    dist = [i for i in generador_distritos]
-    locales = [i for i in generador_locales]
+    dist = [i for i in generador_distritos]  # locales = [i for i in generador_locales]
     mayores = Counter(distrito.id_distrito for distrito in dist)  # id_distrito, cantidad
     numero = mayores.most_common()[0][1]
     filt = [dist for dist, cant in mayores.items() if cant >= numero]
     sirven = filter(lambda x: x if x.id_distrito in filt else None, dist)
     listo = {i for i in map(lambda x: x.nombre, sirven)}
     yield from listo
-
 
 
 def votaron_por_si_mismos(generador_candidatos: Generator,
@@ -173,8 +171,15 @@ def ganadores_por_distrito(generador_candidatos: Generator,
 def mismo_mes_candidato(generador_animales: Generator,
                         generador_candidatos: Generator, generador_votos: Generator,
                         id_candidato: str) -> Generator:
-    # COMPLETAR
-    pass
+    id = id_candidato
+    a = [i for i in generador_animales]
+    vot = {x.id_animal_votante: x.id_voto for x in generador_votos}
+    mes = map(lambda x: x.fecha_nacimiento[5:], filter(lambda x: x.id == int(id), a))
+    year = map(lambda x: x.fecha_nacimiento[:4], filter(lambda x: x.id == int(id), a))
+
+    v = filter(lambda x: (x.fecha_nacimiento[5:] == mes or x.fecha_nacimiento[5:] == year) and
+               vot[x.id_animal_votante] == int(id), a)
+    yield from v
 
 
 def edad_promedio_humana_voto_comuna(generador_animales: Generator,
