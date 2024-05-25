@@ -1,6 +1,6 @@
 data/
 log.md
-test_publicos/
+tests_publicos/
 Enunciado.pdf
 todos_tests.py
 test_solution.py
