@@ -6,6 +6,7 @@ from collections import Counter
 from itertools import combinations
 # CARGA DE DATOS
 
+
 def cargar_datos(tipo_generator: str, tamano: str):
     nombre = f"{tipo_generator}.csv"
     ruta = path.join("data", tamano, nombre)
@@ -23,101 +24,145 @@ def cargar_datos(tipo_generator: str, tamano: str):
                 datos.append(lista)
                 yield cambio(datos, tipo_generator)
 
+
 # 1 GENERADOR
 
+
 def animales_segun_edad(generador_animales: Generator,
-    comparador: str, edad: int) -> Generator:
-    if comparador == ">": #listo
+                        comparador: str, edad: int) -> Generator:
+    if comparador == ">":  # listo
         yield from map(lambda x: x.nombre, filter(lambda x: x.edad > edad, generador_animales))
     elif comparador == "<":
         yield from map(lambda x: x.nombre, filter(lambda x: x.edad < edad, generador_animales))
     else:
-        yield from map(lambda x: x.nombre, filter(lambda x: x.edad  == edad, generador_animales))
+        yield from map(lambda x: x.nombre, filter(lambda x: x.edad == edad, generador_animales))
+
 
 def animales_que_votaron_por(generador_votos: Generator,
-    id_candidato: int) -> Generator: #listo
+                             id_candidato: int) -> Generator:  # listo
     gen = generador_votos
     m = map(lambda x: x.id_animal_votante, filter(lambda x: x.id_candidato == id_candidato, gen))
     yield from m
 
+
 def cantidad_votos_candidato(generador_votos: Generator,
-    id_candidato: int) -> int: #listo
+                             id_candidato: int) -> int:  # listo
     a = map(lambda x: 1, (filter(lambda x: x.id_candidato == id_candidato, generador_votos)))
     return (reduce(lambda x, y: x + y, a, 0))
 
-def ciudades_distritos(generador_distritos: Generator) -> Generator: #listo
+
+def ciudades_distritos(generador_distritos: Generator) -> Generator:  # listo
     yield from {x.provincia for x in generador_distritos}
 
+
 def especies_postulantes(generador_candidatos: Generator,
-    postulantes: int) -> Generator: #listo?
+                         postulantes: int) -> Generator:  # listo?
     cantidad = Counter(x.especie for x in generador_candidatos)
     especies = (str(tipo) for tipo, cant in cantidad.items() if cant >= postulantes)
     for especie in especies:
         yield especie
 
-def pares_candidatos(generador_candidatos: Generator) -> Generator: #listo
+
+def pares_candidatos(generador_candidatos: Generator) -> Generator:  # listo
     lista = combinations([i.nombre for i in generador_candidatos], 2)
     arreglo = filter(lambda x: len(x) > 1, lista)
     yield from arreglo
 
+
 def votos_alcalde_en_local(generador_votos: Generator, candidato: int,
-    local: int) -> Generator: #listo
+                           local: int) -> Generator:  # listo
     gen = generador_votos
     yield from filter(lambda x: x.id_candidato == candidato and x.id_local == local, gen)
 
-def locales_mas_votos_comuna (generador_locales: Generator,
-    cantidad_minima_votantes: int, id_comuna: int) -> Generator:
-    min = cantidad_minima_votantes
-    gen = generador_locales
-    comuna = filter(lambda x: x.id_comuna == id_comuna, gen)
-    yield from map(lambda x: x.id_local, comuna)
 
-def votos_candidato_mas_votado(generador_votos: Generator) -> Generator:
-    votos = map(lambda x: x.id_candidato, generador_votos)
-    mayores = Counter(votos).most_common(3)
-    mayor = reduce(lambda x, y : max(x, y), mayores[0], 0)
-    yield map(lambda x: x.id_voto, filter(lambda x: x.id_candidato == mayor, generador_votos))
+def locales_mas_votos_comuna(generador_locales: Generator,
+                             cantidad_minima_votantes: int, id_comuna: int) -> Generator:  # listo
+    min = cantidad_minima_votantes
+    g = generador_locales
+    c = id_comuna
+    f = (x.id_local for x in g if x.id_comuna == c and len(x.id_votantes) >= min)
+    yield from f
+
+
+def votos_candidato_mas_votado(generador_votos: Generator) -> Generator:  # listo
+    copia = [i for i in generador_votos]
+    mayores = Counter(voto.id_candidato for voto in copia)  # id_candidato, cantidad
+    numero = mayores.most_common()[0][1]
+    filt = (int(tipo) for tipo, cant in mayores.items() if cant == numero)
+    inicial = 0
+    for elemento in filt:
+        final = inicial
+        if int(elemento) > final:
+            final = int(elemento)
+            inicial = int(elemento)
+    yield from map(lambda x: x.id_voto, filter(lambda x: x.id_candidato == final, copia))
+
 
 # 2 GENERADORES
 
+
 def animales_segun_edad_humana(generador_animales: Generator,
-    generador_ponderadores: Generator, comparador: str,
-    edad: int) -> Generator:
-    # COMPLETAR
-    pass
+                               generador_ponderadores: Generator, comparador: str,
+                               edad: int) -> Generator:  # listo
+    animales = [i for i in generador_animales]
+    pond = {i.especie: i.ponderador for i in generador_ponderadores}
+    if comparador == ">":
+        cumplen = filter(lambda x: x if x.edad*pond[x.especie] > edad else None, animales)
+    elif comparador == "<":
+        cumplen = filter(lambda x: x if x.edad*pond[x.especie] < edad else None, animales)
+    elif comparador == "=":
+        cumplen = filter(lambda x: x if x.edad*pond[x.especie] == edad else None, animales)
+    yield from map(lambda x: x.nombre, cumplen)
+
 
 def animal_mas_viejo_edad_humana(generador_animales: Generator,
-    generador_ponderadores: Generator) -> Generator:
-    # COMPLETAR
-    pass
+                                 generador_ponderadores: Generator) -> Generator:  # listo
+    pond = {i.especie: i.ponderador for i in generador_ponderadores}
+    animales = [i for i in generador_animales]
+    edades = map(lambda x: x.edad*pond[x.especie], animales)
+    edad_max = max([i for i in edades])
+    utiles = filter(lambda x: x if x.edad*pond[x.especie] == edad_max else None, animales)
+    yield from map(lambda x: x.nombre, utiles)
 
 
 def votos_por_especie(generador_candidatos: Generator,
-    generador_votos: Generator) -> Generator:
+                      generador_votos: Generator) -> Generator:
     # COMPLETAR
     pass
 
 
 def hallar_region(generador_distritos: Generator,
-    generador_locales: Generator, id_animal: int) -> str:
-    # COMPLETAR
-    pass
+                  generador_locales: Generator, id_animal: int) -> str:  # listo
+    dist = [i for i in generador_distritos]
+    locales = [i for i in generador_locales]
+    donde_vota = next(filter(lambda x: x if id_animal in x.id_votantes else None, locales))
+    donde_vive = next(filter(lambda x: x if donde_vota.id_comuna == x.id_comuna else None, dist))
+    return donde_vive.region
 
 
 def max_locales_distrito(generador_distritos: Generator,
-    generador_locales: Generator) -> Generator:
-    # COMPLETAR
-    pass
+                         generador_locales: Generator) -> Generator:
+    dist = [i for i in generador_distritos]
+    locales = [i for i in generador_locales]
+    mayores = Counter(local.id_comuna for local in locales)  # id_comuna, cantidad
+    numero = mayores.most_common()[0][1]
+    filt = [com for com, cant in mayores.items() if cant == numero]
+    sirven = filter(lambda x: x.id_comuna in filt, dist)
+    print([i for i in sirven])
+    yield from map(lambda x: x.nombre, sirven)
 
 
 def votaron_por_si_mismos(generador_candidatos: Generator,
-    generador_votos: Generator) -> Generator:
-    # COMPLETAR
-    pass
+                          generador_votos: Generator) -> Generator:
+    gen_votos = [i for i in generador_votos]
+    candidatos = [i for i in generador_candidatos]
+    votos = {i.id_animal_votante: i.id_candidato for i in gen_votos}
+    filtro = filter(lambda x: x if x.id_candidato == votos[x.id_candidato] else None, candidatos)
+    yield from map(lambda x: x.nombre, filtro)
 
 
 def ganadores_por_distrito(generador_candidatos: Generator,
-    generador_votos: Generator) -> Generator:
+                           generador_votos: Generator) -> Generator:
     # COMPLETAR
     pass
 
@@ -125,61 +170,63 @@ def ganadores_por_distrito(generador_candidatos: Generator,
 # 3 o MAS GENERADORES
 
 def mismo_mes_candidato(generador_animales: Generator,
-    generador_candidatos: Generator, generador_votos: Generator,
-    id_candidato: str) -> Generator:
+                        generador_candidatos: Generator, generador_votos: Generator,
+                        id_candidato: str) -> Generator:
     # COMPLETAR
     pass
 
 
 def edad_promedio_humana_voto_comuna(generador_animales: Generator,
-    generador_ponderadores: Generator, generador_votos: Generator,
-    id_candidato: int, id_comuna:int ) -> float:
+                                     generador_ponderadores: Generator, generador_votos: Generator,
+                                     id_candidato: int, id_comuna: int) -> float:
     # COMPLETAR
     pass
 
 
 def votos_interespecie(generador_animales: Generator,
-    generador_votos: Generator, generador_candidatos: Generator,
-    misma_especie: bool = False,) -> Generator:
+                       generador_votos: Generator, generador_candidatos: Generator,
+                       misma_especie: bool = False,) -> Generator:
     # COMPLETAR
     pass
 
 
 def porcentaje_apoyo_especie(generador_animales: Generator,
-    generador_candidatos: Generator, generador_votos: Generator) -> Generator:
+                             generador_candidatos: Generator,
+                             generador_votos: Generator) -> Generator:
     # COMPLETAR
     pass
 
 
 def votos_validos(generador_animales: Generator,
-    generador_votos: Generator, generador_ponderadores) -> int:
+                  generador_votos: Generator, generador_ponderadores) -> int:
     # COMPLETAR
     pass
 
 
 def cantidad_votos_especie_entre_edades(generador_animales: Generator,
-    generador_votos: Generator, generador_ponderador: Generator,
-    especie: str, edad_minima: int, edad_maxima: int) -> str:
+                                        generador_votos: Generator, generador_ponderador: Generator,
+                                        especie: str, edad_minima: int, edad_maxima: int) -> str:
     # COMPLETAR
     pass
 
 
 def distrito_mas_votos_especie_bisiesto(generador_animales: Generator,
-    generador_votos: Generator, generador_distritos: Generator,
-    especie: str) -> str:
-    # COMPLETAR 
+                                        generador_votos: Generator, generador_distritos: Generator,
+                                        especie: str) -> str:
+    # COMPLETAR
     pass
 
 
 def votos_validos_local(generador_animales: Generator,
-    generador_votos: Generator, generador_ponderadores: Generator,
-    id_local: int) -> Generator:
+                        generador_votos: Generator, generador_ponderadores: Generator,
+                        id_local: int) -> Generator:
     # COMPLETAR
     pass
 
 
 def votantes_validos_por_distritos(generador_animales: Generator,
-    generador_distritos: Generator, generador_locales: Generator,
-    generador_votos: Generator, generador_ponderadores: Generator) -> Generator:
+                                   generador_distritos: Generator, generador_locales: Generator,
+                                   generador_votos: Generator,
+                                   generador_ponderadores: Generator) -> Generator:
     # COMPLETAR
     pass
