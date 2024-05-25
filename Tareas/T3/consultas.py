@@ -141,29 +141,30 @@ def hallar_region(generador_distritos: Generator,
 
 
 def max_locales_distrito(generador_distritos: Generator,
-                         generador_locales: Generator) -> Generator:
+                         generador_locales: Generator) -> Generator:  # revisar!!!!!
     dist = [i for i in generador_distritos]
     locales = [i for i in generador_locales]
-    mayores = Counter(local.id_comuna for local in locales)  # id_comuna, cantidad
+    mayores = Counter(distrito.id_distrito for distrito in dist)  # id_distrito, cantidad
     numero = mayores.most_common()[0][1]
-    filt = [com for com, cant in mayores.items() if cant == numero]
-    sirven = filter(lambda x: x.id_comuna in filt, dist)
-    print([i for i in sirven])
-    yield from map(lambda x: x.nombre, sirven)
+    filt = [dist for dist, cant in mayores.items() if cant >= numero]
+    sirven = filter(lambda x: x if x.id_distrito in filt else None, dist)
+    listo = {i for i in map(lambda x: x.nombre, sirven)}
+    yield from listo
+
 
 
 def votaron_por_si_mismos(generador_candidatos: Generator,
-                          generador_votos: Generator) -> Generator:
-    gen_votos = [i for i in generador_votos]
-    candidatos = [i for i in generador_candidatos]
-    votos = {i.id_animal_votante: i.id_candidato for i in gen_votos}
-    filtro = filter(lambda x: x if x.id_candidato == votos[x.id_candidato] else None, candidatos)
-    yield from map(lambda x: x.nombre, filtro)
+                          generador_votos: Generator) -> Generator:  # listo
+    gen_votos = generador_votos
+    gen = generador_candidatos
+    filtro = filter(lambda x: x if x.id_candidato == x.id_animal_votante else None, gen_votos)
+    mismos = [x.id_candidato for x in filtro]
+    final = map(lambda x: x.nombre, filter(lambda x: x if x.id_candidato in mismos else None, gen))
+    yield from final
 
 
 def ganadores_por_distrito(generador_candidatos: Generator,
                            generador_votos: Generator) -> Generator:
-    # COMPLETAR
     pass
 
 
