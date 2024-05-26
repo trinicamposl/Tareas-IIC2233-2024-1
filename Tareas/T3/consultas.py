@@ -126,9 +126,15 @@ def animal_mas_viejo_edad_humana(generador_animales: Generator,
 
 
 def votos_por_especie(generador_candidatos: Generator,
-                      generador_votos: Generator) -> Generator:
+                      generador_votos: Generator) -> Generator:  # listo
     candidatos = [i for i in generador_candidatos]
     votos = [i for i in generador_votos]
+    especie = {x.id_candidato: x.especie for x in candidatos}
+    nuevo = map(lambda x: especie[x.id_candidato], votos)
+    cuentas = Counter(especie for especie in nuevo)
+    especies = set(i.especie for i in candidatos)
+    for elemento in especies:
+        yield elemento, cuentas[elemento]
 
 
 def hallar_region(generador_distritos: Generator,
@@ -144,7 +150,7 @@ def max_locales_distrito(generador_distritos: Generator,
                          generador_locales: Generator) -> Generator:  # revisar!!!!!
     dist = [i for i in generador_distritos]  # locales = [i for i in generador_locales]
     mayores = Counter(distrito.id_distrito for distrito in dist)  # id_distrito, cantidad
-    numero = mayores.most_common()[0][1]
+    numero = mayores.most_common()[0][1]  # no funciona para cuando una comuna tiene mas locales
     filt = [dist for dist, cant in mayores.items() if cant >= numero]
     sirven = filter(lambda x: x if x.id_distrito in filt else None, dist)
     listo = {i for i in map(lambda x: x.nombre, sirven)}
@@ -170,16 +176,18 @@ def ganadores_por_distrito(generador_candidatos: Generator,
 
 def mismo_mes_candidato(generador_animales: Generator,
                         generador_candidatos: Generator, generador_votos: Generator,
-                        id_candidato: str) -> Generator:
-    id = id_candidato
-    a = [i for i in generador_animales]
-    votos = [i for i in generador_votos]
-    vot = {x.id_animal_votante: x.id_candidato for x in votos}
-    mes = map(lambda x: x.fecha_nacimiento[5:], filter(lambda x: x.id == int(id), a))
-    year = map(lambda x: x.fecha_nacimiento[:4], filter(lambda x: x.id == int(id), a))
-    filtro = filter(lambda x: x.fecha_nacimiento[5:] == mes or x.fecha_nacimiento[5:] == year, a)
-    filtro_2 = filter(lambda x: vot[x.id_animal_votante] == int(id), filtro)
-    yield from filtro_2
+                        id_candidato: str) -> Generator:  # listo
+    if int(id_candidato) in [i.id_candidato for i in generador_candidatos]:
+        id = int(id_candidato)
+        a = [i for i in generador_animales]
+        votos = [i for i in generador_votos]
+        fecha = {i.id: i.fecha_nacimiento.split("/") for i in a}
+        filtro = filter(lambda x: x.id_candidato == id, votos)
+        mes = fecha[id_candidato][1]
+        year = fecha[id_candidato][0]
+        filtro_2 = filter(lambda x: fecha[x.id_animal_votante][0] == year or
+                        fecha[x.id_animal_votante][1] == mes, filtro)
+        yield from map(lambda x: x.id_animal_votante, filtro_2)
 
 
 def edad_promedio_humana_voto_comuna(generador_animales: Generator,
@@ -204,7 +212,7 @@ def edad_promedio_humana_voto_comuna(generador_animales: Generator,
 
 def votos_interespecie(generador_animales: Generator,
                        generador_votos: Generator, generador_candidatos: Generator,
-                       misma_especie: bool = False,) -> Generator:  # casi listo
+                       misma_especie: bool = False,) -> Generator:  # casi listo, problema issue
     an = [i for i in generador_animales]
     votos = [i for i in generador_votos]
     vot = {x.id_animal_votante: x.id_candidato for x in votos}
@@ -265,7 +273,28 @@ def distrito_mas_votos_especie_bisiesto(generador_animales: Generator,
                                         especie: str) -> str:
     animales = [i for i in generador_animales]
     votos = [i for i in generador_votos]
-    
+    quienes = [i.id_animal_votante for i in votos]
+    edad = {x.id: x.fecha_nacimiento.split("/")[0] for x in animales}
+    especies = {x.id: x.especie for x in animales}
+    filtro = filter(lambda x: especies[x.id_animal_votante] == especie, votos)
+    filtro_2 = filter(lambda x: edad[x.id_animal_votante]%4 == 0, filtro)
+    votaron = [i for i in animales if i.id in quienes]  # revisar esto!!! es muy lento
+    comuna = {x.id: x.id_comuna for x in votaron}
+    distrito = {x.id_comuna: x.id_distrito for x in generador_distritos}
+    cuentas = Counter(distrito[comuna[elemento.id_animal_votante]] for elemento in filtro_2)
+    numero = cuentas.most_common()[0][1]
+    filt = (int(dist) for dist, cant in cuentas.items() if cant == numero)
+    inicial = 0
+    for elemento in filt:
+        final = inicial
+        if int(elemento) > final:
+            final = int(elemento)
+            inicial = int(elemento)
+    texto = f"El distrito {final} fue el que tuvo más votos emitidos por animales de la especie "
+    return f"{texto} nacidos en año bisiesto."
+
+    # mayores = Counter(distrito.id_distrito for distrito in dist)  # id_distrito, cantidad
+
 
 
 def votos_validos_local(generador_animales: Generator,
@@ -281,6 +310,7 @@ def votos_validos_local(generador_animales: Generator,
     f = filter(lambda x: float(ed[x.id_animal_votante]*pond[especie[x.id_animal_votante]]) >= 18,
                filtro)
     yield from map(lambda x: x.id_voto, f)
+
 
 def votantes_validos_por_distritos(generador_animales: Generator,
                                    generador_distritos: Generator, generador_locales: Generator,
