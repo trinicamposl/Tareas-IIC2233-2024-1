@@ -2,7 +2,7 @@ from typing import Generator
 from os import path
 from funciones import arreglo, cambio, resultado
 from functools import reduce
-from collections import Counter
+from collections import Counter, namedtuple
 from itertools import combinations
 # CARGA DE DATOS
 
@@ -168,8 +168,25 @@ def votaron_por_si_mismos(generador_candidatos: Generator,
 
 
 def ganadores_por_distrito(generador_candidatos: Generator,
-                           generador_votos: Generator) -> Generator:
-    pass
+                           generador_votos: Generator) -> Generator:  # arreglar???
+    votos = [i for i in generador_votos]
+    candidatos = [i for i in generador_candidatos]
+    cantidad = set(i.id_distrito_postulacion for i in candidatos)
+    nombre_candidato = {x.id_candidato: x.nombre for x in candidatos}
+    mayor = Counter(voto.id_candidato for voto in votos)  # id_candidato, cantidad
+    totales = namedtuple("totales", ["id", "distrito", "cantidad"])
+    datos = [(i.id_candidato, i.id_distrito_postulacion, mayor[i.id_candidato]) for i in candidatos]
+    info = [totales(*dato) for dato in datos]
+    for distrito in cantidad:
+        especificos = [candidato for candidato in info if candidato.distrito == distrito]
+        if len(especificos) != 1:  # no hay solo un candidato
+            opciones = combinations([i for i in especificos], 2)
+            for combinacion in opciones:
+                mas = (max(combinacion, key=lambda x: x.cantidad)).cantidad
+                sirven = [candidato for candidato in especificos if candidato.cantidad == mas]
+                candidatos_2 = [candidato.id for candidato in sirven]
+                for candidato in candidatos_2:
+                    yield nombre_candidato[candidato]
 
 
 # 3 o MAS GENERADORES
