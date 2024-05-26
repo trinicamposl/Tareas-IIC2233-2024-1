@@ -168,7 +168,7 @@ def votaron_por_si_mismos(generador_candidatos: Generator,
 
 
 def ganadores_por_distrito(generador_candidatos: Generator,
-                           generador_votos: Generator) -> Generator:  # arreglar???
+                           generador_votos: Generator) -> Generator:  # listo
     votos = [i for i in generador_votos]
     candidatos = [i for i in generador_candidatos]
     cantidad = set(i.id_distrito_postulacion for i in candidatos)
@@ -183,10 +183,9 @@ def ganadores_por_distrito(generador_candidatos: Generator,
             opciones = combinations([i for i in especificos], 2)
             for combinacion in opciones:
                 mas = (max(combinacion, key=lambda x: x.cantidad)).cantidad
-                sirven = [candidato for candidato in especificos if candidato.cantidad == mas]
-                candidatos_2 = [candidato.id for candidato in sirven]
-                for candidato in candidatos_2:
-                    yield nombre_candidato[candidato]
+                sirven = [candidato for candidato in combinacion if candidato.cantidad == mas]
+                for candidato in [nombre_candidato[candidato.id] for candidato in sirven]:
+                    yield candidato
 
 
 # 3 o MAS GENERADORES
@@ -322,5 +321,24 @@ def votantes_validos_por_distritos(generador_animales: Generator,
                                    generador_distritos: Generator, generador_locales: Generator,
                                    generador_votos: Generator,
                                    generador_ponderadores: Generator) -> Generator:
-    # COMPLETAR
-    pass
+    animales = [i for i in generador_animales]
+    locales = [i for i in generador_locales]
+    distritos = [i for i in generador_distritos]
+    pond = {i.especie: i.ponderador for i in generador_ponderadores}
+    especie = {i.id: i.especie for i in animales}
+    edad = {i.id: float(pond[especie[i.id]]*i.edad) for i in animales}
+    validos_local = {x.id_local: sum([1 for i in x.id_votantes if edad[i] >= 18]) for x in locales}
+    local_comuna = {i.id_comuna: sum([validos_local[x.id_local] for x in locales if x.id_comuna ==
+                                      i.id_comuna]) for i in locales}
+    comunas_distritos = {x.id_distrito: sum([local_comuna[i.id_comuna] for i in distritos
+                                             if i.id_distrito == x.id_distrito]) for x in distritos}
+    mayor = max(comunas_distritos, key=lambda x: comunas_distritos[x])
+    lista = []
+    for clave, llave in comunas_distritos.items():
+        if llave == mayor:
+            lista.append(clave)
+    if len(lista) == 1:
+        yield from lista
+    else:
+        sirve = max(lista, key=lambda x: x.keys())
+        yield sirve
