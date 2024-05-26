@@ -1,5 +1,6 @@
 from utilidades import Animales, Candidatos, Distritos, Locales, Votos, Ponderador
 
+
 def arreglo(algo):
     if algo.__class__ != list:
         if algo.isdigit():
@@ -7,6 +8,7 @@ def arreglo(algo):
         elif "." in algo:
             algo = float(algo)
         return algo
+
 
 def cambio(lista, tipo):
     if tipo == "animales":
@@ -23,3 +25,10 @@ def cambio(lista, tipo):
         return Distritos(*lista)
     elif tipo == "locales":
         return Locales(*lista)
+
+
+def resultado(suma, contador):
+    if contador == 0:
+        return 0
+    else:
+        return suma/contador

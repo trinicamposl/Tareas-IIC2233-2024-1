@@ -1,6 +1,6 @@
 from typing import Generator
 from os import path
-from funciones import arreglo, cambio
+from funciones import arreglo, cambio, resultado
 from functools import reduce
 from collections import Counter
 from itertools import combinations
@@ -173,7 +173,8 @@ def mismo_mes_candidato(generador_animales: Generator,
                         id_candidato: str) -> Generator:
     id = id_candidato
     a = [i for i in generador_animales]
-    vot = {x.id_animal_votante: x.id_voto for x in generador_votos}
+    votos = [i for i in generador_votos]
+    vot = {x.id_animal_votante: x.id_candidato for x in votos}
     mes = map(lambda x: x.fecha_nacimiento[5:], filter(lambda x: x.id == int(id), a))
     year = map(lambda x: x.fecha_nacimiento[:4], filter(lambda x: x.id == int(id), a))
 
@@ -184,16 +185,36 @@ def mismo_mes_candidato(generador_animales: Generator,
 
 def edad_promedio_humana_voto_comuna(generador_animales: Generator,
                                      generador_ponderadores: Generator, generador_votos: Generator,
-                                     id_candidato: int, id_comuna: int) -> float:
-    # COMPLETAR
-    pass
+                                     id_candidato: int, id_comuna: int) -> float:  # listo
+    animales = [i for i in generador_animales]
+    ponderadores = [i for i in generador_ponderadores]
+    pond = {i.especie: i.ponderador for i in ponderadores}
+    especie = {i.id: i.especie for i in animales}
+    com = {i.id: i.id_comuna for i in animales}
+    edad = {i.id: i.edad for i in animales}
+    utiles = filter(lambda x: x.id_candidato == id_candidato and
+                    com[x.id_animal_votante] == id_comuna, generador_votos)
+    lista = [i.id_animal_votante for i in utiles]
+    contador = 0
+    suma = 0
+    for elemento in lista:
+        suma += edad[elemento]*pond[especie[elemento]]
+        contador += 1
+    return resultado(suma, contador)
 
 
 def votos_interespecie(generador_animales: Generator,
                        generador_votos: Generator, generador_candidatos: Generator,
                        misma_especie: bool = False,) -> Generator:
-    # COMPLETAR
-    pass
+    animales = [i for i in generador_animales]
+    votos = [i for i in generador_votos]
+    vot = {x.id_animal_votante: x.id_candidato for x in votos}
+    especie = {x.id: x.especie for x in animales}
+    if misma_especie:
+        util = filter(lambda x: especie[vot[x.id]] == especie[x.id], animales)
+    else:
+        util = filter(lambda x: especie[vot[x.id]] != especie[x.id], animales)
+    yield from util
 
 
 def porcentaje_apoyo_especie(generador_animales: Generator,
