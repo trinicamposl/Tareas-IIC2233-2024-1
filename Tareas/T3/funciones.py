@@ -32,3 +32,6 @@ def resultado(suma, contador):
         return 0
     else:
         return suma/contador
+
+def parcial(votos, candidato, especie):
+    lista = [i for i in generador if i.]

@@ -253,9 +253,9 @@ def cantidad_votos_especie_entre_edades(generador_animales: Generator,
     pond = {i.especie: float(i.ponderador) for i in ponderadores}
     specie = {x.id: x.especie for x in animales}
     ed = {x.id: int(x.edad) for x in animales}
-    filtro = filter(lambda x: specie[x.id_animal_votante] == especie, v)
-    f = filter(lambda x: edad_minima < float(ed[x.id_animal_votante]*
-                                           pond[specie[x.id_animal_votante]]) < edad_maxima, filtro)
+    filt = filter(lambda x: specie[x.id_animal_votante] == especie, v)
+    f = filter(lambda x: edad_minima < float(ed[x.id_animal_votante] *
+                                             pond[specie[x.id_animal_votante]]) < edad_maxima, filt)
     suma = reduce(lambda x, y: x + y, map(lambda x: 1, f), 0)
     texto = f"Hubo {suma} votos emitidos por animales entre {edad_minima} y {edad_maxima} años de"
     return texto + f" la especie {especie}."
