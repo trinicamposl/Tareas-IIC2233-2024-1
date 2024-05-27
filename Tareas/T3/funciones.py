@@ -3,9 +3,14 @@ from utilidades import Animales, Candidatos, Distritos, Locales, Votos, Ponderad
 
 def arreglo(algo, tipo):
     if tipo == "lista":
-        for i in range(len(algo)):
-            algo[i] = int(algo[i])
-        return algo
+        if algo[0] != "":
+            for i in range(len(algo)):
+                algo[i] = int(algo[i])
+            return algo
+        else:
+            lista = []
+            return lista
+
     else:
         algo[0] = int(algo[0])
         algo[2] = int(algo[2])
