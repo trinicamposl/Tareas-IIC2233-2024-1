@@ -15,12 +15,12 @@ def cargar_datos(tipo_generator: str, tamano: str):
         if tipo_generator != "locales":
             for linea in archivo:
                 elementos = linea.strip().split(",")
-                yield cambio(list(map(arreglo, elementos)), tipo_generator)
+                yield cambio(elementos, tipo_generator)
         else:
             for linea in archivo:
                 separacion = linea.strip().split("[")
-                lista = list(map(arreglo, separacion[1][:-1].split(", ")))
-                datos = list(map(arreglo, separacion[0][:-1].split(",")))
+                lista = list(arreglo(separacion[1][:-1].split(", "), "lista"))
+                datos = list(arreglo(separacion[0][:-1].split(","), "datos"))
                 datos.append(lista)
                 yield cambio(datos, tipo_generator)
 
@@ -84,6 +84,9 @@ def locales_mas_votos_comuna(generador_locales: Generator,
     yield from f
 
 
+# 2 GENERADORES
+
+
 def votos_candidato_mas_votado(generador_votos: Generator) -> Generator:  # listo
     copia = [i for i in generador_votos]
     mayores = Counter(voto.id_candidato for voto in copia)  # id_candidato, cantidad
@@ -96,9 +99,6 @@ def votos_candidato_mas_votado(generador_votos: Generator) -> Generator:  # list
             final = int(elemento)
             inicial = int(elemento)
     yield from map(lambda x: x.id_voto, filter(lambda x: x.id_candidato == final, copia))
-
-
-# 2 GENERADORES
 
 
 def animales_segun_edad_humana(generador_animales: Generator,
