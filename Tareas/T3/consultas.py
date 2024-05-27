@@ -225,7 +225,7 @@ def edad_promedio_humana_voto_comuna(generador_animales: Generator,
 
 def votos_interespecie(generador_animales: Generator,
                        generador_votos: Generator, generador_candidatos: Generator,
-                       misma_especie: bool = False,) -> Generator:  # casi listo, problema issue
+                       misma_especie: bool = False,) -> Generator:  # listo
     an = [i for i in generador_animales]
     votos = [i for i in generador_votos]
     vot = {x.id_animal_votante: x.id_candidato for x in votos}
@@ -321,24 +321,25 @@ def votantes_validos_por_distritos(generador_animales: Generator,
                                    generador_distritos: Generator, generador_locales: Generator,
                                    generador_votos: Generator,
                                    generador_ponderadores: Generator) -> Generator:
-    animales = [i for i in generador_animales]
-    locales = [i for i in generador_locales]
-    distritos = [i for i in generador_distritos]
-    pond = {i.especie: i.ponderador for i in generador_ponderadores}
-    especie = {i.id: i.especie for i in animales}
-    edad = {i.id: float(pond[especie[i.id]]*i.edad) for i in animales}
-    validos_local = {x.id_local: sum([1 for i in x.id_votantes if edad[i] >= 18]) for x in locales}
-    local_comuna = {i.id_comuna: sum([validos_local[x.id_local] for x in locales if x.id_comuna ==
-                                      i.id_comuna]) for i in locales}
-    comunas_distritos = {x.id_distrito: sum([local_comuna[i.id_comuna] for i in distritos
-                                             if i.id_distrito == x.id_distrito]) for x in distritos}
-    mayor = max(comunas_distritos, key=lambda x: comunas_distritos[x])
-    lista = []
-    for clave, llave in comunas_distritos.items():
-        if llave == mayor:
-            lista.append(clave)
-    if len(lista) == 1:
-        yield from lista
-    else:
-        sirve = max(lista, key=lambda x: x.keys())
-        yield sirve
+    # animales = [i for i in generador_animales]
+    # locales = [i for i in generador_locales]
+    # distritos = [i for i in generador_distritos]
+    # pond = {i.especie: i.ponderador for i in generador_ponderadores}
+    # especie = {i.id: i.especie for i in animales}
+    # edad = {i.id: float(pond[especie[i.id]]*i.edad) for i in animales}
+    # validos_local = {x.id_local: sum([1 for i in x.id_votantes if edad[i] >= 18]) for x in locales}
+    # local_comuna = {i.id_comuna: sum([validos_local[x.id_local] for x in locales if x.id_comuna ==
+    #                                   i.id_comuna]) for i in locales}
+    # comunas_distritos = {x.id_distrito: sum([local_comuna[i.id_comuna] for i in distritos
+    #                                          if i.id_distrito == x.id_distrito]) for x in distritos}
+    # mayor = max(comunas_distritos, key=lambda x: comunas_distritos[x])
+    # lista = []
+    # for clave, llave in comunas_distritos.items():
+    #     if llave == mayor:
+    #         lista.append(clave)
+    # if len(lista) == 1:
+    #     yield from lista
+    # else:
+    #     sirve = max(lista, key=lambda x: x.keys())
+    #     yield sirve
+    pass
