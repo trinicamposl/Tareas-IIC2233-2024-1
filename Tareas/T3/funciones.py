@@ -55,3 +55,9 @@ def resultado(suma, contador):
         return 0
     else:
         return suma/contador
+
+
+def lista_f(lista, diccionario):
+    for i in range(len(lista)):
+        lista[i] = int(lista[i]*diccionario[lista[i]])
+    return sum(lista)
