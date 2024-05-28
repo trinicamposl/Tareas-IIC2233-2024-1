@@ -239,13 +239,27 @@ def votos_interespecie(generador_animales: Generator,
 
 def porcentaje_apoyo_especie(generador_animales: Generator,
                              generador_candidatos: Generator,
-                             generador_votos: Generator) -> Generator:
-    # an = [i for i in generador_animales]
-    # votos = [i for i in generador_votos]
-    # especie = {x.id: x.especie for x in an}
-    # totales = Counter(especie[x.id_animal_votante] for x in votos)  # especie, cantidad
-    # vot = {x.id_animal_votante: x.id_candidato for x in votos}
-    pass
+                             generador_votos: Generator) -> Generator:  # listo
+    an = [i for i in generador_animales]
+    votos = [i for i in generador_votos]
+    candidatos = [i for i in generador_candidatos]
+    especie_c = {i.id_candidato: i.especie for i in candidatos}
+    es = {x.id: x.especie for x in an}
+    voto = {x.id_animal_votante: x.id_candidato for x in votos}
+    vot = {x.id_animal_votante: x.id_candidato for x in votos}
+    totales = Counter(es[i.id] for i in an)  # especie, cantidad
+    voto_especie = {x.id: es[x.id] == especie_c.get(voto[x.id], "no") for x in an if x.id in vot}
+    # voto_especie -> id : bool
+    parciales = Counter(voto[i.id_animal_votante] for i in votos if
+                        voto_especie[i.id_animal_votante] is True)
+    for candidato in candidatos:
+        parcial = parciales[candidato.id_candidato]
+        total = totales[candidato.especie]
+        if total != 0:
+            porcentaje = round((parcial/total)*100)
+            yield (candidato.id_candidato, porcentaje)
+        else:
+            yield (candidato.id_candidato, 0)
 
 
 def votos_validos(generador_animales: Generator,
