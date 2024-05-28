@@ -340,13 +340,25 @@ def votantes_validos_por_distritos(generador_animales: Generator,
                                    generador_votos: Generator,
                                    generador_ponderadores: Generator) -> Generator:
     dist = [i for i in generador_distritos]
-    loc = [i for i in generador_locales]
     an = [i for i in generador_animales]
-    pond = {i.especie: i.ponderador for i in generador_ponderadores}
+    loc = [i for i in generador_locales]
     votos = [i for i in generador_votos]
-    c_d = {i.id_comuna: i.id_distrito for i in dist}  # dist = com1*locales_en_com1
+    voto_local = {i.id_animal_votante: i.id_local for i in votos}
     l_c = {i.id_local: i.id_comuna for i in loc}
+    c_d = {i.id_comuna: i.id_distrito for i in dist}
     especie = {i.id: i.especie for i in an}
-    voto = {i.id_animal_votante: i.id_candidato for i in votos}
-    edad = {i.id: float(pond[especie[i.id]]*i.edad) >= 18 for i in an}
-    
+    edades = {i.id: i.edad for i in an}
+    pond = {i.especie: i.ponderador for i in generador_ponderadores}
+    edad = {i.id_animal_votante: float(pond[especie[i.id_animal_votante]] *
+                                       edades[i.id_animal_votante]) >= 18 for i in votos}
+    revision = {i.id_local: [x for x in i.id_votantes if edad[x] is True] for i in loc}
+    cuentas = {i.id_local: c_d[l_c[i.id_local]] for i in loc}  # asocia local a distrito
+    for llave, clave in cuentas.items():
+        repeticiones = len(revision[llave])  # mutiplica distrito por votos validos del local
+        cuentas.update({clave: c_d[l_c[llave]] for x in range(repeticiones)})
+    mayores = Counter(cuentas[i.id_local] for i in loc)  # id_distrito, cantidad
+    numero = mayores.most_common()[0][1]
+    filt = [dist for dist, cant in mayores.items() if cant >= numero]
+    sirven = [i.id_distrito for i in filter(lambda x: x if x.id_distrito in filt else None, dist)]
+    util = [i for i in an if c_d[l_c[voto_local[i.id]]] == max(sirven)]
+    yield from util
