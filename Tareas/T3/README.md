@@ -4,7 +4,7 @@
 Mi tarea define _casi_ todas las funciones pedidas de manera eficiente y rápida. Esta tarea fue hecha con mucho esfuerzo búsquedas en google (stackoverflow mi bestie)
 
 ## Ejecución :computer:
-El módulo principal de la tarea a ejecutar es  ```_el nombre del archivo con el que testeen las funciones_```. Además se debe crear los siguientes archivos y directorios adicionales:
+El módulo principal de la tarea a ejecutar es  _```el nombre del archivo con el que testeen las funciones```_. Además se debe crear los siguientes archivos y directorios adicionales:
 1. ```funciones.py``` en ```T3```
 2. ```data/``` en ```T3``` con todos los archivos que se desean leer, específicados según su tamaño en carpetas dentro de esta carpeta, siendo sus nombres ```s```, ```m``` y ```l``` para achivos pequeños, medianos o grandes respectivamente.
 
