@@ -341,11 +341,12 @@ def votantes_validos_por_distritos(generador_animales: Generator,
     # pond = {i.especie: i.ponderador for i in generador_ponderadores}
     # especie = {i.id: i.especie for i in animales}
     # edad = {i.id: float(pond[especie[i.id]]*i.edad) for i in animales}
-    # validos_local = {x.id_local: sum([1 for i in x.id_votantes if edad[i] >= 18]) for x in locales}
+    # valido_local = {x.id_local: sum([1 for i in x.id_votantes if edad[i] >= 18]) for x in locales}
     # local_comuna = {i.id_comuna: sum([validos_local[x.id_local] for x in locales if x.id_comuna ==
     #                                   i.id_comuna]) for i in locales}
-    # comunas_distritos = {x.id_distrito: sum([local_comuna[i.id_comuna] for i in distritos
-    #                                          if i.id_distrito == x.id_distrito]) for x in distritos}
+    # comunas_distrito = {x.id_distrito: sum([local_comuna[i.id_comuna] for i in distritos
+    #                                         if i.id_distrito == x.id_distrito])
+    #                                         for x in distritos}
     # mayor = max(comunas_distritos, key=lambda x: comunas_distritos[x])
     # lista = []
     # for clave, llave in comunas_distritos.items():
