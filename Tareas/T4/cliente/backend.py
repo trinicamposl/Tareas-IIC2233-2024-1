@@ -17,6 +17,7 @@ class Sandia(QThread):
         self.x = x
         self.y = y
         self.senal_fin_sandia = senal_fin_sandia
+        self.senal_tiempo = senal_tiempo
         self._destruido = False
 
     def run(self) -> None:
@@ -38,8 +39,6 @@ class Sandia(QThread):
                 time.sleep(1)
                 p.TIEMPO_DURACION -= 1
             self.destruido = True
-
-            self.senal_mover.emit(self.id, self.x, self.y)
             if self.y >= p.POSICION_Y:
                 # Desaparecer haciendo daño
                 self._destruido = True
@@ -68,7 +67,7 @@ class Sandia(QThread):
             self._destruido = destruido
 
             # Desaparecer sin hacer daño
-            self.senal_fin_meteorito.emit(self.id, False)
+            self.senal_fin_sandia.emit(self.id, False)
 
     @property
     def centro_x(self) -> int:
