@@ -4,6 +4,16 @@ import time
 import parametros as p
 
 
+class Pepa(QObject):
+    def __init__(self, x: int, y: int, mutex: QMutex) -> None:
+        super().__init__()
+        self.id = Sandia.identificador
+        Sandia.identificador += 1
+        self.mutex = mutex
+        self.x = x
+        self.y = y
+
+
 class Sandia(QThread):
     identificador = 0
 
@@ -34,6 +44,7 @@ class Sandia(QThread):
             time.sleep(p.TIEMPO_APARICION)
             while p.TIEMPO_DURACION:
                 if self.destruido:
+                    self.mutex.lock()
                     self.senal_tiempo.emit(p.TIEMPO_ADICIONAL)
                     break
                 time.sleep(1)
@@ -79,10 +90,10 @@ class Sandia(QThread):
 
 
 class Tiempo(QTimer):
-    def __init__(self, nombre: str, senal_actualizar_poblacion: pyqtSignal) -> None:
+    def __init__(self, nombre: str, dificulty: str, senal_actualizar_tiempo: pyqtSignal) -> None:
         self.nombre = nombre
-        self._poblacion = p.POBLACION_MAXIMA
-        self.senal_actualizar_poblacion = senal_actualizar_poblacion
+        self._tiempo = p.TIEMPO_JUEGO[dificulty]
+        self.senal_actualizar_tiempo = senal_actualizar_tiempo
 
     @property
     def poblacion(self) -> int:
@@ -101,6 +112,14 @@ class Tiempo(QTimer):
         else:
             self.senal_actualizar_poblacion.emit(
                 f'{self.nombre} tiene {self.poblacion} ciudadanos')
+def countdown(t): 
+    while t: 
+        mins, secs = divmod(t, 60) 
+        timer = '{:02d}:{:02d}'.format(mins, secs) 
+        print(timer, end="\r") 
+        time.sleep(1) 
+        t -= 1
+    print('Se te acabó el tiempo D:') 
 
 
 class Juego(QObject):
