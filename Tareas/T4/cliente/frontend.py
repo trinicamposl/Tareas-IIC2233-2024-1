@@ -1,11 +1,11 @@
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
-from PyQt6.QtGui import QFont, QPixmap, QMouseEvent, QKeyEvent, QFont
+from PyQt6.QtGui import QFont, QPixmap, QMouseEvent, QKeyEvent, QFont, QFontDatabase
 from PyQt6.QtCore import Qt, pyqtSignal, QUrl
 from PyQt6.QtWidgets import QHBoxLayout, QWidget, QComboBox, QFormLayout, QLineEdit, QGridLayout
 from PyQt6.QtWidgets import QLabel, QPushButton, QScrollArea, QVBoxLayout, QApplication
 from os import path
 import parametros as p
-from funciones import archivos, salon_fama
+from funciones import archivos, salon_fama, diccionario
 import sys
 
 
@@ -131,50 +131,37 @@ class VentanaInicio(QWidget):
             self.enviar_info()
 
 
-class Map(QWidget):
-
-    map_size: int
-    map: list[list[int]]
-    layout: QGridLayout
-
-    def __init__(self, map_size):
+class LechugasIniciales(QWidget):
+    def __init__(self, nivel: str):
+        tamano = p.TAMANO[nivel.split("_")[0]]
         super().__init__()
-        self.layout = QGridLayout()
-        self.layout.setHorizontalSpacing(0)
-        self.layout.setVerticalSpacing(0)
-        self.map_size = map_size
-        self.build_map()
-        self.draw_map()
-        self.setLayout(self.layout)
+        self.setGeometry(100, 100, 300, 300)
 
-    def build_map(self):
-        # self.board = [[] for _ in range(self.map_size)]
-        self.map = []
-        for y in range(0, self.map_size):
-            # self.board[y] = [0 for _ in range(self.map_size)]
-            self.map.append([])
-            for x in range(0, self.map_size):
-                if y == 0 or y == self.map_size - 1 or x == 0 or x == self.map_size - 1:
-                    self.map[y].append(1)
+        grid_layout = QGridLayout()
+        self.setLayout(grid_layout)
+        fila = 0
+        columna = 0
+        for i in range((tamano+1)**2):
+            datos = f"{fila},{columna}"
+            if columna == 0 or fila == 0:
+                if columna == 0 and fila == 0:
+                    vacio = QLabel(self)
                 else:
-                    self.map[y].append(0)
+                    vacio = QLabel(f"{diccionario(nivel)[datos]}", self)
+                grid_layout.addWidget(vacio, fila, columna)
+            else:
+                lechuga = QLabel(self)
+                lechuga.setPixmap(QPixmap(p.LECHUGA_PATH))
+                lechuga.setGeometry(0, 0, p.ANCHO_LECHUGA, p.ALTURA_LECHUGA)
+                grid_layout.addWidget(lechuga, fila, columna)
+            columna += 1
+            if columna > tamano:
+                columna = 0
+                fila += 1
 
-    def draw_map(self):
-        for y in range(0, self.map_size):
-            for x in range(0, self.map_size):
-                if self.map[y][x] == 0:
-                    block = QWidget()
-                    block.setStyleSheet('background-color: #fff')
-                    self.layout.addWidget(block, y, x)
-                elif self.map[y][x] == 1:
-                    block = QWidget()
-                    block.setStyleSheet('background-color: #f00')
-                    self.layout.addWidget(block, y, x)
 
 class VentanaJuego(QWidget):
     senal_click_pantalla = pyqtSignal(int, int)
-
-    
 
     def __init__(self) -> None:
         super().__init__()
@@ -326,8 +313,9 @@ if __name__ == '__main__':
     sys.__excepthook__ = hook
 
     app = QApplication([])
-    font = QFont("Comic Sans MS", 12)
+    # a = QFontDatabase.addApplicationFont(p.PATH_LETRA)
+    font = QFont("Cascadia Mono SemiBold", 12)
     app.setFont(font)  # Creamos las base de la app: QApplication.
-    ventana = VentanaInicio()   # Construimos un QWidget que será nuestra ventana.
+    ventana = LechugasIniciales("intermedio_1.txt")   # Construimos un QWidget que será nuestra ventana.
     ventana.show()  # Mostramos la ventana.
     sys.exit(app.exec())
