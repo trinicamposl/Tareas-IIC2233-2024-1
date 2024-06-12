@@ -6,6 +6,7 @@ from PyQt6.QtWidgets import QLabel, QPushButton, QScrollArea, QVBoxLayout, QAppl
 import parametros as p
 from funciones import archivos, salon_fama, diccionario
 import sys
+import time
 
 
 class VentanaSala(QWidget):
@@ -36,12 +37,17 @@ class VentanaSala(QWidget):
 
 class VentanaInicio(QWidget):
 
-    signal_seleccionar_puzzle = pyqtSignal(str)
+    signal_intentar_empezar = pyqtSignal(list)
+    signal_empezar = pyqtSignal(list)
     signal_usuario = pyqtSignal(str)
 
     def __init__(self) -> None:
 
         super().__init__()
+        self.iniciar_dibujos()
+        self.iniciar_musica()
+
+    def iniciar_dibujos(self) -> None:
         self.setGeometry(30, 50, p.ANCHO_JUEGO, p.ALTURA_JUEGO)
         self.setWindowTitle("Ventana de Inicio")
         # Creamos el selector que vamos a necesitar en nuestra ventana de Inicio
@@ -50,18 +56,16 @@ class VentanaInicio(QWidget):
         # Creamos el usuario
         self.usuario = QFormLayout()
         self.usuario.addRow("Elige tu usuario:", QLineEdit())
-
+        # Creamos el selector de nivel
         self.selector = QFormLayout()
         self.selector.addRow("Elige el nivel:", self.selector_puzzle)
-
+        # Creamos el botón de inicio
         self.boton_ingresar = QPushButton("Comenzar juego", self)
         self.boton_salir = QPushButton("Salir", self)
-
+        # Creamos imagen
         self.imagen = QLabel(self)
         self.imagen.setGeometry(0, 0, p.ANCHO_IMAGEN, p.ALTURA_IMAGEN)
         self.imagen.setPixmap(QPixmap(p.IMAGEN_PATH))
-        self.imagen.setScaledContents(True)
-
         # Creamos el layout de nuestra ventana y agregamos los elementos
         self.sala = VentanaSala()
         sala = QVBoxLayout()
@@ -100,47 +104,59 @@ class VentanaInicio(QWidget):
         self.setLayout(layout)
         self.show()
 
-        self.media_player_mp3 = QMediaPlayer(self)
-        file_url = QUrl.fromLocalFile(p.PATH_MUSICA_FONDO)
-        self.media_player_mp3.setSource(file_url)
-
-        audio = QAudioOutput(self)
-        audio.setVolume(0.25)
-        self.media_player_mp3.setAudioOutput(audio)
-
-        self.media_player_mp3.play()
-
         self.boton_ingresar.clicked.connect(self.enviar_info)
         self.boton_salir.clicked.connect(self.retirada)
 
-    def enviar_info(self) -> None:
+    def iniciar_musica(self) -> None:
+        # ponemos la música
+        self.media_player_mp3 = QMediaPlayer(self)
+        file_url = QUrl.fromLocalFile(p.PATH_MUSICA_FONDO)
+        self.media_player_mp3.setSource(file_url)
+        audio = QAudioOutput(self)
+        audio.setVolume(0.25)
+        self.media_player_mp3.setAudioOutput(audio)
+        self.media_player_mp3.play()
 
+    def enviar_info(self) -> None:
         # Le avisamos al backend la dificultad mediante la señal.
         nivel = self.selector_puzzle.currentText()
-        self.signal_seleccionar_puzzle.emit(nivel)
-        # self.hide()
-        # nueva_ventana = VentanaJuego()
-        # nueva_ventana.show()
+        usuario = self.usuario.text()
+        self.signal_intentar_empezar.emit([usuario, nivel])
 
-    def retirada(self):
-        sys.exit()
+    def recibir_info(self) -> None:
+        if self.signal_empezar.connect():
+            self.hide()
+        else:
+            self.actualizar_salon()
+            self.show()
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
         if event.key() == Qt.Key.Key_Enter or event.key() == Qt.Key.Key_Return:
             self.enviar_info()
 
+    def retirada(self):
+        sys.exit()
 
-class LechugasIniciales(QWidget):
+
+class Tablero(QWidget):
+    signal_izq = pyqtSignal(str)
+    signal_der = pyqtSignal(str)
+    signal_arriba = pyqtSignal(str)
+    signal_abajo = pyqtSignal(str)
+
     def __init__(self, nivel: str):
-        tamano = p.TAMANO[nivel.split("_")[0]]
+
+        self.tamano = p.TAMANO[nivel.split("_")[0]]
         super().__init__()
         self.setGeometry(100, 100, 300, 300)
+        self.posicion_x = 1
+        self.posicion_y = 1
 
         grid_layout = QGridLayout()
         self.setLayout(grid_layout)
         fila = 0
         columna = 0
-        for i in range((tamano+1)**2):
+        for i in range((self.tamano+1)**2):
             datos = f"{fila},{columna}"
             if columna == 0 or fila == 0:
                 if columna == 0 and fila == 0:
@@ -154,9 +170,63 @@ class LechugasIniciales(QWidget):
                 lechuga.setGeometry(0, 0, p.ANCHO_LECHUGA, p.ALTURA_LECHUGA)
                 grid_layout.addWidget(lechuga, fila, columna)
             columna += 1
-            if columna > tamano:
+            if columna > self.tamano:
                 columna = 0
                 fila += 1
+
+        self.pepa = QLabel(self)
+        self.pepa.setPixmap(QPixmap(p.PATH_DOWN[0]))
+        self.pepa.setGeometry(0, 0, p.ANCHO_LECHUGA, p.ALTURA_LECHUGA)
+        grid_layout.addWidget(self.pepa, self.posicion_x, self.posicion_y)
+
+    def keyPressEvent(self, event: QKeyEvent) -> None:
+        if event.key() == Qt.Key.Key_W:
+            self.signal_arriba.emit("arriba")
+            # if self.signal_arriba.connect():
+            if True:
+                self.mover_arriba()
+
+        if event.key() == Qt.Key.Key_S:
+            self.signal_abajo.emit("abajo")
+            # if self.signal_abajo.connect():
+            if True:
+                self.mover_abajo()
+
+        if event.key() == Qt.Key.Key_A:
+            self.signal_izq.emit("izquierda")
+            # if self.signal_abajo.connect():
+            if True:
+                self.mover_izquierda()
+
+        if event.key() == Qt.Key.Key_D:
+            self.signal_abajo.emit("derecha")
+            # if self.signal_abajo.connect():
+            if True:
+                self.mover_derecha()
+
+    def mover_abajo(self):
+        for i in range(4):
+            self.pepa.move(0, 1)
+            self.pepa.setPixmap(QPixmap(p.PATH_DOWN[i]))
+            time.sleep(0.1)
+
+    def mover_arriba(self):
+        for i in range(4):
+            self.pepa.move(0, 1)
+            self.pepa.setPixmap(QPixmap(p.PATH_UP[i]))
+            time.sleep(0.1)
+
+    def mover_izquierda(self):
+        for i in range(4):
+            self.pepa.move(-1, 0)
+            self.pepa.setPixmap(QPixmap(p.PATH_LEFT[i]))
+            time.sleep(0.1)
+
+    def mover_derecha(self):
+        for i in range(4):
+            self.pepa.move(-1, 0)
+            self.pepa.setPixmap(QPixmap(p.PATH_RIGHT[i]))
+            time.sleep(0.25)
 
 
 class Tiempo(QWidget):
@@ -237,23 +307,6 @@ class VentanaJuego(QWidget):
         self.label_vida.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
 
     def empezar_juego(self) -> None:
-        """
-        Método encargado de reproducir la música y mostrar la ventana
-        cuando empieza el juego.
-
-        Este método tiene 2 errores 😱.
-        """
-        print("[Front] Empezar juego")
-        # Ronda 3.1
-        # ERROR 😱: el método no es start() es play()
-        # Actual ❌: self.media_player_mp3.start()
-        # Solución : Cambiar .start() por .play()
-        self.media_player_mp3.play()
-
-        # Ronda 3.2
-        # ERROR 😱: no se hace show de la ventana
-        # Actual ❌: No había nada
-        # Solución : agregar self.show()
         self.show()
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
@@ -339,6 +392,6 @@ if __name__ == '__main__':
     # a = QFontDatabase.addApplicationFont(p.PATH_LETRA)
     font = QFont("Cascadia Mono SemiBold", 12)
     app.setFont(font)  # Creamos las base de la app: QApplication.
-    ventana = Tiempo("intermedio_1.txt")   # Construimos un QWidget que será nuestra ventana.
+    ventana = Tablero("experto_3.txt")   # Construimos un QWidget que será nuestra ventana.
     ventana.show()  # Mostramos la ventana.
     sys.exit(app.exec())
