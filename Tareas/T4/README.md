@@ -115,8 +115,8 @@ Lo importante es que expliquen qué hace la función y que si saben que alguna p
 ## Referencias de código externo :book:
 
 Para realizar mi tarea saqué código de:
-0. Tomé el archivo ```servidor.py``` de la experiencia 4 como base para el archivo de mi propio servidor así también el archivo ```frontend.py``` y ```backend.py``` de la actividad como 3 como base de mi archivos del mismo nombre.s
-1. https://www.pythonguis.com/tutorials/pyqt6-qscrollarea/: este hace crea un área _scrolleable?_ y está implementado en el archivo ```frontend.py``` en las líneas <número de líneas> y hace que funcione como se debe el Salón de la Fama
+0. Tomé el archivo ```servidor.py``` de la experiencia 4 como base para el archivo de mi propio servidor así también el archivo ```frontend.py``` y ```backend.py``` de la actividad como 3 como base de mi archivos del mismo nombre.
+1. https://www.pythonguis.com/tutorials/pyqt6-qscrollarea/: este hace crea un área _scrolleable?_ y está implementado en el archivo ```frontend.py``` en las líneas 27 - 34  y hace que funcione como se debe el Salón de la Fama
 2. https://python-forum.io/thread-37323.html: este código fue mi base para crear el timer en el juego, igual fue alterado en el proceso pero de este código empecé.
 
 ## Descuentos
