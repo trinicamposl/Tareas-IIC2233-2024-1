@@ -26,4 +26,3 @@ class Tiempo(QWidget):
 
     def aumento(self, cuanto):
         pass
-

@@ -12,7 +12,6 @@ TIEMPO_ADICIONAL = 35
 lista_tiempos = [["novato", 60], ["intermedio", 300], ["experto", 600]]
 TIEMPO_JUEGO = {i[0]: i[1] for i in lista_tiempos}
 
-PATH_LETRA = path.join("Minecraft.ttf")
 LECHUGA_PATH = path.join("..", "assets", "sprites", "lechuga.png")
 ANCHO_LECHUGA = [200, 42, 42]
 ALTURA_LECHUGA = [65, 14, 14]
