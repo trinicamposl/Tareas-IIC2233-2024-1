@@ -6,7 +6,6 @@ from PyQt6.QtWidgets import QLabel, QPushButton, QScrollArea, QVBoxLayout, QAppl
 import parametros as p
 from funciones import archivos, salon_fama, diccionario
 import sys
-import time
 
 
 class VentanaSala(QWidget):
@@ -149,8 +148,10 @@ class Tablero(QWidget):
         self.tamano = p.TAMANO[nivel.split("_")[0]]
         super().__init__()
         self.setGeometry(100, 100, 300, 300)
-        self.posicion_x = 1
-        self.posicion_y = 1
+        self.cor_x = 0  # estas coordenadas indican exactamente dónde está pepe (pixeles)
+        self.cor_y = 0
+        self.xs = 1  # mientras que estas indican en que cuadrado está (matriz de lechugas de nxn)
+        self.ye = 1
 
         grid_layout = QGridLayout()
         self.setLayout(grid_layout)
@@ -176,57 +177,69 @@ class Tablero(QWidget):
 
         self.pepa = QLabel(self)
         self.pepa.setPixmap(QPixmap(p.PATH_DOWN[0]))
-        self.pepa.setGeometry(0, 0, p.ANCHO_LECHUGA, p.ALTURA_LECHUGA)
-        grid_layout.addWidget(self.pepa, self.posicion_x, self.posicion_y)
+        self.pepa.setGeometry(self.cor_x, self.cor_y, p.ANCHO_LECHUGA, p.ALTURA_LECHUGA)
+        self.pepa.setWindowFlags(self.pepa.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
+
+        QTimer.singleShot(100, self.definir_Pepa)
+
+    def definir_Pepa(self):
+        self.cor_x = self.layout().itemAtPosition(self.xs, self.ye).widget().geometry().x()
+        self.cor_y = self.layout().itemAtPosition(self.xs, self.ye).widget().geometry().y()
+        QTimer.singleShot(100, self.mover_pepa)
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
         if event.key() == Qt.Key.Key_W:
             self.signal_arriba.emit("arriba")
-            # if self.signal_arriba.connect():
-            if True:
+            if True: # if self.signal_arriba.connect():
                 self.mover_arriba()
 
         if event.key() == Qt.Key.Key_S:
             self.signal_abajo.emit("abajo")
-            # if self.signal_abajo.connect():
-            if True:
+            if True:  # if self.signal_abajo.connect():
                 self.mover_abajo()
 
         if event.key() == Qt.Key.Key_A:
             self.signal_izq.emit("izquierda")
-            # if self.signal_abajo.connect():
-            if True:
+            if True:  # if self.signal_abajo.connect():
                 self.mover_izquierda()
 
         if event.key() == Qt.Key.Key_D:
             self.signal_abajo.emit("derecha")
-            # if self.signal_abajo.connect():
-            if True:
+            if True:  # if self.signal_abajo.connect():
                 self.mover_derecha()
 
     def mover_abajo(self):
+        self.xs += 1
         for i in range(4):
-            self.pepa.move(0, 1)
+            self.cor_y += 6
+            QTimer.singleShot(200, self.mover_pepa)
             self.pepa.setPixmap(QPixmap(p.PATH_DOWN[i]))
-            time.sleep(0.1)
 
     def mover_arriba(self):
+        self.xs -= 1
         for i in range(4):
-            self.pepa.move(0, 1)
+            self.cor_y -= 6
+            QTimer.singleShot(200, self.mover_pepa)
             self.pepa.setPixmap(QPixmap(p.PATH_UP[i]))
-            time.sleep(0.1)
 
     def mover_izquierda(self):
+        self.ye -= 1
         for i in range(4):
-            self.pepa.move(-1, 0)
+            self.cor_x -= 6
+            QTimer.singleShot(200, self.mover_pepa)
             self.pepa.setPixmap(QPixmap(p.PATH_LEFT[i]))
-            time.sleep(0.1)
 
     def mover_derecha(self):
+        self.ye += 1
         for i in range(4):
-            self.pepa.move(-1, 0)
+            self.cor_x += 6
+            QTimer.singleShot(200, self.mover_pepa)
             self.pepa.setPixmap(QPixmap(p.PATH_RIGHT[i]))
-            time.sleep(0.25)
+
+    def mover_pepa(self):
+        self.pepa.move(self.cor_x, self.cor_y)  # y aquí se mueve realmente
+        self.cor_x = self.layout().itemAtPosition(self.xs, self.ye).widget().geometry().x()
+        self.cor_y = self.layout().itemAtPosition(self.xs, self.ye).widget().geometry().y()
 
 
 class Tiempo(QWidget):
@@ -392,6 +405,6 @@ if __name__ == '__main__':
     # a = QFontDatabase.addApplicationFont(p.PATH_LETRA)
     font = QFont("Cascadia Mono SemiBold", 12)
     app.setFont(font)  # Creamos las base de la app: QApplication.
-    ventana = Tablero("experto_3.txt")   # Construimos un QWidget que será nuestra ventana.
+    ventana = Tablero("novato_1.txt")   # Construimos un QWidget que será nuestra ventana.
     ventana.show()  # Mostramos la ventana.
     sys.exit(app.exec())
