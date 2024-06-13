@@ -1,9 +1,17 @@
-from PyQt6.QtGui import QPixmap, QKeyEvent
-from PyQt6.QtCore import Qt, pyqtSignal, QTimer
-from PyQt6.QtWidgets import QWidget, QGridLayout
+from PyQt6.QtGui import QPixmap, QFont, QKeyEvent
+from PyQt6.QtCore import pyqtSignal, QTimer, QThread, QMutex, Qt
+from PyQt6.QtWidgets import QWidget, QGridLayout, QApplication
 from PyQt6.QtWidgets import QLabel
 import parametros as p
 from funciones import diccionario
+import sys
+
+
+class Thread(QThread):
+    fin = pyqtSignal()
+
+    def run(self):
+        self.fin.emit()
 
 
 class Tablero(QWidget):
@@ -52,6 +60,16 @@ class Tablero(QWidget):
                               p.ALTURA_LECHUGA[self.dificultad])
         self.pepa.setWindowFlags(self.pepa.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
 
+        self.cor_x = 0
+        self.cor_y = 0
+        self.xs = 1
+        self.ye = 1
+
+        self.thread = Thread()
+        self.thread.fin.connect(self.thread_fin)
+
+        self.mutex = QMutex()
+
         QTimer.singleShot(100, self.definir_Pepa)
 
     def definir_Pepa(self):
@@ -60,68 +78,89 @@ class Tablero(QWidget):
         QTimer.singleShot(100, lambda: self.mover_final("abajo", 0))
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
-        if event.key() == Qt.Key.Key_W:
-            self.signal_arriba.emit("arriba")
-            if True:  # if self.signal_arriba.connect():
+        if not self.thread.isRunning() and self.mutex.tryLock():
+            if event.key() == Qt.Key.Key_W:
+                self.thread.start()
                 self.mover_arriba()
 
-        if event.key() == Qt.Key.Key_S:
-            self.signal_abajo.emit("abajo")
-            if True:  # if self.signal_abajo.connect():
+            if event.key() == Qt.Key.Key_S:
+                self.thread.start()
                 self.mover_abajo()
 
-        if event.key() == Qt.Key.Key_A:
-            self.signal_izq.emit("izquierda")
-            if True:  # if self.signal_abajo.connect():
+            if event.key() == Qt.Key.Key_A:
+                self.thread.start()
                 self.mover_izquierda()
 
-        if event.key() == Qt.Key.Key_D:
-            self.signal_abajo.emit("derecha")
-            if True:  # if self.signal_abajo.connect():
+            if event.key() == Qt.Key.Key_D:
+                self.thread.start()
                 self.mover_derecha()
 
     def mover_abajo(self, paso=0):
         if paso < 4:
             self.cor_y += p.PASOS[self.dificultad]
-            QTimer.singleShot(100, lambda: self.mover_pepa("abajo", paso))
+            self.mover_pepa("abajo", paso)
             QTimer.singleShot(100, lambda: self.mover_abajo(paso + 1))
         else:
             self.xs += 1
             QTimer.singleShot(100, lambda: self.mover_final("abajo", 0))
+            self.thread.fin.connect(self.thread_fin)
 
     def mover_arriba(self, paso=0):
         if paso < 4:
             self.cor_y -= p.PASOS[self.dificultad]
-            QTimer.singleShot(100, lambda: self.mover_pepa("arriba", paso))
+            self.mover_pepa("arriba", paso)
             QTimer.singleShot(100, lambda: self.mover_arriba(paso + 1))
         else:
             self.xs -= 1
             QTimer.singleShot(100, lambda: self.mover_final("abajo", 0))
+            self.thread.fin.connect(self.thread_fin)
 
     def mover_izquierda(self, paso=0):
         if paso < 4:
             self.cor_x -= p.PASOS[self.dificultad]
-            QTimer.singleShot(100, lambda: self.mover_pepa("izquierda", paso))
+            self.mover_pepa("izquierda", paso)
             QTimer.singleShot(100, lambda: self.mover_izquierda(paso + 1))
         else:
             self.ye -= 1
             QTimer.singleShot(100, lambda: self.mover_final("abajo", 0))
+            self.thread.fin.connect(self.thread_fin)
 
     def mover_derecha(self, paso=0):
         if paso < 4:
             self.cor_x += p.PASOS[self.dificultad]
-            QTimer.singleShot(100, lambda: self.mover_pepa("derecha", paso))
+            self.mover_pepa("derecha", paso)
             QTimer.singleShot(100, lambda: self.mover_derecha(paso + 1))
         else:
             self.ye += 1
             QTimer.singleShot(100, lambda: self.mover_final("abajo", 0))
+            self.thread.fin.connect(self.thread_fin)
 
     def mover_pepa(self, donde, imagen):
-        self.pepa.move(self.cor_x, self.cor_y)  # y aquí se mueve realmente
         self.pepa.setPixmap(QPixmap(p.RUTAS[donde][imagen][1]))
+        self.pepa.move(self.cor_x, self.cor_y)
 
     def mover_final(self, donde, imagen):
         self.cor_x = self.layout().itemAtPosition(self.xs, self.ye).widget().geometry().x()
         self.cor_y = self.layout().itemAtPosition(self.xs, self.ye).widget().geometry().y()
         self.pepa.move(self.cor_x, self.cor_y)
         self.pepa.setPixmap(QPixmap(p.RUTAS[donde][imagen][1]))
+        self.mutex.unlock()
+
+    def thread_fin(self):
+        self.thread.quit()
+
+
+if __name__ == '__main__':
+    def hook(type, value, traceback) -> None:
+        print(type)
+        print(traceback)
+    sys.__excepthook__ = hook
+
+    app = QApplication([])
+    # a = QFontDatabase.addApplicationFont(p.PATH_LETRA)
+    font = QFont("Cascadia Mono SemiBold", 12)
+    app.setFont(font)  # Creamos las base de la app: QApplication.
+    ventana = Tablero("experto_1.txt")   # Construimos un QWidget que será nuestra ventana.
+
+    ventana.show()  # Mostramos la ventana.
+    sys.exit(app.exec())
