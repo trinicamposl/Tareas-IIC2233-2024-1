@@ -1,5 +1,5 @@
 from PyQt6.QtCore import QTimer
-from PyQt6.QtWidgets import QWidget
+from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtWidgets import QLabel
 import parametros as p
 
@@ -7,14 +7,18 @@ import parametros as p
 class Tiempo(QWidget):
     def __init__(self, nivel: str):
         super().__init__()
+        self.setFixedSize(200, 50)
         self.duration = p.TIEMPO_JUEGO[nivel.split("_")[0]]
         self.label2 = QLabel()
-        self.label2.setStyleSheet('border: 1px solid black')
         self.label2.setText(f'Te quedan {self.duration} segundos.')
         self.label2.show()
         self.timer = QTimer()
         self.timer.timeout.connect(self.update)
         self.timer.start(1000)
+
+        layout = QVBoxLayout()
+        layout.addWidget(self.label2)
+        self.setLayout(layout)
 
     def update(self):
         self.label2.setText(f'Te quedan {self.duration} segundos.')
@@ -25,4 +29,4 @@ class Tiempo(QWidget):
             exit()  # perdiste!
 
     def aumento(self, cuanto):
-        pass
+        self.duration += cuanto
