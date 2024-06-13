@@ -1,10 +1,10 @@
 from PyQt6.QtGui import QPixmap, QFont, QKeyEvent
 from PyQt6.QtCore import pyqtSignal, QTimer, QThread, QMutex, Qt
-from PyQt6.QtWidgets import QWidget, QGridLayout, QApplication
-from PyQt6.QtWidgets import QLabel
+from PyQt6.QtWidgets import QWidget, QGridLayout, QApplication, QPushButton, QLabel
 import parametros as p
 from funciones import diccionario
 import sys
+from TiempoBotones import Tiempo
 
 
 class Thread(QThread):
@@ -22,14 +22,12 @@ class Tablero(QWidget):
 
     def __init__(self, nivel: str):
 
-        self.tamano = p.TAMANO[nivel.split("_")[0]]
-        self.dificultad = p.NIVEL[nivel.split("_")[0]]
+        nivel_2 = nivel.split("_")[0]
+        self.tamano = p.TAMANO[nivel_2]
+        self.dificultad = p.NIVEL[nivel_2]
         super().__init__()
-        self.setGeometry(100, 100, 300, 300)
-        self.cor_x = 0  # estas coordenadas indican exactamente dónde está pepe (pixeles)
-        self.cor_y = 0
-        self.xs = 1  # mientras que estas indican en que cuadrado está (matriz de lechugas de nxn)
-        self.ye = 1
+        self.setGeometry(50, 50, 100, 100)
+        self.setFixedSize(p.ANCHO_PANTALLA[nivel_2], p.LARGO_PANTALLA[nivel_2])
 
         grid_layout = QGridLayout()
         self.setLayout(grid_layout)
@@ -46,24 +44,43 @@ class Tablero(QWidget):
             else:
                 lechuga = QLabel(self)
                 lechuga.setPixmap(QPixmap(p.LECHUGA_PATH))
-                lechuga.setGeometry(0, 0, p.ANCHO_LECHUGA[self.dificultad],
-                                    p.ALTURA_LECHUGA[self.dificultad])
+                lechuga.setFixedSize(p.ANCHO_LECHUGA[self.dificultad],
+                                     p.ALTURA_LECHUGA[self.dificultad])
                 grid_layout.addWidget(lechuga, fila, columna)
+
             columna += 1
             if columna > self.tamano:
                 columna = 0
                 fila += 1
 
+        self.tiempo = Tiempo(nivel)
+        grid_layout.addWidget(self.tiempo, 0, self.tamano + 1)
+        self.salir = QPushButton("Salir")
+        self.salir.setFixedHeight(p.ALTURA_LECHUGA[self.dificultad])
+        self.comprobar = QPushButton("Comprobar")
+        self.comprobar.setFixedHeight(p.ALTURA_LECHUGA[self.dificultad])
+
+        self.comprobar.clicked.connect(self.enviar_info)
+        self.salir.clicked.connect(self.retirada)
+
+        for i in range(self.tamano):
+            if i == 1:
+                grid_layout.addWidget(self.salir, i, self.tamano + 1)
+            elif i == 2:
+                grid_layout.addWidget(self.comprobar, i, self.tamano + 1)
+            else:
+                vacio = QLabel("")
+                grid_layout.addWidget(vacio, i, self.tamano + 1)
+
+        self.cor_x = 0  # estas coordenadas indican exactamente dónde está pepe (pixeles)
+        self.cor_y = 0
+        self.xs = 1  # mientras que estas indican en que cuadrado está (matriz de lechugas de nxn)
+        self.ye = 1
         self.pepa = QLabel(self)
         self.pepa.setPixmap(QPixmap(p.RUTAS["abajo"][0][1]))
         self.pepa.setGeometry(self.cor_x, self.cor_y, p.ANCHO_LECHUGA[self.dificultad],
                               p.ALTURA_LECHUGA[self.dificultad])
         self.pepa.setWindowFlags(self.pepa.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
-
-        self.cor_x = 0
-        self.cor_y = 0
-        self.xs = 1
-        self.ye = 1
 
         self.thread = Thread()
         self.thread.fin.connect(self.thread_fin)
@@ -80,20 +97,32 @@ class Tablero(QWidget):
     def keyPressEvent(self, event: QKeyEvent) -> None:
         if not self.thread.isRunning() and self.mutex.tryLock():
             if event.key() == Qt.Key.Key_W:
-                self.thread.start()
-                self.mover_arriba()
+                if self.ye != 0:
+                    self.thread.start()
+                    self.mover_arriba()
+                else:
+                    pass
 
             if event.key() == Qt.Key.Key_S:
-                self.thread.start()
-                self.mover_abajo()
+                if self.ye != self.tamano + 1:
+                    self.thread.start()
+                    self.mover_abajo()
+                else:
+                    pass
 
             if event.key() == Qt.Key.Key_A:
-                self.thread.start()
-                self.mover_izquierda()
+                if self.ye != 0:
+                    self.thread.start()
+                    self.mover_izquierda()
+                else:
+                    pass
 
             if event.key() == Qt.Key.Key_D:
-                self.thread.start()
-                self.mover_derecha()
+                if self.xs != self.tamano + 1:
+                    self.thread.start()
+                    self.mover_derecha()
+                else:
+                    pass
 
     def mover_abajo(self, paso=0):
         if paso < 4:
@@ -149,18 +178,9 @@ class Tablero(QWidget):
     def thread_fin(self):
         self.thread.quit()
 
+    def retirada(self):
+        self.hide()
+        sys.exit()
 
-if __name__ == '__main__':
-    def hook(type, value, traceback) -> None:
-        print(type)
-        print(traceback)
-    sys.__excepthook__ = hook
-
-    app = QApplication([])
-    # a = QFontDatabase.addApplicationFont(p.PATH_LETRA)
-    font = QFont("Cascadia Mono SemiBold", 12)
-    app.setFont(font)  # Creamos las base de la app: QApplication.
-    ventana = Tablero("experto_1.txt")   # Construimos un QWidget que será nuestra ventana.
-
-    ventana.show()  # Mostramos la ventana.
-    sys.exit(app.exec())
+    def enviar_info(self):
+        pass
