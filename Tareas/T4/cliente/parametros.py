@@ -8,35 +8,37 @@ PATH_MUSICA_FONDO = path.join("assets", "sonidos", "musica_1.wav")
 TIEMPO_APARICION = 45
 TIEMPO_DURACION = 10
 TIEMPO_ADICIONAL = 35
+
 lista_tiempos = [["novato", 60], ["intermedio", 300], ["experto", 600]]
 TIEMPO_JUEGO = {i[0]: i[1] for i in lista_tiempos}
+
 PATH_LETRA = path.join("Minecraft.ttf")
 LECHUGA_PATH = path.join("assets", "sprites", "lechuga.png")
-ANCHO_LECHUGA = 42
-ALTURA_LECHUGA = 14
+ANCHO_LECHUGA = [200, 42, 42]
+ALTURA_LECHUGA = [65, 14, 14]
+
 lista_tamano = [["novato", 3], ["intermedio", 10], ["experto", 20]]
 TAMANO = {i[0]: i[1] for i in lista_tamano}
-lista_paths = []
-DOWN = [[0, path.join("assets", "sprites", "pepa", "down_0.png")],
-        [1, path.join("assets", "sprites", "pepa", "down_1.png")],
-        [2, path.join("assets", "sprites", "pepa", "down_2.png")],
-        [3, path.join("assets", "sprites", "pepa", "down_3.png")]]
-PATH_DOWN = {i[0]: i[1] for i in DOWN}
 
-UP = [[0, path.join("assets", "sprites", "pepa", "up_0.png")],
-      [1, path.join("assets", "sprites", "pepa", "up_1.png")],
-      [2, path.join("assets", "sprites", "pepa", "up_2.png")],
-      [3, path.join("assets", "sprites", "pepa", "up_3.png")]]
-PATH_UP = {i[0]: i[1] for i in UP}
+lista_nivel = [["novato", 0], ["intermedio", 1], ["experto", 2]]
+NIVEL = {i[0]: i[1] for i in lista_nivel}
 
-RIGHT = [[0, path.join("assets", "sprites", "pepa", "right_0.png")],
-         [1, path.join("assets", "sprites", "pepa", "right_1.png")],
-         [2, path.join("assets", "sprites", "pepa", "right_2.png")],
-         [3, path.join("assets", "sprites", "pepa", "right_3.png")]]
-PATH_RIGHT = {i[0]: i[1] for i in RIGHT}
+PATHS = [["abajo", [[0, path.join("assets", "sprites", "pepa", "down_0.png")],
+                    [1, path.join("assets", "sprites", "pepa", "down_1.png")],
+                    [2, path.join("assets", "sprites", "pepa", "down_2.png")],
+                    [3, path.join("assets", "sprites", "pepa", "down_3.png")]]],
+         ["arriba", [[0, path.join("assets", "sprites", "pepa", "up_0.png")],
+                     [1, path.join("assets", "sprites", "pepa", "up_1.png")],
+                     [2, path.join("assets", "sprites", "pepa", "up_2.png")],
+                     [3, path.join("assets", "sprites", "pepa", "up_3.png")]]],
+         ["izquierda", [[0, path.join("assets", "sprites", "pepa", "left_0.png")],
+                        [1, path.join("assets", "sprites", "pepa", "left_1.png")],
+                        [2, path.join("assets", "sprites", "pepa", "left_2.png")],
+                        [3, path.join("assets", "sprites", "pepa", "left_3.png")]]],
+         ["derecha", [[0, path.join("assets", "sprites", "pepa", "right_0.png")],
+                      [1, path.join("assets", "sprites", "pepa", "right_1.png")],
+                      [2, path.join("assets", "sprites", "pepa", "right_2.png")],
+                      [3, path.join("assets", "sprites", "pepa", "right_3.png")]]]]
+RUTAS = {i[0]: i[1] for i in PATHS}
 
-LEFT = [[0, path.join("assets", "sprites", "pepa", "left_0.png")],
-        [1, path.join("assets", "sprites", "pepa", "left_1.png")],
-        [2, path.join("assets", "sprites", "pepa", "left_2.png")],
-        [3, path.join("assets", "sprites", "pepa", "left_3.png")]]
-PATH_LEFT = {i[0]: i[1] for i in LEFT}
+PASOS = [14, 6, 6]
