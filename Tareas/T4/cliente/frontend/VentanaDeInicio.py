@@ -36,12 +36,11 @@ class VentanaSala(QWidget):
 
 class VentanaInicio(QWidget):
 
-    signal_intentar_empezar = pyqtSignal(list)
-    signal_empezar = pyqtSignal(list)
-    signal_usuario = pyqtSignal(str)
+    signal_intentar_empezar = pyqtSignal(str)
+    signal_empezar = pyqtSignal(str)
+    signal_empezo_juego = pyqtSignal()
 
     def __init__(self) -> None:
-
         super().__init__()
         self.iniciar_dibujos()
         self.iniciar_musica()
@@ -118,16 +117,13 @@ class VentanaInicio(QWidget):
 
     def enviar_info(self) -> None:
         # Le avisamos al backend la dificultad mediante la señal.
-        nivel = self.selector_puzzle.currentText()
-        usuario = self.usuario.text()
-        self.signal_intentar_empezar.emit([usuario, nivel])
+        usuario = self.usuario.itemAt(0).widget().text()
+        self.signal_intentar_empezar.emit(usuario)
 
-    def recibir_info(self) -> None:
-        if self.signal_empezar.connect():
+    def recibir_info(self, variable) -> None:
+        if variable:
             self.hide()
-        else:
-            self.actualizar_salon()
-            self.show()
+            self.signal_empezo_juego.emit()
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
         if event.key() == Qt.Key.Key_Enter or event.key() == Qt.Key.Key_Return:

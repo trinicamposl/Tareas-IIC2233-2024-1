@@ -1,44 +1,24 @@
 # no sé
 from PyQt6.QtWidgets import QApplication
-from frontend import VentanaInicio
+from frontend import VentanaDeInicio
+from backend import Usuario
 import sys
 
-class ProtegeDCCity:
+
+class Empezar:
     def __init__(self) -> None:
         """
         Instanciamos todas las ventanas y clases necesarias
         """
-        self.frontend_inicio = VentanaInicio()
-        # self.frontend_juego = VentanaJuego()
-        # self.backend = Juego()
+        self.frontend_inicio = VentanaDeInicio()
+        self.backend = Usuario()
 
     def conectar(self) -> None:
-        """
-        Conectamos todas las señales entre ventanas y backend
-
-        En este método hay 2 errores 😱.
-        """
-
         # # Backend le avisa al frontend del juego que empieza el juego
         # self.backend.senal_empezar_juego(self.frontend_juego.empezar_juego)
-
-        # # Frontend_juego notifica al backend cuando se hace click en pantalla
-        # self.frontend_juego.senal_click_pantalla.connect(self.backend.click_pantalla)
-
-        # # Backend notifica al frontend_juego cuando aparece, se mueve
-        # # y desaparece el meteorito
-        # self.backend.senal_aparecer_meteorito.connect(
-        #     self.frontend_juego.aparecer_meteorito
-        # )
-        # self.backend.senal_mover_meteorito.connect(self.frontend_juego.mover_meteorito)
-        # self.backend.senal_remover_meteorito.connect(
-        #     self.frontend_juego.remover_meteorito
-        # )
-
-        # # Backend notifica al frontend_juego cuando se cambia la población
-        # self.backend.senal_actualizar_poblacion.connect(
-        #     self.frontend_juego.actualizar_poblacion
-        # )
+        # Backend notifica al frontend_juego cuando se empieza
+        self.backend.signal_intentar_empezar.connect(self.frontend_juego.revisar_texto)
+        self.frontend.signal_empezar.connect(self.backend.recibir_info)
 
     def iniciar(self) -> None:
         self.frontend_inicio.show()
@@ -53,7 +33,7 @@ if __name__ == "__main__":
     sys.__excepthook__ = hook
 
     app = QApplication([])
-    juego = ProtegeDCCity()
+    juego = Empezar()
     juego.conectar()
     juego.iniciar()
 

@@ -1,6 +1,6 @@
-from PyQt6.QtGui import QPixmap, QFont, QKeyEvent
+from PyQt6.QtGui import QPixmap, QKeyEvent
 from PyQt6.QtCore import pyqtSignal, QTimer, QThread, QMutex, Qt
-from PyQt6.QtWidgets import QWidget, QGridLayout, QApplication, QPushButton, QLabel
+from PyQt6.QtWidgets import QWidget, QGridLayout, QPushButton, QLabel
 import parametros as p
 from funciones import diccionario
 import sys
@@ -97,32 +97,24 @@ class Tablero(QWidget):
     def keyPressEvent(self, event: QKeyEvent) -> None:
         if not self.thread.isRunning() and self.mutex.tryLock():
             if event.key() == Qt.Key.Key_W:
-                if self.ye != 0:
+                if self.ye != 1:
                     self.thread.start()
                     self.mover_arriba()
-                else:
-                    pass
 
             if event.key() == Qt.Key.Key_S:
-                if self.ye != self.tamano + 1:
+                if self.ye != self.tamano:
                     self.thread.start()
                     self.mover_abajo()
-                else:
-                    pass
 
             if event.key() == Qt.Key.Key_A:
-                if self.ye != 0:
+                if self.xs != 1:
                     self.thread.start()
                     self.mover_izquierda()
-                else:
-                    pass
 
             if event.key() == Qt.Key.Key_D:
-                if self.xs != self.tamano + 1:
+                if self.xs != self.tamano:
                     self.thread.start()
                     self.mover_derecha()
-                else:
-                    pass
 
     def mover_abajo(self, paso=0):
         if paso < 4:

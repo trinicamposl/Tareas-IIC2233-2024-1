@@ -21,4 +21,3 @@ if __name__ == '__main__':
     ventana3.show()  # Mostramos la ventana.
     ventana2.show()
     sys.exit(app.exec())
-    
