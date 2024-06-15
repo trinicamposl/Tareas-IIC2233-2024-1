@@ -1,8 +1,8 @@
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
-from PyQt6.QtGui import QPixmap, QKeyEvent, QFont
+from PyQt6.QtGui import QPixmap, QKeyEvent
 from PyQt6.QtCore import Qt, pyqtSignal, QUrl
 from PyQt6.QtWidgets import QHBoxLayout, QWidget, QComboBox, QFormLayout, QLineEdit
-from PyQt6.QtWidgets import QLabel, QPushButton, QScrollArea, QVBoxLayout, QApplication
+from PyQt6.QtWidgets import QLabel, QPushButton, QScrollArea, QVBoxLayout, QDialogButtonBox, QDialog
 from funciones import salon_fama, archivos
 import parametros as p
 import sys
@@ -34,26 +34,54 @@ class VentanaSala(QWidget):
         self.setLayout(layout_principal)
 
 
+class Popup(QDialog):
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle("HELLO!")
+
+        QBtn = QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
+
+        self.buttonBox = QDialogButtonBox(QBtn)
+        self.buttonBox.accepted.connect(self.accept)
+        self.buttonBox.rejected.connect(self.reject)
+
+        self.layout = QVBoxLayout()
+        texto = "Tu usuario tiene que tener al menos:\n- Una mayúscula\n- Una minúscula \n"
+        texto_2 = "- Un número"
+        message = QLabel(texto + texto_2)
+        self.layout.addWidget(message)
+        self.layout.addWidget(self.buttonBox)
+        self.setLayout(self.layout)
+        self.setWindowFlags(self.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
+
+
 class VentanaInicio(QWidget):
 
     signal_intentar_empezar = pyqtSignal(str)
     signal_empezar = pyqtSignal(str)
-    signal_empezo_juego = pyqtSignal()
+    signal_empezo_juego = pyqtSignal(bool)
+    signal_datos = pyqtSignal(list)
+    signal_popup = pyqtSignal()
 
     def __init__(self) -> None:
         super().__init__()
         self.iniciar_dibujos()
         self.iniciar_musica()
+        # Creamos el popup en caso que no se cumplan las condiciones de usuario
+        self.ventana_popup = Popup()
+        self.ventana_popup.setGeometry(210, 280, 200, 100)
 
     def iniciar_dibujos(self) -> None:
         self.setGeometry(30, 50, p.ANCHO_JUEGO, p.ALTURA_JUEGO)
         self.setWindowTitle("Ventana de Inicio")
         # Creamos el selector que vamos a necesitar en nuestra ventana de Inicio
-        self.selector_puzzle = QComboBox(self)
-        self.selector_puzzle.addItems(reversed(archivos()))
+        self.selector_puzzle = QComboBox()
+        self.selector_puzzle.addItems(archivos())
         # Creamos el usuario
         self.usuario = QFormLayout()
-        self.usuario.addRow("Elige tu usuario:", QLineEdit())
+        self.linea_texto = QLineEdit()
+        self.usuario.addRow("Elige tu usuario:", self.linea_texto)
         # Creamos el selector de nivel
         self.selector = QFormLayout()
         self.selector.addRow("Elige el nivel:", self.selector_puzzle)
@@ -104,6 +132,23 @@ class VentanaInicio(QWidget):
 
         self.boton_ingresar.clicked.connect(self.enviar_info)
         self.boton_salir.clicked.connect(self.retirada)
+        self.signal_popup.connect(self.popup)
+
+    def popup(self):
+        # aquí conecto el cerrar el popup a activar todo
+        self.ventana_popup.accepted.connect(lambda: self.boton_ingresar.setEnabled(True))
+        self.ventana_popup.rejected.connect(lambda: self.boton_ingresar.setEnabled(True))
+        self.ventana_popup.accepted.connect(lambda: self.selector_puzzle.setEnabled(True))
+        self.ventana_popup.rejected.connect(lambda: self.selector_puzzle.setEnabled(True))
+        self.ventana_popup.accepted.connect(lambda: self.linea_texto.setEnabled(True))
+        self.ventana_popup.rejected.connect(lambda: self.linea_texto.setEnabled(True))
+        self.ventana_popup.show()
+
+        # aquí conecto el abrir el popup a bloquear
+        if self.ventana_popup.isVisible():
+            self.boton_ingresar.setEnabled(False)
+            self.selector_puzzle.setEnabled(False)
+            self.linea_texto.setEnabled(False)
 
     def iniciar_musica(self) -> None:
         # ponemos la música
@@ -117,13 +162,18 @@ class VentanaInicio(QWidget):
 
     def enviar_info(self) -> None:
         # Le avisamos al backend la dificultad mediante la señal.
-        usuario = self.usuario.itemAt(0).widget().text()
+        usuario = self.usuario.itemAt(1).widget().text()
         self.signal_intentar_empezar.emit(usuario)
 
     def recibir_info(self, variable) -> None:
         if variable:
-            self.hide()
-            self.signal_empezo_juego.emit()
+            usuario = self.usuario.itemAt(1).widget().text()
+            nivel = self.selector_puzzle.currentText()
+            self.signal_empezo_juego.emit(True)
+            self.signal_datos.emit([usuario, nivel])
+
+        else:
+            self.signal_empezo_juego.emit(False)
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
         if event.key() == Qt.Key.Key_Enter or event.key() == Qt.Key.Key_Return:
@@ -131,18 +181,3 @@ class VentanaInicio(QWidget):
 
     def retirada(self):
         sys.exit()
-
-
-if __name__ == '__main__':
-    def hook(type, value, traceback) -> None:
-        print(type)
-        print(traceback)
-    sys.__excepthook__ = hook
-
-    app = QApplication([])
-    # a = QFontDatabase.addApplicationFont(p.PATH_LETRA)
-    font = QFont("Cascadia Mono SemiBold", 12)
-    app.setFont(font)  # Creamos las base de la app: QApplication.
-    ventana = VentanaInicio()   # Construimos un QWidget que será nuestra ventana.
-    ventana.show()  # Mostramos la ventana.
-    sys.exit(app.exec())
