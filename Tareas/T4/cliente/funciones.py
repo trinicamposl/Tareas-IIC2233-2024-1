@@ -3,7 +3,8 @@ from os import path, listdir
 
 def archivos():
     ruta = path.join("assets", "base_puzzles")
-    return listdir(ruta)
+    lista = listdir(ruta)
+    return sorted(lista, key=lambda x: x[3:6])
 
 
 def salon_fama():
