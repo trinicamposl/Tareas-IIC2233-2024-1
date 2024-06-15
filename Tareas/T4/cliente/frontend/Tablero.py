@@ -1,10 +1,37 @@
 from PyQt6.QtGui import QPixmap, QKeyEvent
 from PyQt6.QtCore import pyqtSignal, QTimer, QThread, QMutex, Qt
-from PyQt6.QtWidgets import QWidget, QGridLayout, QPushButton, QLabel
+from PyQt6.QtWidgets import QWidget, QGridLayout, QPushButton, QLabel, QVBoxLayout
 import parametros as p
 from funciones import diccionario
 import sys
-from TiempoBotones import Tiempo
+
+
+class Tiempo(QWidget):
+    def __init__(self, nivel: str):
+        super().__init__()
+        self.setFixedSize(200, 50)
+        self.duration = p.TIEMPO_JUEGO[nivel.split("_")[0]]
+        self.label2 = QLabel()
+        self.label2.setText(f'Te quedan {self.duration} segundos.')
+        self.label2.show()
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.update)
+        self.timer.start(1000)
+
+        layout = QVBoxLayout()
+        layout.addWidget(self.label2)
+        self.setLayout(layout)
+
+    def update(self):
+        self.label2.setText(f'Te quedan {self.duration} segundos.')
+        self.duration -= 1
+
+        if self.duration < 0:
+            self.timer.stop()
+            exit()  # perdiste!
+
+    def aumento(self, cuanto):
+        self.duration += cuanto
 
 
 class Thread(QThread):
@@ -44,8 +71,8 @@ class Tablero(QWidget):
             else:
                 lechuga = QLabel(self)
                 lechuga.setPixmap(QPixmap(p.LECHUGA_PATH))
-                lechuga.setFixedSize(p.ANCHO_LECHUGA[self.dificultad],
-                                     p.ALTURA_LECHUGA[self.dificultad])
+                lechuga.setFixedSize(p.ANCHO_LECHUGA,
+                                     p.ALTURA_LECHUGA)
                 grid_layout.addWidget(lechuga, fila, columna)
 
             columna += 1
@@ -56,9 +83,9 @@ class Tablero(QWidget):
         self.tiempo = Tiempo(nivel)
         grid_layout.addWidget(self.tiempo, 0, self.tamano + 1)
         self.salir = QPushButton("Salir")
-        self.salir.setFixedHeight(p.ALTURA_LECHUGA[self.dificultad])
+        self.salir.setFixedHeight(p.ALTURA_LECHUGA)
         self.comprobar = QPushButton("Comprobar")
-        self.comprobar.setFixedHeight(p.ALTURA_LECHUGA[self.dificultad])
+        self.comprobar.setFixedHeight(p.ALTURA_LECHUGA)
 
         self.comprobar.clicked.connect(self.enviar_info)
         self.salir.clicked.connect(self.retirada)
@@ -77,9 +104,8 @@ class Tablero(QWidget):
         self.xs = 1  # mientras que estas indican en que cuadrado está (matriz de lechugas de nxn)
         self.ye = 1
         self.pepa = QLabel(self)
-        self.pepa.setPixmap(QPixmap(p.RUTAS["abajo"][0][1]))
-        self.pepa.setGeometry(self.cor_x, self.cor_y, p.ANCHO_LECHUGA[self.dificultad],
-                              p.ALTURA_LECHUGA[self.dificultad])
+        self.pepa.setPixmap(QPixmap(p.RUTAS["abajo"][0]))
+        self.pepa.setGeometry(self.cor_x, self.cor_y, p.ANCHO_LECHUGA, p.ALTURA_LECHUGA)
         self.pepa.setWindowFlags(self.pepa.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
 
         self.thread = Thread()
@@ -157,14 +183,14 @@ class Tablero(QWidget):
             self.thread.fin.connect(self.thread_fin)
 
     def mover_pepa(self, donde, imagen):
-        self.pepa.setPixmap(QPixmap(p.RUTAS[donde][imagen][1]))
+        self.pepa.setPixmap(QPixmap(p.RUTAS[donde][imagen]))
         self.pepa.move(self.cor_x, self.cor_y)
 
     def mover_final(self, donde, imagen):
         self.cor_x = self.layout().itemAtPosition(self.xs, self.ye).widget().geometry().x()
         self.cor_y = self.layout().itemAtPosition(self.xs, self.ye).widget().geometry().y()
         self.pepa.move(self.cor_x, self.cor_y)
-        self.pepa.setPixmap(QPixmap(p.RUTAS[donde][imagen][1]))
+        self.pepa.setPixmap(QPixmap(p.RUTAS[donde][imagen]))
         self.mutex.unlock()
 
     def thread_fin(self):

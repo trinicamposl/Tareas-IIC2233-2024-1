@@ -26,8 +26,3 @@ class Usuario(QObject):
     def crear_tablero(self, parametro):
         crear_tablero = tablero.Tablero(parametro)
         crear_tablero.show()
-
-
-
-# backend.signal_intentar_empezar.connect(revisar_texto)
-# frontend.signal_empezar.connect(recibir_info):
