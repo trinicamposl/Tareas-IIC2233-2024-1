@@ -63,6 +63,7 @@ class VentanaInicio(QWidget):
     signal_empezo_juego = pyqtSignal(bool)
     signal_datos = pyqtSignal(list)
     signal_popup = pyqtSignal()
+    signal_parar_tiempo = pyqtSignal()
 
     def __init__(self) -> None:
         super().__init__()
@@ -181,3 +182,10 @@ class VentanaInicio(QWidget):
 
     def retirada(self):
         sys.exit()
+
+    def volver(self):
+        self.show()
+        self.signal_parar_tiempo.emit()
+
+    def silenciar(self):
+        self.media_player_mp3.stop()

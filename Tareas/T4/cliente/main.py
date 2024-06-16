@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QApplication
 from PyQt6.QtGui import QFont
 import frontend.VentanaDeInicio as frontend_inicio
 import backend.backend as backend
+import frontend.Tablero as tablero
 import sys
 
 
@@ -13,7 +14,11 @@ class Empezar:
         """
         self.frontend_inicio = frontend_inicio.VentanaInicio()
         self.backend = backend.Usuario()
+        self.backend_tablero = None
         self.conectar()
+        self.tablero_juego = None
+        self.pepa = None
+        self.nivel = None
 
     def conectar(self) -> None:
         # # Backend le avisa al frontend del juego que empieza el juego
@@ -23,6 +28,8 @@ class Empezar:
         self.backend.signal_empezar.connect(self.frontend_inicio.recibir_info)
         self.frontend_inicio.signal_empezo_juego.connect(self.iniciar_juego)
         self.frontend_inicio.signal_datos.connect(self.backend.guardar_datos)
+        self.backend.signal_crear_tablero.connect(self.crear_tablero)
+        self.iniciar()
 
     def iniciar(self) -> None:
         self.frontend_inicio.show()
@@ -32,6 +39,25 @@ class Empezar:
             self.frontend_inicio.hide()
         else:
             self.frontend_inicio.signal_popup.emit()
+
+    def crear_tablero(self, nivel):
+        self.nivel = nivel
+        self.tablero_juego = tablero.Tablero(nivel)
+        self.tablero_juego.show()
+        self.conectar_juego()
+
+    def conectar_juego(self):
+        self.backend_tablero = backend.Tablero()
+        self.tablero_juego.signal_salir.connect(self.frontend_inicio.volver)
+        self.frontend_inicio.signal_parar_tiempo.connect(self.backend.reiniciar_tiempo)
+        self.backend_tablero.signal_crear_pepa.connect(self.tablero_juego.definir_Pepa)
+        self.backend_tablero.signal_crear_pepa.emit()
+        self.tablero_juego.signal_posicion.connect(self.mandar_info)
+        self.backend.signal_empezar_tiempo.emit()
+        self.tablero_juego.signal_silenciar.connect(self.frontend_inicio.silenciar)
+
+    def mandar_info(self):
+        self.backend_tablero.signal_inicial.emit([0, 0, self.nivel.split("_")])
 
 
 if __name__ == "__main__":
@@ -46,7 +72,4 @@ if __name__ == "__main__":
     font = QFont("Cascadia Mono SemiBold", 10)
     app.setFont(font)
     juego = Empezar()
-    juego.conectar()
-    juego.iniciar()
-
     sys.exit(app.exec())

@@ -23,22 +23,22 @@ TAMANO = {i[0]: i[1] for i in lista_tamano}
 lista_nivel = [["novato", 0], ["intermedio", 1], ["experto", 2]]
 NIVEL = {i[0]: i[1] for i in lista_nivel}
 
-PATHS = [["abajo", [[path.join("assets", "sprites", "pepa", "down_0.png")],
-                    [path.join("assets", "sprites", "pepa", "down_1.png")],
-                    [path.join("assets", "sprites", "pepa", "down_2.png")],
-                    [path.join("assets", "sprites", "pepa", "down_3.png")]]],
-         ["arriba", [[path.join("assets", "sprites", "pepa", "up_0.png")],
-                     [path.join("assets", "sprites", "pepa", "up_1.png")],
-                     [path.join("assets", "sprites", "pepa", "up_2.png")],
-                     [path.join("assets", "sprites", "pepa", "up_3.png")]]],
-         ["izquierda", [[path.join("assets", "sprites", "pepa", "left_0.png")],
-                        [path.join("assets", "sprites", "pepa", "left_1.png")],
-                        [path.join("assets", "sprites", "pepa", "left_2.png")],
-                        [path.join("assets", "sprites", "pepa", "left_3.png")]]],
-         ["derecha", [[path.join("assets", "sprites", "pepa", "right_0.png")],
-                      [path.join("assets", "sprites", "pepa", "right_1.png")],
-                      [path.join("assets", "sprites", "pepa", "right_2.png")],
-                      [path.join("assets", "sprites", "pepa", "right_3.png")]]]]
+PATHS = [["abajo", [path.join("assets", "sprites", "pepa", "down_0.png"),
+                    path.join("assets", "sprites", "pepa", "down_1.png"),
+                    path.join("assets", "sprites", "pepa", "down_2.png"),
+                    path.join("assets", "sprites", "pepa", "down_3.png")]],
+         ["arriba", [path.join("assets", "sprites", "pepa", "up_0.png"),
+                     path.join("assets", "sprites", "pepa", "up_1.png"),
+                     path.join("assets", "sprites", "pepa", "up_2.png"),
+                     path.join("assets", "sprites", "pepa", "up_3.png")]],
+         ["izquierda", [path.join("assets", "sprites", "pepa", "left_0.png"),
+                        path.join("assets", "sprites", "pepa", "left_1.png"),
+                        path.join("assets", "sprites", "pepa", "left_2.png"),
+                        path.join("assets", "sprites", "pepa", "left_3.png")]],
+         ["derecha", [path.join("assets", "sprites", "pepa", "right_0.png"),
+                      path.join("assets", "sprites", "pepa", "right_1.png"),
+                      path.join("assets", "sprites", "pepa", "right_2.png"),
+                      path.join("assets", "sprites", "pepa", "right_3.png")]]]
 RUTAS = {i[0]: i[1] for i in PATHS}
 PASOS = [6, 6, 6]
 
