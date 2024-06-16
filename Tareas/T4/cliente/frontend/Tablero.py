@@ -32,7 +32,7 @@ class Tiempo(QWidget):
 
     def aumento(self, cuanto):
         self.duration += cuanto
-    
+
     def detener(self):
         self.timer.stop()
 
@@ -41,17 +41,14 @@ class Tablero(QWidget):
     signal_posicion = pyqtSignal(list)
     signal_salir = pyqtSignal()
     signal_agregar_pepa = pyqtSignal()
-    signal_izquierda = pyqtSignal()
-    signal_derecha = pyqtSignal()
-    signal_arriba = pyqtSignal()
-    signal_abajo = pyqtSignal()
+    signal_mover = pyqtSignal(str)
     signal_silenciar = pyqtSignal()
+    signal_dar_coordenadas = pyqtSignal(list)
 
     def __init__(self, nivel: str):
         self.nivel = nivel  # nombre completo ej: intermedio_1.txt
         self.nivel_2 = nivel.split("_")[0]  # nombre dificultad
         self.tamano = p.TAMANO[self.nivel_2]
-        self.dificultad = p.NIVEL[self.nivel_2]  # numero asociado a la dificultad, 1; 2 ó 3
         self.grid_layout = None
         self.cor_x = 0  # estas coordenadas indican exactamente dónde está pepe (pixeles)
         self.cor_y = 0
@@ -120,15 +117,11 @@ class Tablero(QWidget):
         self.hide()
         self.signal_salir.emit()
 
-    def posiciones_pepa(self):
-        self.cor_x = self.layout().itemAtPosition(1, 1).widget().geometry().x()
-        self.cor_y = self.layout().itemAtPosition(1, 1).widget().geometry().y()
-        self.signal_posicion.emit([self.cor_x, self.cor_y])
-
     def definir_Pepa(self):
         self.cor_x = self.layout().itemAtPosition(1, 1).widget().geometry().x()
         self.cor_y = self.layout().itemAtPosition(1, 1).widget().geometry().y()
         self.pepa.move(self.cor_x, self.cor_y)
+        self.signal_posicion.emit([self.cor_x, self.cor_y, self.tamano])
 
     def instalar_atajos(self) -> None:
         self.cheatcode_silenciar = QShortcut(QKeySequence("M, U, T, E"), self)
@@ -138,16 +131,23 @@ class Tablero(QWidget):
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
         if event.key() == Qt.Key.Key_W:
-            self.signal_arriba.emit()
+            self.signal_mover.emit("arriba")
 
         if event.key() == Qt.Key.Key_S:
-            self.signal_abajo.emit()
+            self.signal_mover.emit("abajo")
 
         if event.key() == Qt.Key.Key_A:
-            self.signal_izquierda.emit()
+            self.signal_mover.emit("izquierda")
 
         if event.key() == Qt.Key.Key_D:
-            self.signal_derecha.emit()
+            self.signal_mover.emit("derecha")
+
+    def mover_pepa(self, elemento):
+        donde = elemento[0]
+        imagen = elemento[1]
+        lugar = elemento[2]
+        self.pepa.setPixmap(QPixmap(p.RUTAS[donde][imagen]))
+        self.pepa.move(*lugar)
 
     def silenciar(self):
         self.signal_silenciar.emit()
@@ -158,6 +158,12 @@ class Tablero(QWidget):
         if isinstance(tiempo_og, Tiempo):
             tiempo_og.label2.setText("Te quedan ∞ segundos.")
             tiempo_og.detener()
+
+    def dar_coordenadas(self, datos):
+        x = self.layout().itemAtPosition(*datos).widget().geometry().x()
+        y = self.layout().itemAtPosition(*datos).widget().geometry().y()
+        self.signal_dar_coordenadas.emit([x, y])
+
 
 
 if __name__ == '__main__':

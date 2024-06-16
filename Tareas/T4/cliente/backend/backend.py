@@ -48,7 +48,7 @@ class Usuario(QObject):
     def reiniciar_tiempo(self):
         self.timer.stop()
         self.tiempo = 0
-    
+
     def terminar(self):
         self.timer.stop()
 
@@ -57,15 +57,19 @@ class Tablero(QObject):
     signal_inicial = pyqtSignal(list)
     signal_crear_pepa = pyqtSignal()
     signal_agregar_pepa = pyqtSignal()
+    signal_mover = pyqtSignal(list)
+    signal_pedir_coordenadas = pyqtSignal(list)
 
     def __init__(self):
         super().__init__()
         self.thread = Thread()
         self.thread.fin.connect(self.thread_fin)
-        self.dificultad = None
-        self.timer_sandia = QTimer(self)
-        self.x = 0
+        self.tamano = None
+        self.timer_sandia = QTimer(self)  # revisar
+        self.x = 0  # posiciones pixeles
         self.y = 0
+        self.m_x = 1  # posiciones cuadricula
+        self.m_y = 1
 
         self.mutex = QMutex()
         self.posiciones = None
@@ -74,60 +78,74 @@ class Tablero(QObject):
     def posiciones_pepa(self, lista):
         self.x = lista[0]
         self.y = lista[1]
-        self.dificultad = lista[2]
+        self.tamano = lista[2]
         self.signal_agregar_pepa.emit()
 
-    def mover_abajo(self, paso=0):
-        if paso < 4:
-            self.cor_y += p.PASOS[self.dificultad]
-            self.mover_pepa("abajo", paso)
-            QTimer.singleShot(100, lambda: self.mover_abajo(paso + 1))
+    def mover(self, donde):
+        if donde == "arriba":
+            self.mover_arriba()
+        elif donde == "abajo":
+            self.mover_abajo()
+        elif donde == "izquierda":
+            self.mover_izquierda()
         else:
-            self.xs += 1
-            QTimer.singleShot(100, lambda: self.mover_final("abajo", 0))
-            self.thread.fin.connect(self.thread_fin)
+            self.mover_derecha()
+
+    def mover_abajo(self, paso=0):
+        if self.m_x != self.tamano:
+            if paso < 4:
+                self.y += p.PASOS
+                self.signal_mover.emit(("abajo", paso, [self.x, self.y]))
+                QTimer.singleShot(100, lambda: self.mover_abajo(paso + 1))
+            else:
+                self.m_x += 1
+                QTimer.singleShot(100, lambda:
+                                  self.signal_pedir_coordenadas.emit([self.m_x, self.m_y]))
+
 
     def mover_arriba(self, paso=0):
-        if paso < 4:
-            self.cor_y -= p.PASOS[self.dificultad]
-            self.mover_pepa("arriba", paso)
-            QTimer.singleShot(100, lambda: self.mover_arriba(paso + 1))
-        else:
-            self.xs -= 1
-            QTimer.singleShot(100, lambda: self.mover_final("abajo", 0))
-            self.thread.fin.connect(self.thread_fin)
+        if self.m_x != 1:
+            if paso < 4:
+                self.y -= p.PASOS
+                self.signal_mover.emit(("arriba", paso, [self.x, self.y]))
+                QTimer.singleShot(100, lambda: self.mover_arriba(paso + 1))
+            else:
+                self.m_x -= 1
+                QTimer.singleShot(100, lambda:
+                                  self.signal_pedir_coordenadas.emit([self.m_x, self.m_y]))
+                # QTimer.singleShot(100, lambda: self.mover_abajo(0))
+                # self.thread.fin.connect(self.thread_fin)
 
     def mover_izquierda(self, paso=0):
-        if paso < 4:
-            self.cor_x -= p.PASOS[self.dificultad]
-            self.mover_pepa("izquierda", paso)
-            QTimer.singleShot(100, lambda: self.mover_izquierda(paso + 1))
-        else:
-            self.ye -= 1
-            QTimer.singleShot(100, lambda: self.mover_final("abajo", 0))
-            self.thread.fin.connect(self.thread_fin)
+        if self.m_y != 1:
+            if paso < 4:
+                self.x -= p.PASOS
+                self.signal_mover.emit(("izquierda", paso, [self.x, self.y]))
+                QTimer.singleShot(100, lambda: self.mover_izquierda(paso + 1))
+            else:
+                self.m_y -= 1
+                QTimer.singleShot(100, lambda:
+                                  self.signal_pedir_coordenadas.emit([self.m_x, self.m_y]))
+                # QTimer.singleShot(100, lambda: self.mover_final("abajo", 0))
+                # self.thread.fin.connect(self.thread_fin)
 
     def mover_derecha(self, paso=0):
-        if paso < 4:
-            self.cor_x += p.PASOS[self.dificultad]
-            self.mover_pepa("derecha", paso)
-            QTimer.singleShot(100, lambda: self.mover_derecha(paso + 1))
-        else:
-            self.ye += 1
-            QTimer.singleShot(100, lambda: self.mover_final("abajo", 0))
-            self.thread.fin.connect(self.thread_fin)
+        if self.m_y != self.tamano:
+            if paso < 4:
+                self.x += p.PASOS
+                self.signal_mover.emit(("derecha", paso, [self.x, self.y]))
+                QTimer.singleShot(100, lambda: self.mover_derecha(paso + 1))
+            else:
+                self.m_y += 1
+                QTimer.singleShot(100, lambda:
+                                  self.signal_pedir_coordenadas.emit([self.m_x, self.m_y]))
+                # QTimer.singleShot(100, lambda: self.mover_final("abajo", 0))
+                # self.thread.fin.connect(self.thread_fin)
 
-    def mover_pepa(self, donde, imagen):
-        self.pepa.setPixmap(QPixmap(p.RUTAS[donde][imagen][1]))
-        self.pepa.move(self.cor_x, self.cor_y)
-
-    def mover_final(self, donde, imagen):
-        self.cor_x = self.layout().itemAtPosition(self.xs, self.ye).widget().geometry().x()
-        self.cor_y = self.layout().itemAtPosition(self.xs, self.ye).widget().geometry().y()
-        self.pepa.move(self.cor_x, self.cor_y)
-        self.pepa.setPixmap(QPixmap(p.RUTAS[donde][imagen][1]))
-        self.mutex.unlock()
+    def mover_final(self, datos):
+        self.x = datos[0]
+        self.y = datos[1]
+        self.signal_mover.emit(("abajo", 0, datos))
 
     def thread_fin(self):
         self.thread.quit()
-
