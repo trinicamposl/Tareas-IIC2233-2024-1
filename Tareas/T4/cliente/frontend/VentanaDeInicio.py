@@ -69,9 +69,8 @@ class PopupPerdiste(QDialog):
         self.buttonBox.rejected.connect(self.reject)
 
         self.layout = QVBoxLayout()
-        texto = "Tu usuario tiene que tener al menos:\n- Una mayúscula\n- Una minúscula \n"
-        texto_2 = "- Un número"
-        message = QLabel(texto + texto_2)
+        texto = "Se te acabó el tiempo D:\n        Perdiste!"
+        message = QLabel(texto)
         self.layout.addWidget(message)
         self.layout.addWidget(self.buttonBox)
         self.setLayout(self.layout)
@@ -94,7 +93,9 @@ class VentanaInicio(QWidget):
         # Creamos el popup en caso que no se cumplan las condiciones de usuario
         self.ventana_popup = Popup()
         self.ventana_popup_perdiste = PopupPerdiste()
+        self.silenciado = False
         self.ventana_popup.setGeometry(210, 280, 200, 100)
+        self.ventana_popup_perdiste.setGeometry(210, 280, 200, 100)
 
     def iniciar_dibujos(self) -> None:
         self.setGeometry(30, 50, p.ANCHO_JUEGO, p.ALTURA_JUEGO)
@@ -183,6 +184,7 @@ class VentanaInicio(QWidget):
         audio.setVolume(0.25)
         self.media_player_mp3.setAudioOutput(audio)
         self.media_player_mp3.play()
+        self.media_player_mp3.setLoops(p.NUMERO_GRANDE)
 
     def enviar_info(self) -> None:
         # Le avisamos al backend la dificultad mediante la señal.
@@ -225,7 +227,17 @@ class VentanaInicio(QWidget):
             self.selector_puzzle.setEnabled(False)
             self.linea_texto.setEnabled(False)
         self.show()
+        if not self.silenciado:
+            media_player_mp3 = QMediaPlayer(self)
+            file_url = QUrl.fromLocalFile(p.PATH_MUSICA_PERDEDORA)
+            media_player_mp3.setSource(file_url)
+            audio = QAudioOutput(self)
+            audio.setVolume(0.5)
+            media_player_mp3.setAudioOutput(audio)
+            media_player_mp3.play()
+
         self.signal_parar_tiempo.emit()
 
     def silenciar(self):
         self.media_player_mp3.stop()
+        self.silenciado = True

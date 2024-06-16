@@ -166,7 +166,6 @@ class Tablero(QObject):
         self.thread.quit()
 
     def relleno(self):
-        print(self.lechugas, self.m_x, self.m_y)
         if self.lechugas[self.m_x - 1][self.m_y - 1] == 1:
             self.signal_enviar_accion.emit(["vaciar", [self.m_x, self.m_y]])
             self.lechugas[self.m_x - 1][self.m_y - 1] = 0

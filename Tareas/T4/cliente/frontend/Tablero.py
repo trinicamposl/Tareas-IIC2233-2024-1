@@ -73,7 +73,9 @@ class Tablero(QWidget):
             datos = f"{fila},{columna}"
             if columna == 0 or fila == 0:
                 if columna == 0 and fila == 0:
-                    vacio = QLabel(self)
+                    vacio = QLabel()
+                    vacio.setPixmap(QPixmap())
+                    vacio.setFixedSize(p.ANCHO_LECHUGA, p.ALTURA_LECHUGA)
                 else:
                     vacio = QLabel(f"{diccionario(self.nivel)[datos]}", self)
                 self.grid_layout.addWidget(vacio, fila, columna)
@@ -104,7 +106,7 @@ class Tablero(QWidget):
         self.comprobar = QPushButton("Comprobar")
         self.comprobar.setFixedHeight(p.ALTURA_LECHUGA)
         self.pausar = QPushButton("Pausar")
-        self.comprobar.setFixedHeight(p.ALTURA_LECHUGA)
+        self.pausar.setFixedHeight(p.ALTURA_LECHUGA)
 
         self.comprobar.clicked.connect(self.enviar_info)
         self.salir.clicked.connect(self.retirada)
@@ -119,6 +121,7 @@ class Tablero(QWidget):
             else:
                 vacio = QLabel("")
                 vacio.setPixmap(QPixmap())
+                vacio.setFixedHeight(p.ANCHO_LECHUGA)
                 self.grid_layout.addWidget(vacio, i, self.tamano + 1)
         self.setLayout(self.grid_layout)
 
@@ -129,7 +132,6 @@ class Tablero(QWidget):
         tiempo_og = self.grid_layout.itemAtPosition(0, self.tamano + 1).widget()
         if tiempo_og and isinstance(tiempo_og, Tiempo):
             texto = tiempo_og.label2.text()
-            print(texto)
             self.signal_tiempo_restante.emit(texto)
 
     def retirada(self):
