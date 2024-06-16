@@ -44,3 +44,17 @@ ANCHO_PANTALLA = {i[0]: i[1] for i in pantalla_ancho}
 
 pantalla_largo = [["novato", 200], ["intermedio", 450], ["experto", 650]]
 LARGO_PANTALLA = {i[0]: i[1] for i in pantalla_largo}
+
+# pasos_diccionario_y = [["arriba", -7], ["abajo", 7], ["izquierda", 0], ["derecha", 0]]
+# PASOS_Y = {i[0]: i[1] for i in pasos_diccionario_y}
+
+# pasos_diccionario_x = [["arriba", 0], ["abajo", 0], ["izquierda", -7], ["derecha", 7]]
+# PASOS_X = {i[0]: i[1] for i in pasos_diccionario_x}
+
+# avance_diccionario_x = [["arriba", -1], ["abajo", 1], ["izquierda", 0], ["derecha", 0]]
+# AVANCE_X = {i[0]: i[1] for i in avance_diccionario_x}
+
+# avance_diccionario_Y = [["arriba", 0], ["abajo", 0], ["izquierda", -1], ["derecha", 1]]
+# AVANCE_Y = {i[0]: i[1] for i in avance_diccionario_x}
+
+POOP_PATH = path.join("assets", "sprites", "poop.png")

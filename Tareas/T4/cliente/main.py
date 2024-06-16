@@ -59,6 +59,8 @@ class Empezar:
         self.backend_tablero.signal_mover.connect(self.tablero_juego.mover_pepa)
         self.backend_tablero.signal_pedir_coordenadas.connect(self.tablero_juego.dar_coordenadas)
         self.tablero_juego.signal_dar_coordenadas.connect(self.backend_tablero.mover_final)
+        self.tablero_juego.signal_relleno.connect(self.backend_tablero.relleno)
+        self.backend_tablero.signal_enviar_accion.connect(self.tablero_juego.rellenar)
 
     def mandar_info(self, datos):
         self.backend_tablero.signal_inicial.emit(datos)

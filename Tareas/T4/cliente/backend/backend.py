@@ -59,6 +59,7 @@ class Tablero(QObject):
     signal_agregar_pepa = pyqtSignal()
     signal_mover = pyqtSignal(list)
     signal_pedir_coordenadas = pyqtSignal(list)
+    signal_enviar_accion = pyqtSignal(list)
 
     def __init__(self):
         super().__init__()
@@ -75,23 +76,29 @@ class Tablero(QObject):
         self.posiciones = None
         self.signal_inicial.connect(self.posiciones_pepa)
 
+        self.lechugas = None
+
     def posiciones_pepa(self, lista):
         self.x = lista[0]
         self.y = lista[1]
         self.tamano = lista[2]
+        self.lechugas = [[1 for x in range(self.tamano)] for i in range(self.tamano)]
+        print(self.lechugas)
         self.signal_agregar_pepa.emit()
 
     def mover(self, donde):
-        if donde == "arriba":
-            self.mover_arriba()
-        elif donde == "abajo":
-            self.mover_abajo()
-        elif donde == "izquierda":
-            self.mover_izquierda()
-        else:
-            self.mover_derecha()
+        if not self.thread.isRunning() and self.mutex.tryLock():
+            self.thread.start()
+            if donde == "arriba":
+                self.mover_arriba()
+            elif donde == "abajo":
+                self.mover_abajo()
+            elif donde == "izquierda":
+                self.mover_izquierda()
+            elif donde == "derecha":
+                self.mover_derecha()
 
-    def mover_abajo(self, paso=0):
+    def mover_abajo(self, paso=0):  # si alcanzo mejorar esto para que no este acoplado
         if self.m_x != self.tamano:
             if paso < 4:
                 self.y += p.PASOS
@@ -101,7 +108,9 @@ class Tablero(QObject):
                 self.m_x += 1
                 QTimer.singleShot(100, lambda:
                                   self.signal_pedir_coordenadas.emit([self.m_x, self.m_y]))
-
+        else:
+            self.mutex.unlock()
+            self.thread.fin.connect(self.thread_fin)
 
     def mover_arriba(self, paso=0):
         if self.m_x != 1:
@@ -113,8 +122,9 @@ class Tablero(QObject):
                 self.m_x -= 1
                 QTimer.singleShot(100, lambda:
                                   self.signal_pedir_coordenadas.emit([self.m_x, self.m_y]))
-                # QTimer.singleShot(100, lambda: self.mover_abajo(0))
-                # self.thread.fin.connect(self.thread_fin)
+        else:
+            self.mutex.unlock()
+            self.thread.fin.connect(self.thread_fin)
 
     def mover_izquierda(self, paso=0):
         if self.m_y != 1:
@@ -126,8 +136,9 @@ class Tablero(QObject):
                 self.m_y -= 1
                 QTimer.singleShot(100, lambda:
                                   self.signal_pedir_coordenadas.emit([self.m_x, self.m_y]))
-                # QTimer.singleShot(100, lambda: self.mover_final("abajo", 0))
-                # self.thread.fin.connect(self.thread_fin)
+        else:
+            self.mutex.unlock()
+            self.thread.fin.connect(self.thread_fin)
 
     def mover_derecha(self, paso=0):
         if self.m_y != self.tamano:
@@ -139,13 +150,25 @@ class Tablero(QObject):
                 self.m_y += 1
                 QTimer.singleShot(100, lambda:
                                   self.signal_pedir_coordenadas.emit([self.m_x, self.m_y]))
-                # QTimer.singleShot(100, lambda: self.mover_final("abajo", 0))
-                # self.thread.fin.connect(self.thread_fin)
+        else:
+            self.mutex.unlock()
+            self.thread.fin.connect(self.thread_fin)
 
     def mover_final(self, datos):
         self.x = datos[0]
         self.y = datos[1]
         self.signal_mover.emit(("abajo", 0, datos))
+        self.mutex.unlock()
+        self.thread.fin.connect(self.thread_fin)
 
     def thread_fin(self):
         self.thread.quit()
+
+    def relleno(self):
+        print(self.lechugas, self.m_x, self.m_y)
+        if self.lechugas[self.m_x - 1][self.m_y - 1] == 1:
+            self.signal_enviar_accion.emit(["vaciar", [self.m_x, self.m_y]])
+            self.lechugas[self.m_x - 1][self.m_y - 1] = 0
+        else:
+            self.signal_enviar_accion.emit(["rellenar", [self.m_x, self.m_y]])
+            self.lechugas[self.m_x - 1][self.m_y - 1] = 1

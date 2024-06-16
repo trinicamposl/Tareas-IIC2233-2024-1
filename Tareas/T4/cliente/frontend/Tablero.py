@@ -44,6 +44,7 @@ class Tablero(QWidget):
     signal_mover = pyqtSignal(str)
     signal_silenciar = pyqtSignal()
     signal_dar_coordenadas = pyqtSignal(list)
+    signal_relleno = pyqtSignal()
 
     def __init__(self, nivel: str):
         self.nivel = nivel  # nombre completo ej: intermedio_1.txt
@@ -107,6 +108,7 @@ class Tablero(QWidget):
                 self.grid_layout.addWidget(self.comprobar, i, self.tamano + 1)
             else:
                 vacio = QLabel("")
+                vacio.setPixmap(QPixmap())
                 self.grid_layout.addWidget(vacio, i, self.tamano + 1)
         self.setLayout(self.grid_layout)
 
@@ -142,6 +144,9 @@ class Tablero(QWidget):
         if event.key() == Qt.Key.Key_D:
             self.signal_mover.emit("derecha")
 
+        if event.key() == Qt.Key.Key_G:
+            self.signal_relleno.emit()
+
     def mover_pepa(self, elemento):
         donde = elemento[0]
         imagen = elemento[1]
@@ -164,6 +169,15 @@ class Tablero(QWidget):
         y = self.layout().itemAtPosition(*datos).widget().geometry().y()
         self.signal_dar_coordenadas.emit([x, y])
 
+    def rellenar(self, que):
+        accion = que[0]
+        donde = que[1]
+        imagen = self.grid_layout.itemAtPosition(*donde).widget()
+        if accion == "rellenar":
+            imagen.setPixmap(QPixmap(p.POOP_PATH))
+            QTimer.singleShot(2000, lambda: imagen.setPixmap(QPixmap(p.LECHUGA_PATH)))
+        elif accion == "vaciar":
+            imagen.setPixmap(QPixmap())
 
 
 if __name__ == '__main__':
