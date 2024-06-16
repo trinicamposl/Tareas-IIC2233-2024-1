@@ -47,6 +47,28 @@ class Popup(QDialog):
         self.buttonBox.rejected.connect(self.reject)
 
         self.layout = QVBoxLayout()
+        texto = "Tu usuario tiene que:\n- Tener al menos una mayúscula\n"
+        texto_2 = "- Tener al menos un número\n- Solo tiene que utilizar letras y números"
+        message = QLabel(texto + texto_2)
+        self.layout.addWidget(message)
+        self.layout.addWidget(self.buttonBox)
+        self.setLayout(self.layout)
+        self.setWindowFlags(self.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
+
+
+class PopupPerdiste(QDialog):
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle("HELLO!")
+
+        QBtn = QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
+
+        self.buttonBox = QDialogButtonBox(QBtn)
+        self.buttonBox.accepted.connect(self.accept)
+        self.buttonBox.rejected.connect(self.reject)
+
+        self.layout = QVBoxLayout()
         texto = "Tu usuario tiene que tener al menos:\n- Una mayúscula\n- Una minúscula \n"
         texto_2 = "- Un número"
         message = QLabel(texto + texto_2)
@@ -71,6 +93,7 @@ class VentanaInicio(QWidget):
         self.iniciar_musica()
         # Creamos el popup en caso que no se cumplan las condiciones de usuario
         self.ventana_popup = Popup()
+        self.ventana_popup_perdiste = PopupPerdiste()
         self.ventana_popup.setGeometry(210, 280, 200, 100)
 
     def iniciar_dibujos(self) -> None:
@@ -184,6 +207,23 @@ class VentanaInicio(QWidget):
         sys.exit()
 
     def volver(self):
+        self.show()
+        self.signal_parar_tiempo.emit()
+
+    def volver_perdido(self):
+        self.ventana_popup_perdiste.accepted.connect(lambda: self.boton_ingresar.setEnabled(True))
+        self.ventana_popup_perdiste.rejected.connect(lambda: self.boton_ingresar.setEnabled(True))
+        self.ventana_popup_perdiste.accepted.connect(lambda: self.selector_puzzle.setEnabled(True))
+        self.ventana_popup_perdiste.rejected.connect(lambda: self.selector_puzzle.setEnabled(True))
+        self.ventana_popup_perdiste.accepted.connect(lambda: self.linea_texto.setEnabled(True))
+        self.ventana_popup_perdiste.rejected.connect(lambda: self.linea_texto.setEnabled(True))
+        self.ventana_popup_perdiste.show()
+
+        # aquí conecto el abrir el popup a bloquear
+        if self.ventana_popup_perdiste.isVisible():
+            self.boton_ingresar.setEnabled(False)
+            self.selector_puzzle.setEnabled(False)
+            self.linea_texto.setEnabled(False)
         self.show()
         self.signal_parar_tiempo.emit()
 

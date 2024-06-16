@@ -60,6 +60,7 @@ class Tablero(QObject):
     signal_mover = pyqtSignal(list)
     signal_pedir_coordenadas = pyqtSignal(list)
     signal_enviar_accion = pyqtSignal(list)
+    signal_perdiste = pyqtSignal()
 
     def __init__(self):
         super().__init__()
@@ -71,6 +72,7 @@ class Tablero(QObject):
         self.y = 0
         self.m_x = 1  # posiciones cuadricula
         self.m_y = 1
+        self.tiempo_restante = None
 
         self.mutex = QMutex()
         self.posiciones = None
@@ -83,7 +85,6 @@ class Tablero(QObject):
         self.y = lista[1]
         self.tamano = lista[2]
         self.lechugas = [[1 for x in range(self.tamano)] for i in range(self.tamano)]
-        print(self.lechugas)
         self.signal_agregar_pepa.emit()
 
     def mover(self, donde):
@@ -172,3 +173,8 @@ class Tablero(QObject):
         else:
             self.signal_enviar_accion.emit(["rellenar", [self.m_x, self.m_y]])
             self.lechugas[self.m_x - 1][self.m_y - 1] = 1
+
+    def actualizar_restante(self, dato):
+        self.tiempo_restante = int(dato.split(" ")[2])
+        if self.tiempo_restante <= 0:
+            self.signal_perdiste.emit()

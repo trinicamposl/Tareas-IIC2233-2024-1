@@ -48,6 +48,7 @@ class Empezar:
 
     def conectar_juego(self):
         self.backend_tablero = backend.Tablero()
+        self.backend_tablero.signal_perdiste.connect(self.frontend_inicio.volver_perdido)
         self.tablero_juego.signal_salir.connect(self.frontend_inicio.volver)
         self.frontend_inicio.signal_parar_tiempo.connect(self.backend.reiniciar_tiempo)
         self.backend_tablero.signal_crear_pepa.connect(self.tablero_juego.definir_Pepa)
@@ -61,6 +62,7 @@ class Empezar:
         self.tablero_juego.signal_dar_coordenadas.connect(self.backend_tablero.mover_final)
         self.tablero_juego.signal_relleno.connect(self.backend_tablero.relleno)
         self.backend_tablero.signal_enviar_accion.connect(self.tablero_juego.rellenar)
+        self.tablero_juego.signal_tiempo_restante.connect(self.backend_tablero.actualizar_restante)
 
     def mandar_info(self, datos):
         self.backend_tablero.signal_inicial.emit(datos)

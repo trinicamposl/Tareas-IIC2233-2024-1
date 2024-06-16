@@ -1,11 +1,14 @@
 from PyQt6.QtGui import QPixmap, QKeyEvent, QShortcut, QKeySequence
-from PyQt6.QtCore import pyqtSignal, QTimer, Qt
+from PyQt6.QtCore import pyqtSignal, QTimer, Qt, QUrl
 from PyQt6.QtWidgets import QWidget, QGridLayout, QPushButton, QLabel, QVBoxLayout
+from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 import parametros as p
 from funciones import diccionario
 
 
 class Tiempo(QWidget):
+    signal_tiempo = pyqtSignal()
+
     def __init__(self, nivel: str):
         super().__init__()
         self.setFixedSize(200, 50)
@@ -16,6 +19,7 @@ class Tiempo(QWidget):
         self.timer = QTimer()
         self.timer.timeout.connect(self.update)
         self.timer.start(1000)
+        self.perdiste = False
 
         layout = QVBoxLayout()
         layout.addWidget(self.label2)
@@ -27,7 +31,7 @@ class Tiempo(QWidget):
 
         if self.duration < 0:
             self.timer.stop()
-            exit()  # perdiste!
+        self.signal_tiempo.emit()
 
     def aumento(self, cuanto):
         self.duration += cuanto
@@ -44,12 +48,14 @@ class Tablero(QWidget):
     signal_silenciar = pyqtSignal()
     signal_dar_coordenadas = pyqtSignal(list)
     signal_relleno = pyqtSignal()
+    signal_tiempo_restante = pyqtSignal(str)
 
     def __init__(self, nivel: str):
         self.nivel = nivel  # nombre completo ej: intermedio_1.txt
         self.nivel_2 = nivel.split("_")[0]  # nombre dificultad
         self.tamano = p.TAMANO[self.nivel_2]
         self.grid_layout = None
+        self.mute = False
         self.cor_x = 0  # estas coordenadas indican exactamente dónde está pepe (pixeles)
         self.cor_y = 0
 
@@ -91,20 +97,25 @@ class Tablero(QWidget):
         QTimer.singleShot(100, self.definir_Pepa)
 
         self.tiempo_original = Tiempo(self.nivel)
+        self.tiempo_original.signal_tiempo.connect(self.enviar_tiempo)
         self.grid_layout.addWidget(self.tiempo_original, 0, self.tamano + 1)
         self.salir = QPushButton("Salir")
         self.salir.setFixedHeight(p.ALTURA_LECHUGA)
         self.comprobar = QPushButton("Comprobar")
         self.comprobar.setFixedHeight(p.ALTURA_LECHUGA)
+        self.pausar = QPushButton("Pausar")
+        self.comprobar.setFixedHeight(p.ALTURA_LECHUGA)
 
         self.comprobar.clicked.connect(self.enviar_info)
         self.salir.clicked.connect(self.retirada)
 
-        for i in range(self.tamano):
+        for i in range(self.tamano + 1):
             if i == 1:
                 self.grid_layout.addWidget(self.salir, i, self.tamano + 1)
             elif i == 2:
                 self.grid_layout.addWidget(self.comprobar, i, self.tamano + 1)
+            elif i == 3:
+                self.grid_layout.addWidget(self.pausar, i, self.tamano + 1)
             else:
                 vacio = QLabel("")
                 vacio.setPixmap(QPixmap())
@@ -113,6 +124,13 @@ class Tablero(QWidget):
 
     def enviar_info(self):
         pass
+
+    def enviar_tiempo(self):
+        tiempo_og = self.grid_layout.itemAtPosition(0, self.tamano + 1).widget()
+        if tiempo_og and isinstance(tiempo_og, Tiempo):
+            texto = tiempo_og.label2.text()
+            print(texto)
+            self.signal_tiempo_restante.emit(texto)
 
     def retirada(self):
         self.hide()
@@ -155,13 +173,18 @@ class Tablero(QWidget):
 
     def silenciar(self):
         self.signal_silenciar.emit()
-        print("me debería silenciar")
+        self.mute = True
 
     def tiempo_infinito(self):
         tiempo_og = self.grid_layout.itemAtPosition(0, self.tamano + 1).widget()
         if isinstance(tiempo_og, Tiempo):
             tiempo_og.label2.setText("Te quedan ∞ segundos.")
             tiempo_og.detener()
+
+    def agregar_tiempo(self):
+        tiempo_og = self.grid_layout.itemAtPosition(0, self.tamano + 1).widget()
+        if isinstance(tiempo_og, Tiempo):
+            tiempo_og.aumento(p.TIEMPO_JUEGO[self.nivel_2])
 
     def dar_coordenadas(self, datos):
         x = self.layout().itemAtPosition(*datos).widget().geometry().x()
@@ -173,7 +196,24 @@ class Tablero(QWidget):
         donde = que[1]
         imagen = self.grid_layout.itemAtPosition(*donde).widget()
         if accion == "rellenar":
+            if not self.mute:
+                self.media_player_mp3 = QMediaPlayer(self)
+                file_url = QUrl.fromLocalFile(p.PATH_MUSICA_POOP)
+                self.media_player_mp3.setSource(file_url)
+                audio = QAudioOutput(self)
+                audio.setVolume(0.5)
+                self.media_player_mp3.setAudioOutput(audio)
+                self.media_player_mp3.play()
             imagen.setPixmap(QPixmap(p.POOP_PATH))
             QTimer.singleShot(2000, lambda: imagen.setPixmap(QPixmap(p.LECHUGA_PATH)))
         elif accion == "vaciar":
+            if not self.mute:
+                self.media_player_mp3 = QMediaPlayer(self)
+                file_url = QUrl.fromLocalFile(p.PATH_MUSICA_COMER)
+                self.media_player_mp3.setSource(file_url)
+                audio = QAudioOutput(self)
+                audio.setVolume(0.5)
+                self.media_player_mp3.setAudioOutput(audio)
+                self.media_player_mp3.play()
+                QTimer.singleShot(1000, lambda: self.media_player_mp3.stop())
             imagen.setPixmap(QPixmap())
