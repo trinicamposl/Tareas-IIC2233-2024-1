@@ -20,8 +20,6 @@ TIEMPO_PASOS = 100
 lista_tamano = [["novato", 3], ["intermedio", 10], ["experto", 20]]
 TAMANO = {i[0]: i[1] for i in lista_tamano}
 
-lista_nivel = [["novato", 0], ["intermedio", 1], ["experto", 2]]
-NIVEL = {i[0]: i[1] for i in lista_nivel}
 
 PATHS = [["abajo", [path.join("assets", "sprites", "pepa", "down_0.png"),
                     path.join("assets", "sprites", "pepa", "down_1.png"),
@@ -40,8 +38,7 @@ PATHS = [["abajo", [path.join("assets", "sprites", "pepa", "down_0.png"),
                       path.join("assets", "sprites", "pepa", "right_2.png"),
                       path.join("assets", "sprites", "pepa", "right_3.png")]]]
 RUTAS = {i[0]: i[1] for i in PATHS}
-PASOS = [6, 6, 6]
-
+PASOS = 7
 pantalla_ancho = [["novato", 300], ["intermedio", 550], ["experto", 900]]
 ANCHO_PANTALLA = {i[0]: i[1] for i in pantalla_ancho}
 
