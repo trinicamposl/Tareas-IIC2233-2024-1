@@ -55,9 +55,13 @@ class Empezar:
         self.tablero_juego.signal_posicion.connect(self.mandar_info)
         self.backend.signal_empezar_tiempo.emit()
         self.tablero_juego.signal_silenciar.connect(self.frontend_inicio.silenciar)
+        self.tablero_juego.signal_mover.connect(self.backend_tablero.mover)
+        self.backend_tablero.signal_mover.connect(self.tablero_juego.mover_pepa)
+        self.backend_tablero.signal_pedir_coordenadas.connect(self.tablero_juego.dar_coordenadas)
+        self.tablero_juego.signal_dar_coordenadas.connect(self.backend_tablero.mover_final)
 
-    def mandar_info(self):
-        self.backend_tablero.signal_inicial.emit([0, 0, self.nivel.split("_")])
+    def mandar_info(self, datos):
+        self.backend_tablero.signal_inicial.emit(datos)
 
 
 if __name__ == "__main__":
