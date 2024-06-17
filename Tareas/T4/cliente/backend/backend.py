@@ -16,6 +16,7 @@ class Usuario(QObject):
     signal_crear_tablero = pyqtSignal(str)
     signal_empezar_tiempo = pyqtSignal()
     signal_comprobar = pyqtSignal()
+    signal_tiempo_final = pyqtSignal(int)
 
     def __init__(self):
         super().__init__()
@@ -52,6 +53,9 @@ class Usuario(QObject):
     def terminar(self):
         self.timer.stop()
 
+    def enviar_tiempo_final(self):
+        self.signal_tiempo_final.emit(self.tiempo)
+
 
 class Tablero(QObject):
     signal_inicial = pyqtSignal(list)
@@ -61,22 +65,26 @@ class Tablero(QObject):
     signal_pedir_coordenadas = pyqtSignal(list)
     signal_enviar_accion = pyqtSignal(list)
     signal_perdiste = pyqtSignal()
+    signal_tiempo_final = pyqtSignal(int)
 
     def __init__(self):
         super().__init__()
         self.thread = Thread()
         self.thread.fin.connect(self.thread_fin)
         self.tamano = None
+        self.tiempo = None
         self.timer_sandia = QTimer(self)  # revisar
         self.x = 0  # posiciones pixeles
         self.y = 0
         self.m_x = 1  # posiciones cuadricula
         self.m_y = 1
         self.tiempo_restante = None
+        self.puntaje = None
 
         self.mutex = QMutex()
         self.posiciones = None
         self.signal_inicial.connect(self.posiciones_pepa)
+        self.signal_tiempo_final.connect(self.calcular_puntaje)
 
         self.lechugas = None
 
@@ -177,3 +185,10 @@ class Tablero(QObject):
         self.tiempo_restante = int(dato.split(" ")[2])
         if self.tiempo_restante <= 0:
             self.signal_perdiste.emit()
+
+    def calcular_puntaje(self, tiempo_final):
+        if self.tiempo_restante == "infinito":
+            puntaje_final = p.PUNTAJE_INF
+        else:
+            puntaje_final = self.tiempo_restante * self.tamano * self.tamano / tiempo_final
+        return puntaje_final

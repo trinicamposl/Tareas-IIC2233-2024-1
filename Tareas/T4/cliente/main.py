@@ -48,6 +48,7 @@ class Empezar:
 
     def conectar_juego(self):
         self.backend_tablero = backend.Tablero()
+        self.backend.signal_tiempo_final.connect(self.backend_tablero.signal_tiempo_final)
         self.backend_tablero.signal_perdiste.connect(self.frontend_inicio.volver_perdido)
         self.backend_tablero.signal_perdiste.connect(self.tablero_juego.retirada)
         self.tablero_juego.signal_salir.connect(self.frontend_inicio.volver)

@@ -10,9 +10,12 @@ PATH_MUSICA_COMER = path.join("assets", "sonidos", "comer.wav")
 PATH_MUSICA_POOP = path.join("assets", "sonidos", "poop.wav")
 TIEMPO_APARICION = 45
 TIEMPO_DURACION = 10
+TIEMPO_TRANSICION = 2
+PUNTAJE_INF = 200
+CONSTANTE = 1000
 
 lista_tiempo_adicional = [["novato", 30], ["intermedio", 150], ["experto", 300]]
-TIEMPO_JUEGO = {i[0]: i[1] for i in lista_tiempo_adicional}
+TIEMPO_ADICIONAL = {i[0]: i[1] for i in lista_tiempo_adicional}
 
 lista_tiempos = [["novato", 30], ["intermedio", 300], ["experto", 600]]
 TIEMPO_JUEGO = {i[0]: i[1] for i in lista_tiempos}

@@ -179,14 +179,16 @@ class Tablero(QWidget):
 
     def tiempo_infinito(self):
         tiempo_og = self.grid_layout.itemAtPosition(0, self.tamano + 1).widget()
+
         if isinstance(tiempo_og, Tiempo):
             tiempo_og.label2.setText("Te quedan ∞ segundos.")
             tiempo_og.detener()
+            self.signal_tiempo_restante.emit("infinito")
 
     def agregar_tiempo(self):
         tiempo_og = self.grid_layout.itemAtPosition(0, self.tamano + 1).widget()
         if isinstance(tiempo_og, Tiempo):
-            tiempo_og.aumento(p.TIEMPO_JUEGO[self.nivel_2])
+            tiempo_og.aumento(p.TIEMPO_ADICIONAL[self.nivel_2])
 
     def dar_coordenadas(self, datos):
         x = self.layout().itemAtPosition(*datos).widget().geometry().x()
@@ -207,7 +209,8 @@ class Tablero(QWidget):
                 self.media_player_mp3.setAudioOutput(audio)
                 self.media_player_mp3.play()
             imagen.setPixmap(QPixmap(p.POOP_PATH))
-            QTimer.singleShot(2000, lambda: imagen.setPixmap(QPixmap(p.LECHUGA_PATH)))
+            QTimer.singleShot(p.TIEMPO_TRANSICION * 1000,
+                              lambda: imagen.setPixmap(QPixmap(p.LECHUGA_PATH)))
         elif accion == "vaciar":
             if not self.mute:
                 self.media_player_mp3 = QMediaPlayer(self)
