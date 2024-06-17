@@ -1,5 +1,6 @@
 from PyQt6.QtCore import QObject, pyqtSignal, QTimer, QMutex, QThread
 import parametros as p
+import random
 
 
 class Thread(QThread):
@@ -66,6 +67,7 @@ class Tablero(QObject):
     signal_enviar_accion = pyqtSignal(list)
     signal_perdiste = pyqtSignal()
     signal_tiempo_final = pyqtSignal(int)
+    signal_sandia = pyqtSignal(list)
 
     def __init__(self):
         super().__init__()
@@ -73,20 +75,23 @@ class Tablero(QObject):
         self.thread.fin.connect(self.thread_fin)
         self.tamano = None
         self.tiempo = None
-        self.timer_sandia = QTimer(self)  # revisar
         self.x = 0  # posiciones pixeles
         self.y = 0
         self.m_x = 1  # posiciones cuadricula
         self.m_y = 1
         self.tiempo_restante = None
         self.puntaje = None
+        self.lechugas = None
 
         self.mutex = QMutex()
         self.posiciones = None
+
+        self.timer_sandia = QTimer(self)
+        self.timer_sandia.timeout.connect(self.producir_sandia)
+        self.intervalo = p.TIEMPO_APARICION * 1000
+
         self.signal_inicial.connect(self.posiciones_pepa)
         self.signal_tiempo_final.connect(self.calcular_puntaje)
-
-        self.lechugas = None
 
     def posiciones_pepa(self, lista):
         self.x = lista[0]
@@ -94,6 +99,7 @@ class Tablero(QObject):
         self.tamano = lista[2]
         self.lechugas = [[1 for x in range(self.tamano)] for i in range(self.tamano)]
         self.signal_agregar_pepa.emit()
+        self.timer_sandia.start(self.intervalo)   # revisar
 
     def mover(self, donde):
         if not self.thread.isRunning() and self.mutex.tryLock():
@@ -192,3 +198,8 @@ class Tablero(QObject):
         else:
             puntaje_final = self.tiempo_restante * self.tamano * self.tamano / tiempo_final
         return puntaje_final
+
+    def producir_sandia(self):
+        x = random.randint(50, p.ANCHO_PANTALLA[p.TAMANO_INV[self.tamano]] - 20)
+        y = random.randint(50, p.LARGO_PANTALLA[p.TAMANO_INV[self.tamano]] - 20)
+        self.signal_sandia.emit([x, y])

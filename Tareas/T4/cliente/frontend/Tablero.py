@@ -1,9 +1,23 @@
-from PyQt6.QtGui import QPixmap, QKeyEvent, QShortcut, QKeySequence
+from PyQt6.QtGui import QMouseEvent, QPixmap, QKeyEvent, QShortcut, QKeySequence
 from PyQt6.QtCore import pyqtSignal, QTimer, Qt, QUrl
 from PyQt6.QtWidgets import QWidget, QGridLayout, QPushButton, QLabel, QVBoxLayout
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 import parametros as p
 from funciones import diccionario
+
+
+class Sandia(QLabel):
+    signal_apretaron_sandia = pyqtSignal()
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setPixmap(QPixmap(p.SANDIA_PATH))
+        self.setFixedSize(p.ANCHO_LECHUGA, p.ALTURA_LECHUGA)
+        self.setWindowFlags(self.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
+
+    def mousePressEvent(self, ev: QMouseEvent | None) -> None:
+        self.signal_apretaron_sandia.emit()
+        super().mousePressEvent(ev)
 
 
 class Tiempo(QWidget):
@@ -125,6 +139,10 @@ class Tablero(QWidget):
                 self.grid_layout.addWidget(vacio, i, self.tamano + 1)
         self.setLayout(self.grid_layout)
 
+        self.sandia = Sandia(self)
+        self.sandia.show()
+        self.sandia.signal_apretaron_sandia.connect(self.sandia_presionada)
+
     def enviar_info(self):
         pass
 
@@ -143,6 +161,7 @@ class Tablero(QWidget):
         self.cor_y = self.layout().itemAtPosition(1, 1).widget().geometry().y()
         self.pepa.move(self.cor_x, self.cor_y)
         self.signal_posicion.emit([self.cor_x, self.cor_y, self.tamano])
+        self.sandia.hide()
 
     def instalar_atajos(self) -> None:
         self.cheatcode_silenciar = QShortcut(QKeySequence("M, U, T, E"), self)
@@ -222,3 +241,19 @@ class Tablero(QWidget):
                 self.media_player_mp3.play()
                 QTimer.singleShot(1000, lambda: self.media_player_mp3.stop())
             imagen.setPixmap(QPixmap())
+
+    def aparecer_sandia(self, datos):
+        self.sandia.show()
+        self.sandia.move(*datos)
+        self.empezar_tiempo_sandia()
+
+    def sandia_presionada(self):
+        self.sandia.hide()
+        self.agregar_tiempo()
+
+    def empezar_tiempo_sandia(self):
+        QTimer.singleShot(p.TIEMPO_DURACION*1000, lambda: self.revisar_sandia())
+
+    def revisar_sandia(self):
+        if self.sandia.isVisible:
+            self.sandia.hide()

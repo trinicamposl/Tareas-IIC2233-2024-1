@@ -9,8 +9,9 @@ PATH_MUSICA_PERDEDORA = path.join("assets", "sonidos", "juego_perdido.wav")
 PATH_MUSICA_COMER = path.join("assets", "sonidos", "comer.wav")
 PATH_MUSICA_POOP = path.join("assets", "sonidos", "poop.wav")
 POOP_PATH = path.join("assets", "sprites", "poop.png")
-TIEMPO_APARICION = 45
-TIEMPO_DURACION = 10
+SANDIA_PATH = path.join("assets", "sprites", "sandia.png")
+TIEMPO_APARICION = 2
+TIEMPO_DURACION = 1
 TIEMPO_TRANSICION = 2
 PUNTAJE_INF = 200
 CONSTANTE = 1000
@@ -29,6 +30,9 @@ TIEMPO_JUEGO = {i[0]: i[1] for i in lista_tiempos}
 
 lista_tamano = [["novato", 3], ["intermedio", 10], ["experto", 20]]
 TAMANO = {i[0]: i[1] for i in lista_tamano}
+
+lista_tamano_inv = [[3, "novato"], [10, "intermedio"], [20, "experto"]]
+TAMANO_INV = {i[0]: i[1] for i in lista_tamano_inv}
 
 paths = [["abajo", [path.join("assets", "sprites", "pepa", "down_0.png"),
                     path.join("assets", "sprites", "pepa", "down_1.png"),

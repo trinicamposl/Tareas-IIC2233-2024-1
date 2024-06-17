@@ -65,6 +65,7 @@ class Empezar:
         self.tablero_juego.signal_relleno.connect(self.backend_tablero.relleno)
         self.backend_tablero.signal_enviar_accion.connect(self.tablero_juego.rellenar)
         self.tablero_juego.signal_tiempo_restante.connect(self.backend_tablero.actualizar_restante)
+        self.backend_tablero.signal_sandia.connect(self.tablero_juego.aparecer_sandia)
 
     def mandar_info(self, datos):
         self.backend_tablero.signal_inicial.emit(datos)
