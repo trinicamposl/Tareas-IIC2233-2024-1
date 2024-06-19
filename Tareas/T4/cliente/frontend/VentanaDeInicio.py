@@ -35,7 +35,7 @@ class VentanaSala(QWidget):
 
 
 class Popup(QDialog):
-    def __init__(self):
+    def __init__(self, texto):
         super().__init__()
 
         self.setWindowTitle("HELLO!")
@@ -47,29 +47,6 @@ class Popup(QDialog):
         self.buttonBox.rejected.connect(self.reject)
 
         self.layout = QVBoxLayout()
-        texto = "Tu usuario tiene que:\n- Tener al menos una mayúscula\n"
-        texto_2 = "- Tener al menos un número\n- Solo tiene que utilizar letras y números"
-        message = QLabel(texto + texto_2)
-        self.layout.addWidget(message)
-        self.layout.addWidget(self.buttonBox)
-        self.setLayout(self.layout)
-        self.setWindowFlags(self.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
-
-
-class PopupPerdiste(QDialog):
-    def __init__(self):
-        super().__init__()
-
-        self.setWindowTitle("HELLO!")
-
-        QBtn = QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
-
-        self.buttonBox = QDialogButtonBox(QBtn)
-        self.buttonBox.accepted.connect(self.accept)
-        self.buttonBox.rejected.connect(self.reject)
-
-        self.layout = QVBoxLayout()
-        texto = "Se te acabó el tiempo D:\n        Perdiste!"
         message = QLabel(texto)
         self.layout.addWidget(message)
         self.layout.addWidget(self.buttonBox)
@@ -91,8 +68,8 @@ class VentanaInicio(QWidget):
         self.iniciar_dibujos()
         self.iniciar_musica()
         # Creamos el popup en caso que no se cumplan las condiciones de usuario
-        self.ventana_popup = Popup()
-        self.ventana_popup_perdiste = PopupPerdiste()
+        self.ventana_popup = Popup(p.texto_reglas)
+        self.ventana_popup_perdiste = Popup(p.texto_perdiste)
         self.silenciado = False
         self.ventana_popup.setGeometry(210, 280, 200, 100)
         self.ventana_popup_perdiste.setGeometry(210, 280, 200, 100)

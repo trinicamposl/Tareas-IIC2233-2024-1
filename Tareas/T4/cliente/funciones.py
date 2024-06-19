@@ -8,10 +8,10 @@ def archivos():
 
 
 def salon_fama():
-    ruta = path.join("puntaje.txt")
+    ruta = path.join("copia.txt")
     with open(ruta, "r", encoding="UTF-8") as archivo:
         lista = [i.strip().split("---") for i in archivo]
-        puntajes = sorted(lista, key=lambda x: int(x[1]))
+        puntajes = sorted(lista, key=lambda x: float(x[1]))
         nueva = []
         for elemento in puntajes:
             nueva.append(f"{elemento[0]} - {elemento[1]}")
@@ -44,3 +44,49 @@ def diccionario(nivel):
         for i in range(len(fila)):
             diccionario[str(i + 1)+",0"] = fila[i]
         return diccionario
+
+
+def codificar(mensaje):
+    mensaje_final = bytearray()
+    largo = len(mensaje).to_bytes(4, "big")
+    mensaje_final += bytearray(largo)
+    chunks_completos = len(mensaje) // 25
+    cantidad_faltante = len(mensaje) % 25
+    for i in range(0, chunks_completos):
+        numero_bloque_bytes = i.to_bytes(3, "big")
+        posicion_inicial = i * 25
+        posicion_final = (i * 25) + 25
+        bloque = mensaje[posicion_inicial:posicion_final]
+        mensaje_final += bytearray(numero_bloque_bytes)
+        mensaje_final += bloque
+
+    if cantidad_faltante != 0:  # hay un chunk incompleto
+        numero_bloque = chunks_completos
+        numero_bloque_bytes = numero_bloque.to_bytes(3, "big")
+        posicion_inicial = numero_bloque * 25
+        posicion_final = (numero_bloque * 25) + cantidad_faltante
+        bloque = mensaje[posicion_inicial:posicion_final]
+        mensaje_final += bytearray(numero_bloque_bytes)
+        mensaje_final += bloque
+        for i in range(cantidad_faltante, 25):
+            mensaje_final += bytearray(b'\x00')
+    return mensaje_final
+
+
+def decodificar(msg: bytearray) -> bytearray:
+    """Decodifica un mensaje codificado"""
+    mensaje_preliminar = bytearray()
+    largo = decodificar_largo(msg)
+    mensaje = msg[4:]
+    lista_bytes = [mensaje[i:i+28] for i in range(0, len(mensaje), 28)]
+    for chunk in lista_bytes:
+        sub_chunk = chunk[3:]  # ignora datos
+        mensaje_preliminar += sub_chunk
+
+    mensaje_decodificado = mensaje_preliminar[:largo]  # ignorar \x00
+    return mensaje_decodificado
+
+
+def decodificar_largo(mensaje: bytearray) -> int:
+    bytes_largo = mensaje[0:4]
+    return int.from_bytes(bytes_largo, byteorder="big")

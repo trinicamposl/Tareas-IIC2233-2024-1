@@ -63,6 +63,7 @@ class Tablero(QWidget):
     signal_dar_coordenadas = pyqtSignal(list)
     signal_relleno = pyqtSignal()
     signal_tiempo_restante = pyqtSignal(str)
+    signal_comprobar = pyqtSignal(int)
 
     def __init__(self, nivel: str):
         self.nivel = nivel  # nombre completo ej: intermedio_1.txt
@@ -92,6 +93,7 @@ class Tablero(QWidget):
                     vacio.setFixedSize(p.ANCHO_LECHUGA, p.ALTURA_LECHUGA)
                 else:
                     vacio = QLabel(f"{diccionario(self.nivel)[datos]}", self)
+                    vacio.setAlignment(Qt.AlignmentFlag.AlignCenter)
                 self.grid_layout.addWidget(vacio, fila, columna)
             else:
                 lechuga = QLabel(self)
@@ -144,7 +146,11 @@ class Tablero(QWidget):
         self.sandia.signal_apretaron_sandia.connect(self.sandia_presionada)
 
     def enviar_info(self):
-        pass
+        tiempo_og = self.grid_layout.itemAtPosition(0, self.tamano + 1).widget()
+        if tiempo_og and isinstance(tiempo_og, Tiempo):
+            texto = tiempo_og.label2.text()
+            segundos = int(texto.split(" ")[2])
+        self.signal_comprobar.emit(segundos)
 
     def enviar_tiempo(self):
         tiempo_og = self.grid_layout.itemAtPosition(0, self.tamano + 1).widget()

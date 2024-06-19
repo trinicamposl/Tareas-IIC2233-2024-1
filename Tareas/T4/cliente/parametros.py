@@ -57,3 +57,13 @@ ANCHO_PANTALLA = {i[0]: i[1] for i in pantalla_ancho}
 
 pantalla_largo = [["novato", 200], ["intermedio", 450], ["experto", 650]]
 LARGO_PANTALLA = {i[0]: i[1] for i in pantalla_largo}
+
+host = "localhost"
+
+texto = "Tu usuario tiene que:\n- Tener al menos una mayúscula\n"
+texto_2 = "- Tener al menos un número\n- Solo tiene que utilizar letras y números"
+texto_reglas = texto + texto_2
+
+texto_perdiste = "Se te acabó el tiempo D:\n        Perdiste!"
+
+PATH_PUNTAJES = path.join("copia.txt")
