@@ -34,8 +34,7 @@ def escuchar_cliente(jugador: object, lock: Lock) -> None:
                 veredicto = revisar(mensaje)
                 if veredicto:
                     with open(p.PATH_PUNTAJES, "a", encoding="utf-8") as archivo:
-                        print("aqu+i lleugé")
-                        archivo.write(f"{mensaje[2]}---{mensaje[3]}")
+                        archivo.write(f"{mensaje[2]}---{mensaje[3]}\n")
                     socket_cliente.sendall(codificar(pickle.dumps(True)))
                 else:
                     socket_cliente.sendall(codificar(pickle.dumps(False)))

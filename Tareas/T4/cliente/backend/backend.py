@@ -81,7 +81,7 @@ class Usuario(QObject):
                 texto = pickle.loads(obj)
                 if texto:
                     with open(p.PATH_PUNTAJES, "a", encoding="utf-8") as archivo:
-                        archivo.write(f"{self.nombre}---{self.puntaje}")
+                        archivo.write(f"{self.nombre}---{self.puntaje}\n")
                         self.signal_ganaste.emit(self.puntaje)
                 else:
                     self.signal_estaba_mal.emit()
@@ -148,7 +148,7 @@ class Usuario(QObject):
         self.signal_pedir_tablero.emit()
 
     def comprobar(self, tablero):
-        self.enviar_informacion([self.nivel, tablero])
+        self.enviar_informacion([self.nivel, tablero, self.nombre, self.puntaje])
 
 
 class Tablero(QObject):
@@ -281,9 +281,12 @@ class Tablero(QObject):
             self.lechugas[self.m_x - 1][self.m_y - 1] = 1
 
     def actualizar_restante(self, dato):
-        self.tiempo_restante = int(dato.split(" ")[2])
-        if self.tiempo_restante <= 0:
-            self.signal_perdiste.emit()
+        if dato.split(" ")[2].isnumeric():
+            self.tiempo_restante = int(dato.split(" ")[2])
+            if self.tiempo_restante <= 0:
+                self.signal_perdiste.emit()
+        else:
+            self.tiempo_restante = "infinito"
 
     def producir_sandia(self):
         x = random.randint(50, p.ANCHO_PANTALLA[p.TAMANO_INV[self.tamano]] - 20)

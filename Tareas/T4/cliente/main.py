@@ -111,6 +111,8 @@ class Empezar:
 
     def ganaste(self, puntaje):
         self.tablero_juego.hide()
+        sala = frontend_inicio.VentanaSala()
+        self.frontend_inicio.sala = sala
         self.frontend_inicio.show()
         mensaje = f"Ganaste!!!! Felicitacionesssss. Tuviste {puntaje} puntos"
         self.popup = frontend_inicio.Popup(mensaje)
