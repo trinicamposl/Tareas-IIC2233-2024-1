@@ -4,12 +4,14 @@ from funciones_servidor import leer_json
 from threading import Thread, Lock
 import pickle
 from funciones_servidor import decodificar, codificar, revisar
-import parametros_servidor as p
 
 
 def escuchar_cliente(jugador: object, lock: Lock, dato: str) -> None:
     """Se encarga de recibir los mensajes del cliente e interpretarlos"""
     socket_cliente = jugador
+    path_parametros = "parametros.json"
+    parametros = leer_json(path_parametros)
+    PATH_PUNTAJES = parametros["PATH_PUNTAJES"]
     while True:
         try:
             bytes_largo_datos = socket_cliente.recv(4)
@@ -33,7 +35,7 @@ def escuchar_cliente(jugador: object, lock: Lock, dato: str) -> None:
                 mensaje = pickle.loads(decodificar(respuesta))
                 veredicto = revisar(mensaje)
                 if veredicto:
-                    with open(p.PATH_PUNTAJES, "a", encoding="utf-8") as archivo:
+                    with open(PATH_PUNTAJES, "a", encoding="utf-8") as archivo:
                         archivo.write(f"{mensaje[2]}---{mensaje[3]}\n")
                     socket_cliente.sendall(codificar(pickle.dumps(True)))
                 else:

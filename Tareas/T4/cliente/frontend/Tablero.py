@@ -135,8 +135,8 @@ class Tablero(QWidget):
         self.comprobar.clicked.connect(self.enviar_info)
         self.pausar.clicked.connect(self.pausa)
         self.salir.clicked.connect(self.retirada)
-        self.signal_ganaste.connect(self.sonidos("victoria"))
-        self.signal_perdiste.connect(self.sonidos("pena"))
+        self.signal_ganaste.connect(lambda: self.sonidos("victoria"))
+        self.signal_perdiste.connect(lambda: self.sonidos("pena"))
 
         for i in range(self.tamano + 1):
             if i == 1:
@@ -270,7 +270,8 @@ class Tablero(QWidget):
 
     def sandia_presionada(self):
         self.sandia.hide()
-        self.sonidos("sandia")
+        if not self.mute:
+            self.sonidos("sandia")
         self.agregar_tiempo()
 
     def empezar_tiempo_sandia(self):

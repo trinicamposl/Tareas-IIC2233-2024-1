@@ -39,12 +39,12 @@ class Empezar:
         if self.conectado:
             self.frontend_inicio.show()
 
-    def iniciar_juego(self, mensaje):
+    def iniciar_juego(self, mensaje, texto):
         if mensaje:
             self.frontend_inicio.hide()
             self.modo = "juego"
         else:
-            self.frontend_inicio.signal_popup.emit()
+            self.frontend_inicio.signal_popup.emit(texto)
 
     def crear_tablero(self, nivel):
         self.nivel = nivel

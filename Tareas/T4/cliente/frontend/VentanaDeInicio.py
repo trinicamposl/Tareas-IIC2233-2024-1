@@ -74,9 +74,9 @@ class VentanaInicio(QWidget):
 
     signal_intentar_empezar = pyqtSignal(str)
     signal_empezar = pyqtSignal(str)
-    signal_empezo_juego = pyqtSignal(bool)
+    signal_empezo_juego = pyqtSignal(bool, str)
     signal_datos = pyqtSignal(list)
-    signal_popup = pyqtSignal()
+    signal_popup = pyqtSignal(str)
     signal_parar_tiempo = pyqtSignal()
 
     def __init__(self) -> None:
@@ -84,7 +84,7 @@ class VentanaInicio(QWidget):
         self.iniciar_dibujos()
         self.iniciar_musica()
         # Creamos el popup en caso que no se cumplan las condiciones de usuario
-        self.ventana_popup = Popup(p.texto_reglas)
+        self.ventana_popup = None
         self.ventana_popup_perdiste = Popup(p.texto_perdiste)
         self.silenciado = False
 
@@ -152,8 +152,9 @@ class VentanaInicio(QWidget):
 
         self.setFixedSize(p.ANCHO_JUEGO, p.ALTURA_JUEGO)
 
-    def popup(self):
+    def popup(self, texto):
         # aquí conecto el cerrar el popup a activar todo
+        self.ventana_popup = Popup(texto)
         self.ventana_popup.accepted.connect(lambda: self.boton_ingresar.setEnabled(True))
         self.ventana_popup.rejected.connect(lambda: self.boton_ingresar.setEnabled(True))
         self.ventana_popup.accepted.connect(lambda: self.selector_puzzle.setEnabled(True))
@@ -184,15 +185,14 @@ class VentanaInicio(QWidget):
         usuario = self.usuario.itemAt(1).widget().text()
         self.signal_intentar_empezar.emit(usuario)
 
-    def recibir_info(self, variable) -> None:
+    def recibir_info(self, variable, texto) -> None:
         if variable:
             usuario = self.usuario.itemAt(1).widget().text()
             nivel = self.selector_puzzle.currentText()
-            self.signal_empezo_juego.emit(True)
+            self.signal_empezo_juego.emit(True, texto)
             self.signal_datos.emit([usuario, nivel])
-
         else:
-            self.signal_empezo_juego.emit(False)
+            self.signal_empezo_juego.emit(False, texto)
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
         if event.key() == Qt.Key.Key_Enter or event.key() == Qt.Key.Key_Return:
@@ -222,7 +222,7 @@ class VentanaInicio(QWidget):
         self.show()
         if not self.silenciado:
             media_player_mp3 = QMediaPlayer(self)
-            file_url = QUrl.fromLocalFile(p.PATH_MUSICA_PERDEDORA)
+            file_url = QUrl.fromLocalFile(p.PATH_MUSICA["pena"])
             media_player_mp3.setSource(file_url)
             audio = QAudioOutput(self)
             audio.setVolume(0.5)

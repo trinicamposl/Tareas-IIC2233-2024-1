@@ -1,3 +1,4 @@
 {
-    "host": "localhost"
+    "host": "localhost",
+    "PATH_PUNTAJES": "puntajes.txt"
 }

@@ -1,19 +1,10 @@
 # Tarea 3: DCCome Lechuga 🐢🍉🥬
 
 
-Un buen ```README.md``` puede marcar una gran diferencia en la facilidad con la que corregimos una tarea, y consecuentemente cómo funciona su programa, por lo en general, entre más ordenado y limpio sea éste, mejor será 
-
-Para nuestra suerte, GitHub soporta el formato [MarkDown](https://es.wikipedia.org/wiki/Markdown), el cual permite utilizar una amplia variedad de estilos de texto, tanto para resaltar cosas importantes como para separar ideas o poner código de manera ordenada ([pueden ver casi todas las funcionalidades que incluye aquí](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet))
-
-Un buen ```README.md``` no tiene por que ser muy extenso tampoco, hay que ser **concisos** (a menos que lo consideren necesario) pero **tampoco pueden** faltar cosas. Lo importante es que sea claro y limpio 
-
-**Dejar claro lo que NO pudieron implementar y lo que no funciona a la perfección. Esto puede sonar innecesario pero permite que el ayudante se enfoque en lo que sí podría subir su puntaje.**
-
 ## Consideraciones generales :octocat:
 
-<Descripción de lo que hace y que **_no_** hace la tarea que entregaron junto
-con detalles de último minuto y consideraciones como por ejemplo cambiar algo
-en cierta línea del código o comentar una función>
+Mi tarea logra presentar un juego fácil de manejar para el usuario, con el mayor esfuerzo que tenga una interfaz _linda_ (no lo logré). Dentro de todo, se modela bien lo pedido, las teclas mueven a Pepa según corresponde y esta no se sale del tablero, sí existen ciertos problemas con _hacer poop_, que si uno presiona G en pleno de un traslado entre celdas, Pepa _hace poop_ en su posición previa al movimiento. Creo que no logré bien la separación de frontend y backend, lo mismo con servidor y cliente y creo que tengo una cantidad absurda e innecesaria de señales, pero mi código funciona (_se supone_). Es importante mencionar que le cambié la tipografía de base al juego, a una que mi computador tenía y supongo que viene instalada en pyqt6, en caso de que no funcione por esto, habria que cambiar toda ocurrencia de ```Cascadia Mono SemiBold``` a alguna otra tipografía como comic sans o no sé. 
+
 
 ### Cosas implementadas y no implementadas :white_check_mark: :x:
 
@@ -22,22 +13,28 @@ Explicación: mantén el emoji correspondiente, de manera honesta, para cada ite
 - ✅ si completaste **correctamente** lo pedido
 - 🟠 si el item está **incompleto** o tiene algunos errores
 
-**⚠️⚠️NO BASTA CON SOLO PONER EL COLOR DE LO IMPLEMENTADO**,
-SINO QUE SE DEBERÁ EXPLICAR QUÉ SE REALIZO DETALLADAMENTE EN CADA ITEM.
-⚠️⚠️
+
 
 #### Entidades: 18.5 pts (21%)
-##### ❌✅🟠 Pepa
-##### ❌✅🟠 Sandías
+##### 🟠 Pepa:
+Pepa es modelada pero no tiene una clase individual, sino que se encuentra inmersa dentro del tablero. Esto fue porque cuando intenté crearla fuera, se me habría como una ventana aparte (después caché que podía arreglarlo alterando el _parent_, pero ya era muy tarde para cambiarlo)
+##### 🟠 Sandías:
+Se genera una sola sandía que se va apareciendo y desapareciendo (esto lo comento en los supuestos); moviendose de manera aleatoria y desapareciendo ya sea porque se acabó el tiempo o porque fue presionada. No supe bien si las sandías estaban apareciendo cada un rango de tiempo constante.
 
 #### Interfaz gráfica: 27 pts (30%)
-##### ❌✅🟠 Ventana Inicio
-##### ❌✅🟠 Ventana Juego
-##### ❌✅🟠 Fin del *puzzle*
+##### ✅ Ventana Inicio
+Se genera una ventana de inicio con los requisitos, que se actualiza automáticamente el salón de la fama después de ganar una partida.
+##### 🟠 Ventana Juego
+Nunca logré que el tablero me quedara exactamente cuadrado pero lo demás debería estar bien.
+##### ✅ Fin del *puzzle*
+Se avisa en caso de acertar o perder el puzzle, así también el caso en que se acaba el tiempo, y se vuelve a la ventana de inicio actualizada.
 
 #### Interacción: 13 pts (14%)
-##### ❌✅🟠 *Cheatcodes*
-##### ❌✅🟠 Sonidos
+##### 🟠 *Cheatcodes*
+Los cheatcodes se activan pero sólo pueden ser activados cuando está presente el tablero y no la ventana de inicio.
+
+##### ✅ Sonidos
+Se debería escuchar todo tipo de sonido, a menos que durante la partida el jugar haya activado el cheatcode _MUTE_
 
 #### *Networking*: 20.5 pts (23%)
 ##### ❌✅🟠 Arquitectura
@@ -45,14 +42,14 @@ SINO QUE SE DEBERÁ EXPLICAR QUÉ SE REALIZO DETALLADAMENTE EN CADA ITEM.
 ##### ❌✅🟠 Codificación y decodifición
 
 #### Archivos: 11 pts (12%)
-##### ❌✅🟠 *sprites*
-##### ❌✅🟠 *puzzle*
-##### ❌✅🟠 JSON
-##### ❌✅🟠 parámetros.py
+##### ✅ *sprites*
+##### ✅ *puzzle*
+##### ✅ JSON
+##### ✅ parámetros.py
 
 
 ## Ejecución :computer:
-El módulo principal de la tarea a ejecutar es  ```archivo.py```. Además se debe crear los siguientes archivos y directorios adicionales:
+Los módulo principales de la tarea a ejecutar son  ```main.py```, tanto de la carpeta ```servidor``` como la carpeta ```cliente```. Además se debe crear los siguientes archivos y directorios adicionales:
 1. ```archivo.ext``` en ```ubicación```
 2. ```directorio``` en ```ubicación```
 3. ...

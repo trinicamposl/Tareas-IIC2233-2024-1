@@ -19,6 +19,33 @@ def salon_fama():
         return nueva
 
 
+def info(alnum, mayusc, numero):
+    print(f"alnum: {alnum}, mayus: {mayusc}, numero: {numero}")
+    if alnum and mayusc:
+        texto = "Tu usuario tiene que:\n- Tener al menos un número\n"
+    elif alnum and numero:
+        texto = "Tu usuario tiene que:\n- Tener al menos una mayúscula\n"
+    elif alnum and not mayusc and not numero:
+        texto_1 = "Tu usuario tiene que:\n- Tener al menos una mayúscula\n"
+        texto_2 = "- Tener al menos un número"
+        texto = texto_1 + texto_2
+    elif mayusc and numero:
+        texto = "Tu usuario tiene que:\n- Contener solo letras y números"
+    elif numero and not mayusc and not alnum:
+        texto_1 = "Tu usuario tiene que:\n- Tener al menos una mayúscula\n"
+        texto_2 = "- Contener solo letras y números"
+        texto = texto_1 + texto_2
+    elif mayusc and not numero and not alnum:
+        texto_1 = "Tu usuario tiene que:\n"
+        texto_2 = "- Tener al menos un número\n- Solo tiene que utilizar letras y números"
+        texto = texto_1 + texto_2
+    else:
+        texto_1 = "Tu usuario tiene que:\n- Tener al menos una mayúscula\n"
+        texto_2 = "- Tener al menos un número\n- Contener solo letras y números"
+        texto = texto_1 + texto_2
+    return texto
+
+
 def diccionario(nivel):
     ruta = path.join("assets", "base_puzzles", nivel)
     with open(ruta, "r", encoding="UTF-8") as archivo:

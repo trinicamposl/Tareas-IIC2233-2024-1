@@ -4,7 +4,7 @@ import socket
 import pickle
 import parametros as p
 import random
-from funciones import decodificar, codificar
+from funciones import decodificar, codificar, info
 
 
 class thread_modificado(QThread):
@@ -19,7 +19,7 @@ class Usuario(QObject):
     signal_actualizar_conectado = pyqtSignal()
     signal_cerrar_ventana = pyqtSignal()
     signal_intentar_empezar = pyqtSignal(str)
-    signal_empezar = pyqtSignal(bool)
+    signal_empezar = pyqtSignal(bool, str)
     signal_datos = pyqtSignal(list)
     signal_crear_tablero = pyqtSignal(str)
     signal_empezar_tiempo = pyqtSignal()
@@ -31,7 +31,9 @@ class Usuario(QObject):
 
     def __init__(self, host: str, puerto: str):
         super().__init__()
-        self.puede = False
+        self.mayuscula = False
+        self.numero = False
+        self.alnum = False
         self.signal_empezar_tiempo.connect(self.empezar_tiempo)
         self.signal_comprobar.connect(self.terminar)
         self.timer = QTimer(self)
@@ -80,7 +82,7 @@ class Usuario(QObject):
                 obj = decodificar(respuesta)
                 texto = pickle.loads(obj)
                 if texto:
-                    with open(p.PATH_PUNTAJES, "a", encoding="utf-8") as archivo:
+                    with open(p.PATH_COPIA, "a", encoding="utf-8") as archivo:
                         archivo.write(f"{self.nombre}---{self.puntaje}\n")
                         self.signal_ganaste.emit(self.puntaje)
                 else:
@@ -110,12 +112,22 @@ class Usuario(QObject):
         """Cierra el socket"""
         socket_servidor.close()
 
-    def revisar_texto(self, texto):
-        if texto.isalnum() and texto.lower() != texto:
-            for elemento in texto:
-                if elemento in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]:
-                    self.puede = True
-        self.signal_empezar.emit(self.puede)
+    def revisar_texto(self, texto: str):
+        if texto.isalnum():
+            self.alnum = True
+        if texto.lower() != texto:
+            self.mayuscula = True
+        for elemento in texto:
+            if elemento in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+                self.numero = True
+        if self.numero and self.mayuscula and self.alnum:
+            self.signal_empezar.emit(True, "")
+        else:
+            print(f"alnum: {self.alnum}, mayus: {self.mayuscula}, numero: {self.numero}")
+            self.signal_empezar.emit(False, info(self.alnum, self.mayuscula, self.numero))
+        self.alnum = False
+        self.numero = False
+        self.mayuscula = False
 
     def guardar_datos(self, lista):
         self.nombre = lista[0]  # nombre usuario
