@@ -2,8 +2,8 @@ from os import path
 IMAGEN_PATH = path.join("assets", "sprites", "logo.png")
 ANCHO_IMAGEN = 300
 ALTURA_IMAGEN = 100
-ANCHO_JUEGO = 600
-ALTURA_JUEGO = 480
+ANCHO_JUEGO = 850
+ALTURA_JUEGO = 620
 PATH_MUSICA_FONDO = path.join("assets", "sonidos", "musica_1.wav")
 PATH_MUSICA_PERDEDORA = path.join("assets", "sonidos", "juego_perdido.wav")
 PATH_MUSICA_COMER = path.join("assets", "sonidos", "comer.wav")
@@ -11,7 +11,7 @@ PATH_MUSICA_POOP = path.join("assets", "sonidos", "poop.wav")
 PATH_MUSICA_VICTORIA = path.join("assets", "sonidos", "juego_ganado.wav")
 POOP_PATH = path.join("assets", "sprites", "poop.png")
 SANDIA_PATH = path.join("assets", "sprites", "sandia.png")
-TIEMPO_APARICION = 28
+TIEMPO_APARICION = 3
 TIEMPO_DURACION = 5
 TIEMPO_TRANSICION = 2
 PUNTAJE_INF = 200
@@ -21,7 +21,9 @@ ANCHO_LECHUGA = 20
 ALTURA_LECHUGA = 20
 TIEMPO_PASOS = 100
 NUMERO_GRANDE = 2147483647  # para el loop de la música, era el máximo
-PASOS = 7
+
+pasos = [[3, 37], [10, 14], [20, 7]]
+PASOS = {i[0]: i[1] for i in pasos}
 
 lista_tiempo_adicional = [["novato", 30], ["intermedio", 150], ["experto", 300]]
 TIEMPO_ADICIONAL = {i[0]: i[1] for i in lista_tiempo_adicional}
@@ -53,10 +55,13 @@ paths = [["abajo", [path.join("assets", "sprites", "pepa", "down_0.png"),
                       path.join("assets", "sprites", "pepa", "right_3.png")]]]
 RUTAS = {i[0]: i[1] for i in paths}
 
-pantalla_ancho = [["novato", 300], ["intermedio", 550], ["experto", 900]]
+pantalla_ancho = [["novato", 350], ["intermedio", 550], ["experto", 850]]
 ANCHO_PANTALLA = {i[0]: i[1] for i in pantalla_ancho}
 
-pantalla_largo = [["novato", 200], ["intermedio", 450], ["experto", 650]]
+dim = [["novato", (100, 100)], ["intermedio", (50, 50)], ["experto", (20, 20)]]
+DIM = {i[0]: i[1] for i in dim}
+
+pantalla_largo = [["novato", 200], ["intermedio", 450], ["experto", 630]]
 LARGO_PANTALLA = {i[0]: i[1] for i in pantalla_largo}
 
 host = "localhost"
@@ -68,3 +73,6 @@ texto_reglas = texto + texto_2
 texto_perdiste = "Se te acabó el tiempo D:\n        Perdiste!"
 
 PATH_PUNTAJES = path.join("copia.txt")
+
+letra = [["novato", 20], ["intermedio", 12], ["experto", 10]]
+LETRA = {i[0]: i[1] for i in letra}

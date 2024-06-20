@@ -209,7 +209,7 @@ class Tablero(QObject):
     def mover_abajo(self, paso=0):  # si alcanzo mejorar esto para que no este acoplado
         if self.m_x != self.tamano:
             if paso < 4:
-                self.y += p.PASOS
+                self.y += p.PASOS[self.tamano]
                 self.signal_mover.emit(("abajo", paso, [self.x, self.y]))
                 QTimer.singleShot(100, lambda: self.mover_abajo(paso + 1))
             else:
@@ -223,7 +223,7 @@ class Tablero(QObject):
     def mover_arriba(self, paso=0):
         if self.m_x != 1:
             if paso < 4:
-                self.y -= p.PASOS
+                self.y -= p.PASOS[self.tamano]
                 self.signal_mover.emit(("arriba", paso, [self.x, self.y]))
                 QTimer.singleShot(100, lambda: self.mover_arriba(paso + 1))
             else:
@@ -237,7 +237,7 @@ class Tablero(QObject):
     def mover_izquierda(self, paso=0):
         if self.m_y != 1:
             if paso < 4:
-                self.x -= p.PASOS
+                self.x -= p.PASOS[self.tamano]
                 self.signal_mover.emit(("izquierda", paso, [self.x, self.y]))
                 QTimer.singleShot(100, lambda: self.mover_izquierda(paso + 1))
             else:
@@ -251,7 +251,7 @@ class Tablero(QObject):
     def mover_derecha(self, paso=0):
         if self.m_y != self.tamano:
             if paso < 4:
-                self.x += p.PASOS
+                self.x += p.PASOS[self.tamano]
                 self.signal_mover.emit(("derecha", paso, [self.x, self.y]))
                 QTimer.singleShot(100, lambda: self.mover_derecha(paso + 1))
             else:

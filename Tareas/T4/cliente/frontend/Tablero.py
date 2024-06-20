@@ -1,4 +1,4 @@
-from PyQt6.QtGui import QMouseEvent, QPixmap, QKeyEvent, QShortcut, QKeySequence
+from PyQt6.QtGui import QMouseEvent, QPixmap, QKeyEvent, QShortcut, QKeySequence, QFont
 from PyQt6.QtCore import pyqtSignal, QTimer, Qt, QUrl
 from PyQt6.QtWidgets import QWidget, QGridLayout, QPushButton, QLabel, QVBoxLayout
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
@@ -12,7 +12,6 @@ class Sandia(QLabel):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setPixmap(QPixmap(p.SANDIA_PATH))
-        self.setFixedSize(p.ANCHO_LECHUGA, p.ALTURA_LECHUGA)
         self.setWindowFlags(self.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
 
     def mousePressEvent(self, ev: QMouseEvent | None) -> None:
@@ -26,10 +25,13 @@ class Tiempo(QWidget):
     def __init__(self, nivel: str):
         super().__init__()
         self.setFixedSize(200, 50)
-        self.duration = p.TIEMPO_JUEGO[nivel.split("_")[0]]
+        self.nivel = nivel.split("_")[0]
+        self.duration = p.TIEMPO_JUEGO[self.nivel]
         self.label2 = QLabel()
         self.label2.setText(f'Te quedan {self.duration} segundos.')
+        self.label2.setFont(QFont("Cascadia Mono SemiBold", 10))
         self.label2.show()
+        self.label2.setAlignment(Qt.AlignmentFlag.AlignBottom)
         self.timer = QTimer()
         self.timer.timeout.connect(self.update)
         self.timer.start(1000)
@@ -66,6 +68,7 @@ class Tablero(QWidget):
     signal_comprobar = pyqtSignal(int)
     signal_ganaste = pyqtSignal()
     signal_perdiste = pyqtSignal()
+    signal_pausa = pyqtSignal()
 
     def __init__(self, nivel: str):
         self.nivel = nivel  # nombre completo ej: intermedio_1.txt
@@ -77,8 +80,8 @@ class Tablero(QWidget):
         self.cor_y = 0
 
         super().__init__()
-        self.setGeometry(50, 50, 100, 100)
-        self.setFixedSize(p.ANCHO_PANTALLA[self.nivel_2], p.LARGO_PANTALLA[self.nivel_2])
+        self.setGeometry(30, 40, p.ANCHO_JUEGO, p.ALTURA_JUEGO)
+        self.setFixedSize(p.ANCHO_JUEGO, p.ALTURA_JUEGO)
         self.iniciar_dibujos()
         self.instalar_atajos()
 
@@ -91,29 +94,26 @@ class Tablero(QWidget):
                     if columna == 0 and fila == 0:
                         vacio = QLabel()
                         vacio.setPixmap(QPixmap())
-                        vacio.setFixedSize(p.ANCHO_LECHUGA, p.ALTURA_LECHUGA)
+                        vacio.setFixedSize(*p.DIM[self.nivel_2])
                     else:
-                        statement = fila != self.tamano + 1 and columna != self.tamano + 1
-                        if statement:
+                        if fila != self.tamano + 1 and columna != self.tamano + 1:
                             vacio = QLabel(f"{diccionario(self.nivel)[datos]}", self)
-                            if datos[2] == "0":  # numeros de al lado
-                                vacio.setFixedHeight(p.ALTURA_LECHUGA)
-                                donde = Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignCenter
-                                vacio.setAlignment(donde)
-                            else:  # numeros de arriba
+                            if fila == 0:  # numeros de arriba
                                 donde = Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignBottom
                                 vacio.setAlignment(donde)
-                                vacio.setFixedWidth(p.ALTURA_LECHUGA)
+                            else:  # numeros de al lado
+                                donde = Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignCenter
+                                vacio.setAlignment(donde)
+                        vacio.setFont(QFont("Cascadia Mono SemiBold", p.LETRA[self.nivel_2]))
                     self.grid_layout.addWidget(vacio, fila, columna)
                 else:
                     lechuga = QLabel(self)
-                    lechuga.setPixmap(QPixmap(p.LECHUGA_PATH))
-                    lechuga.setFixedSize(p.ANCHO_LECHUGA, p.ALTURA_LECHUGA)
+                    lechuga.setPixmap(QPixmap(p.LECHUGA_PATH).scaled(*p.DIM[self.nivel_2]))
                     self.grid_layout.addWidget(lechuga, fila, columna)
 
         self.pepa = QLabel(self)
-        self.pepa.setPixmap(QPixmap(p.RUTAS["abajo"][0]))
-        self.pepa.setGeometry(self.cor_x, self.cor_y, p.ANCHO_LECHUGA, p.ALTURA_LECHUGA)
+        self.pepa.setPixmap(QPixmap(p.RUTAS["abajo"][0]).scaled(*p.DIM[self.nivel_2]))
+        self.pepa.move(self.cor_x, self.cor_y)
         self.pepa.setWindowFlags(self.pepa.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
         self.pepa.show()
 
@@ -123,13 +123,17 @@ class Tablero(QWidget):
         self.tiempo_original.signal_tiempo.connect(self.enviar_tiempo)
         self.grid_layout.addWidget(self.tiempo_original, 0, self.tamano + 1)
         self.salir = QPushButton("Salir")
-        self.salir.setFixedHeight(p.ALTURA_LECHUGA)
+        self.salir.setFont(QFont("Cascadia Mono SemiBold", p.LETRA[self.nivel_2]))
+        self.salir.setFixedHeight(p.DIM[self.nivel_2][0])
         self.comprobar = QPushButton("Comprobar")
-        self.comprobar.setFixedHeight(p.ALTURA_LECHUGA)
+        self.comprobar.setFont(QFont("Cascadia Mono SemiBold", p.LETRA[self.nivel_2]))
+        self.comprobar.setFixedHeight(p.DIM[self.nivel_2][0])
         self.pausar = QPushButton("Pausar")
-        self.pausar.setFixedHeight(p.ALTURA_LECHUGA)
+        self.pausar.setFixedHeight(p.DIM[self.nivel_2][0])
+        self.pausar.setFont(QFont("Cascadia Mono SemiBold", p.LETRA[self.nivel_2]))
 
         self.comprobar.clicked.connect(self.enviar_info)
+        self.pausar.clicked.connect(self.pausa)
         self.salir.clicked.connect(self.retirada)
         self.signal_ganaste.connect(self.sonidos_de_victoria)
         self.signal_perdiste.connect(self.sonidos_de_pena)
@@ -205,7 +209,7 @@ class Tablero(QWidget):
         donde = elemento[0]
         imagen = elemento[1]
         lugar = elemento[2]
-        self.pepa.setPixmap(QPixmap(p.RUTAS[donde][imagen]))
+        self.pepa.setPixmap(QPixmap(p.RUTAS[donde][imagen]).scaled(*p.DIM[self.nivel_2]))
         self.pepa.move(*lugar)
 
     def silenciar(self):
@@ -243,9 +247,10 @@ class Tablero(QWidget):
                 audio.setVolume(0.5)
                 self.media_player_mp3.setAudioOutput(audio)
                 self.media_player_mp3.play()
-            imagen.setPixmap(QPixmap(p.POOP_PATH))
+            imagen.setPixmap(QPixmap(p.POOP_PATH).scaled(*p.DIM[self.nivel_2]))
             QTimer.singleShot(p.TIEMPO_TRANSICION * 1000,
-                              lambda: imagen.setPixmap(QPixmap(p.LECHUGA_PATH)))
+                              lambda: imagen.setPixmap(QPixmap(p.LECHUGA_PATH).
+                                                       scaled(*p.DIM[self.nivel_2])))
         elif accion == "vaciar":
             if not self.mute:
                 self.media_player_mp3 = QMediaPlayer(self)
@@ -293,3 +298,16 @@ class Tablero(QWidget):
             audio.setVolume(0.5)
             self.media_player_mp3.setAudioOutput(audio)
             self.media_player_mp3.play()
+
+    def pausa(self):
+        tiempo_og = self.grid_layout.itemAtPosition(0, self.tamano + 1).widget()
+        if isinstance(tiempo_og, Tiempo):
+            if tiempo_og.label2.text() != "Te quedan ∞ segundos.":
+                tiempo_og.timer.stop()
+        self.signal_pausa.emit()
+
+    def despausa(self):
+        tiempo_og = self.grid_layout.itemAtPosition(0, self.tamano + 1).widget()
+        if isinstance(tiempo_og, Tiempo):
+            if tiempo_og.label2.text() != "Te quedan ∞ segundos.":
+                tiempo_og.timer.start()

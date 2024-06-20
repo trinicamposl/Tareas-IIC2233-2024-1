@@ -75,6 +75,7 @@ class Empezar:
         self.backend.signal_pedir_tablero.connect(self.backend_tablero.enviar_tablero)
         self.backend_tablero.signal_tablero.connect(self.backend.comprobar)
         self.backend.signal_ganaste.connect(self.ganaste)
+        self.tablero_juego.signal_pausa.connect(self.hacer_pausa)
 
     def mandar_info(self, datos):
         self.backend_tablero.signal_inicial.emit(datos)
@@ -120,6 +121,18 @@ class Empezar:
         self.popup.show()
         self.tablero_juego.signal_ganaste.emit()
 
+    def hacer_pausa(self):
+        self.tablero_juego.hide()
+        mensaje = "Tu juego está pausado"
+        self.popup = frontend_inicio.Popup(mensaje)
+        self.popup.show()
+        self.popup.accepted.connect(self.despausar)
+        self.popup.rejected.connect(self.despausar)
+
+    def despausar(self):
+        self.tablero_juego.show()
+        self.tablero_juego.despausa()
+
 
 if __name__ == "__main__":
 
@@ -143,7 +156,7 @@ if __name__ == '__main__':
     else:
         puerto = int(sys.argv[1])
         app = QApplication([])
-        font = QFont("Cascadia Mono SemiBold", 10)
+        font = QFont("Cascadia Mono SemiBold", 14)
         app.setFont(font)
         juego = Empezar(puerto)
         sys.exit(app.exec())

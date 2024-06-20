@@ -89,7 +89,7 @@ class VentanaInicio(QWidget):
         self.silenciado = False
 
     def iniciar_dibujos(self) -> None:
-        self.setGeometry(30, 50, p.ANCHO_JUEGO, p.ALTURA_JUEGO)
+        self.setGeometry(30, 40, p.ANCHO_JUEGO, p.ALTURA_JUEGO)
         self.setWindowTitle("Ventana de Inicio")
         # Creamos el selector que vamos a necesitar en nuestra ventana de Inicio
         self.selector_puzzle = QComboBox()
@@ -149,6 +149,8 @@ class VentanaInicio(QWidget):
         self.boton_ingresar.clicked.connect(self.enviar_info)
         self.boton_salir.clicked.connect(self.retirada)
         self.signal_popup.connect(self.popup)
+
+        self.setFixedSize(p.ANCHO_JUEGO, p.ALTURA_JUEGO)
 
     def popup(self):
         # aquí conecto el cerrar el popup a activar todo
