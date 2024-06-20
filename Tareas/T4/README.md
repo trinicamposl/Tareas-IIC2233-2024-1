@@ -81,7 +81,7 @@ La lista de librerías externas que utilicé fue la siguiente:
 2. ```pickle```: ```main.py``` del servidor y ```backend.py``` del cliente, para transformar en bytes y destransformar(?)
 3. ```os```: ```parametros.py`` para que los paths relativos funcionaran en cualquier dispositivo
 4. ```sys```: en varias partes, para manejar el fin del programa
-5. ```pyqt6```: principalmente en ```VentanaDeInicio.py```y ```Tablero.py``, para manejar interfaz gráfica, uso de timers, locks, etc.
+5. ```pyqt6```: principalmente en ```VentanaDeInicio.py```y ```Tablero.py```, para manejar interfaz gráfica, uso de timers, locks, etc. (incluyendo Qt, Qt.Core, Qt.Gui, etc.)
 
 ### Librerías propias
 Por otro lado, los módulos que fueron creados fueron los siguientes:
