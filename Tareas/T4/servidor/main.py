@@ -7,7 +7,7 @@ from funciones_servidor import decodificar, codificar, revisar
 import parametros_servidor as p
 
 
-def escuchar_cliente(jugador: object, lock: Lock) -> None:
+def escuchar_cliente(jugador: object, lock: Lock, dato: str) -> None:
     """Se encarga de recibir los mensajes del cliente e interpretarlos"""
     socket_cliente = jugador
     while True:
@@ -39,8 +39,10 @@ def escuchar_cliente(jugador: object, lock: Lock) -> None:
                 else:
                     socket_cliente.sendall(codificar(pickle.dumps(False)))
         except BrokenPipeError:
+            print(f"Cliente {dato} fue desconectado.")
             break
-        except ConnectionError:
+        except ConnectionResetError:
+            print(f"Cliente {dato} fue desconectado.")
             break
         except AttributeError:
             # Ya se ha des-asignado el cliente.
@@ -74,10 +76,10 @@ if __name__ == "__main__":
                 print(f"Recibiendo conexiones en {port}.")
                 # Aceptamos a un cliente
                 socket_cliente, address = sock.accept()
-                print(f"Nueva conexión: {address[0]}:" f"{address[1]}")
+                print(f"Nueva conexión: IP -> {address[0]}; " f"puerto -> {address[1]}")
                 # Creamos un thread encargado de escuchar a ese cliente
                 thread = Thread(target=escuchar_cliente,
-                                args=(socket_cliente, lock_escuchar),
+                                args=(socket_cliente, lock_escuchar, address[1]),
                                 daemon=True)
                 thread.start()
 
