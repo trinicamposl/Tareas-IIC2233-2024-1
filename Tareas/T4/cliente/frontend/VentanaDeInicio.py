@@ -176,7 +176,7 @@ class VentanaInicio(QWidget):
         audio.setVolume(0.25)
         self.media_player_mp3.setAudioOutput(audio)
         self.media_player_mp3.play()
-        self.media_player_mp3.setLoops(p.NUMERO_GRANDE)
+        self.media_player_mp3.setLoops(-1)
 
     def enviar_info(self) -> None:
         # Le avisamos al backend la dificultad mediante la señal.

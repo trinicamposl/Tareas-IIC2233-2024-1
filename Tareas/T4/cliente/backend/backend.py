@@ -281,10 +281,13 @@ class Tablero(QObject):
             self.lechugas[self.m_x - 1][self.m_y - 1] = 1
 
     def actualizar_restante(self, dato):
-        if dato.split(" ")[2].isnumeric():
-            self.tiempo_restante = int(dato.split(" ")[2])
-            if self.tiempo_restante <= 0:
-                self.signal_perdiste.emit()
+        if len(dato.split(" ")) >= 3:
+            if dato.split(" ")[2].isnumeric():
+                self.tiempo_restante = int(dato.split(" ")[2])
+                if self.tiempo_restante <= 0:
+                    self.signal_perdiste.emit()
+            else:
+                self.tiempo_restante = "infinito"
         else:
             self.tiempo_restante = "infinito"
 

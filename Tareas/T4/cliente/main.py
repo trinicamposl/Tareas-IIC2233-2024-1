@@ -110,6 +110,7 @@ class Empezar:
         QTimer.singleShot(1000, self.frontend_inicio.show())
 
     def ganaste(self, puntaje):
+        self.tablero_juego.tiempo_infinito()
         self.tablero_juego.hide()
         self.frontend_inicio.actualizar_salon()
         self.frontend_inicio.show()
