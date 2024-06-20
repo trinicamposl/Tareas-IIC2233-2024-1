@@ -116,10 +116,10 @@ Lo importante es que expliquen qué hace la función y que si saben que alguna p
 
 Para realizar mi tarea saqué código de:
 1. Tomé el archivo ```servidor.py``` de la experiencia 4 como base para el archivo de mi propio servidor así también el archivo ```frontend.py``` y ```backend.py``` de la actividad como 3 como base de mi archivos del mismo nombre.
-2. https://www.pythonguis.com/tutorials/pyqt6-qscrollarea/: este hace crea un área _scrolleable?_ y está implementado en el archivo ```frontend.py``` en las líneas 27 - 34  y hace que funcione como se debe el Salón de la Fama
+2. https://www.pythonguis.com/tutorials/pyqt6-qscrollarea/: este hace crea un área _scrolleable?_ y está implementado en el archivo ```frontend.py``` y hace que funcione como se debe el Salón de la Fama
 3. https://python-forum.io/thread-37323.html: este código fue mi base para crear el timer en el juego, igual fue alterado en el proceso pero de este código empecé.
-
 4. https://github.com/tomastrivino/iic2233-2023-1/blob/main/T3/cliente/Scripts/encoding.py: este código, fue base para codificar y decodificar los mensajes que se enviaban entre servidor y cliente, también como guía entre los mismos.
+5. https://www.pythonguis.com/tutorials/pyqt6-dialogs/: este ayuda a la creación de los distintos popups
 
 ## Descuentos
 La guía de descuentos se encuentra [link](https://github.com/IIC2233/Syllabus/blob/main/Tareas/Bases%20Generales%20de%20Tareas%20-%20IIC2233.pdf).

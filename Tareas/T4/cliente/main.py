@@ -6,16 +6,17 @@ import frontend.VentanaDeInicio as frontend_inicio
 import backend.backend as backend
 import frontend.Tablero as tablero
 import sys
-import parametros as p
+from funciones import leer_json
 
 
 class Empezar:
     def __init__(self, puerto: str) -> None:
 
         self.puerto = puerto
-        self.host = p.host
+        parametros = leer_json("parametros.json")
+        self.host = parametros["host"]
         self.frontend_inicio = frontend_inicio.VentanaInicio()
-        self.backend = backend.Usuario(p.host, self.puerto)
+        self.backend = backend.Usuario(self.host, self.puerto)
         self.backend_tablero = None
         self.tablero_juego = None
         self.pepa = None
@@ -80,7 +81,6 @@ class Empezar:
 
     def actualizar_conectado(self) -> None:
         self.conectado = True
-        print("esto pasó parte mil")
         self.iniciar()
 
     def cerrar(self):
@@ -103,11 +103,12 @@ class Empezar:
 
     def perdiste(self):
         mensaje = "Tu solución no era la correcta :(\n      Perdiste."
+        self.tablero_juego.signal_perdiste.emit()
         self.tablero_juego.hide()
         self.popup = frontend_inicio.Popup(mensaje)
         self.popup.show()
         QTimer.singleShot(6000, lambda: self.popup.hide())
-        QTimer.singleShot(1000, self.frontend_inicio.show())
+        QTimer.singleShot(1000, lambda: self.frontend_inicio.show())
 
     def ganaste(self, puntaje):
         self.tablero_juego.tiempo_infinito()
@@ -117,6 +118,7 @@ class Empezar:
         mensaje = f"Ganaste!!!! Felicitacionesssss. Tuviste {puntaje} puntos"
         self.popup = frontend_inicio.Popup(mensaje)
         self.popup.show()
+        self.tablero_juego.signal_ganaste.emit()
 
 
 if __name__ == "__main__":

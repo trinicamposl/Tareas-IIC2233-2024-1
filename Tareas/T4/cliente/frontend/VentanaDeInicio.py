@@ -67,6 +67,7 @@ class Popup(QDialog):
         self.layout.addWidget(self.buttonBox)
         self.setLayout(self.layout)
         self.setWindowFlags(self.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
+        self.setGeometry(210, 280, 200, 100)
 
 
 class VentanaInicio(QWidget):
@@ -86,8 +87,6 @@ class VentanaInicio(QWidget):
         self.ventana_popup = Popup(p.texto_reglas)
         self.ventana_popup_perdiste = Popup(p.texto_perdiste)
         self.silenciado = False
-        self.ventana_popup.setGeometry(210, 280, 200, 100)
-        self.ventana_popup_perdiste.setGeometry(210, 280, 200, 100)
 
     def iniciar_dibujos(self) -> None:
         self.setGeometry(30, 50, p.ANCHO_JUEGO, p.ALTURA_JUEGO)

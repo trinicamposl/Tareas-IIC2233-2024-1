@@ -1,4 +1,5 @@
 from os import path, listdir
+import json
 
 
 def archivos():
@@ -29,6 +30,7 @@ def diccionario(nivel):
             else:
                 linea = fila[i].split(",")
                 fila[i] = " ".join(linea)
+                fila[i] += " "
 
         for i in range(len(columna)):
             if columna[i] == "-":
@@ -90,3 +92,9 @@ def decodificar(msg: bytearray) -> bytearray:
 def decodificar_largo(mensaje: bytearray) -> int:
     bytes_largo = mensaje[0:4]
     return int.from_bytes(bytes_largo, byteorder="big")
+
+
+def leer_json(nombre: str) -> dict:
+    ruta = path.join("backend", nombre)
+    with open(ruta, encoding="utf-8") as archivo:
+        return json.load(archivo)

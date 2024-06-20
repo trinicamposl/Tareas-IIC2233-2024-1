@@ -140,7 +140,7 @@ class Usuario(QObject):
         self.timer.stop()
 
     def calcular_puntaje(self, tiempo_restante):
-        if tiempo_restante == "infinito":
+        if tiempo_restante == -1:
             puntaje_final = p.PUNTAJE_INF
         else:
             puntaje_final = tiempo_restante * self.tamano * self.tamano / self.tiempo
@@ -287,9 +287,9 @@ class Tablero(QObject):
                 if self.tiempo_restante <= 0:
                     self.signal_perdiste.emit()
             else:
-                self.tiempo_restante = "infinito"
+                self.tiempo_restante = -1
         else:
-            self.tiempo_restante = "infinito"
+            self.tiempo_restante = -1
 
     def producir_sandia(self):
         x = random.randint(50, p.ANCHO_PANTALLA[p.TAMANO_INV[self.tamano]] - 20)

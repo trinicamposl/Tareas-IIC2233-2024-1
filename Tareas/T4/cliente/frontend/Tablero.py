@@ -64,6 +64,8 @@ class Tablero(QWidget):
     signal_relleno = pyqtSignal()
     signal_tiempo_restante = pyqtSignal(str)
     signal_comprobar = pyqtSignal(int)
+    signal_ganaste = pyqtSignal()
+    signal_perdiste = pyqtSignal()
 
     def __init__(self, nivel: str):
         self.nivel = nivel  # nombre completo ej: intermedio_1.txt
@@ -82,29 +84,32 @@ class Tablero(QWidget):
 
     def iniciar_dibujos(self):
         self.grid_layout = QGridLayout()
-        fila = 0
-        columna = 0
-        for i in range((self.tamano+1)**2):
-            datos = f"{fila},{columna}"
-            if columna == 0 or fila == 0:
-                if columna == 0 and fila == 0:
-                    vacio = QLabel()
-                    vacio.setPixmap(QPixmap())
-                    vacio.setFixedSize(p.ANCHO_LECHUGA, p.ALTURA_LECHUGA)
+        for fila in range((self.tamano + 1)):
+            for columna in range(self.tamano + 1):
+                datos = f"{fila},{columna}"
+                if columna == 0 or fila == 0:
+                    if columna == 0 and fila == 0:
+                        vacio = QLabel()
+                        vacio.setPixmap(QPixmap())
+                        vacio.setFixedSize(p.ANCHO_LECHUGA, p.ALTURA_LECHUGA)
+                    else:
+                        statement = fila != self.tamano + 1 and columna != self.tamano + 1
+                        if statement:
+                            vacio = QLabel(f"{diccionario(self.nivel)[datos]}", self)
+                            if datos[2] == "0":  # numeros de al lado
+                                vacio.setFixedHeight(p.ALTURA_LECHUGA)
+                                donde = Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignCenter
+                                vacio.setAlignment(donde)
+                            else:  # numeros de arriba
+                                donde = Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignBottom
+                                vacio.setAlignment(donde)
+                                vacio.setFixedWidth(p.ALTURA_LECHUGA)
+                    self.grid_layout.addWidget(vacio, fila, columna)
                 else:
-                    vacio = QLabel(f"{diccionario(self.nivel)[datos]}", self)
-                    vacio.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                self.grid_layout.addWidget(vacio, fila, columna)
-            else:
-                lechuga = QLabel(self)
-                lechuga.setPixmap(QPixmap(p.LECHUGA_PATH))
-                lechuga.setFixedSize(p.ANCHO_LECHUGA, p.ALTURA_LECHUGA)
-                self.grid_layout.addWidget(lechuga, fila, columna)
-
-            columna += 1
-            if columna > self.tamano:
-                columna = 0
-                fila += 1
+                    lechuga = QLabel(self)
+                    lechuga.setPixmap(QPixmap(p.LECHUGA_PATH))
+                    lechuga.setFixedSize(p.ANCHO_LECHUGA, p.ALTURA_LECHUGA)
+                    self.grid_layout.addWidget(lechuga, fila, columna)
 
         self.pepa = QLabel(self)
         self.pepa.setPixmap(QPixmap(p.RUTAS["abajo"][0]))
@@ -126,6 +131,8 @@ class Tablero(QWidget):
 
         self.comprobar.clicked.connect(self.enviar_info)
         self.salir.clicked.connect(self.retirada)
+        self.signal_ganaste.connect(self.sonidos_de_victoria)
+        self.signal_perdiste.connect(self.sonidos_de_pena)
 
         for i in range(self.tamano + 1):
             if i == 1:
@@ -149,7 +156,10 @@ class Tablero(QWidget):
         tiempo_og = self.grid_layout.itemAtPosition(0, self.tamano + 1).widget()
         if tiempo_og and isinstance(tiempo_og, Tiempo):
             texto = tiempo_og.label2.text()
-            segundos = int(texto.split(" ")[2])
+            if texto.split(" ")[2].isnumeric():
+                segundos = int(texto.split(" ")[2])
+            else:
+                segundos = -1
         self.signal_comprobar.emit(segundos)
 
     def enviar_tiempo(self):
@@ -263,3 +273,23 @@ class Tablero(QWidget):
     def revisar_sandia(self):
         if self.sandia.isVisible:
             self.sandia.hide()
+
+    def sonidos_de_victoria(self):
+        if not self.mute:
+            self.media_player_mp3 = QMediaPlayer(self)
+            file_url = QUrl.fromLocalFile(p.PATH_MUSICA_VICTORIA)
+            self.media_player_mp3.setSource(file_url)
+            audio = QAudioOutput(self)
+            audio.setVolume(0.5)
+            self.media_player_mp3.setAudioOutput(audio)
+            self.media_player_mp3.play()
+
+    def sonidos_de_pena(self):
+        if not self.mute:
+            self.media_player_mp3 = QMediaPlayer(self)
+            file_url = QUrl.fromLocalFile(p.PATH_MUSICA_PERDEDORA)
+            self.media_player_mp3.setSource(file_url)
+            audio = QAudioOutput(self)
+            audio.setVolume(0.5)
+            self.media_player_mp3.setAudioOutput(audio)
+            self.media_player_mp3.play()

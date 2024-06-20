@@ -8,6 +8,7 @@ PATH_MUSICA_FONDO = path.join("assets", "sonidos", "musica_1.wav")
 PATH_MUSICA_PERDEDORA = path.join("assets", "sonidos", "juego_perdido.wav")
 PATH_MUSICA_COMER = path.join("assets", "sonidos", "comer.wav")
 PATH_MUSICA_POOP = path.join("assets", "sonidos", "poop.wav")
+PATH_MUSICA_VICTORIA = path.join("assets", "sonidos", "juego_ganado.wav")
 POOP_PATH = path.join("assets", "sprites", "poop.png")
 SANDIA_PATH = path.join("assets", "sprites", "sandia.png")
 TIEMPO_APARICION = 28
