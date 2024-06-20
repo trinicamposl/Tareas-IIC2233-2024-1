@@ -21,7 +21,7 @@ class Usuario(QObject):
     signal_intentar_empezar = pyqtSignal(str)
     signal_empezar = pyqtSignal(bool, str)
     signal_datos = pyqtSignal(list)
-    signal_crear_tablero = pyqtSignal(str)
+    signal_crear_tablero = pyqtSignal(str, bool)
     signal_empezar_tiempo = pyqtSignal()
     signal_comprobar = pyqtSignal()
     signal_tiempo_final = pyqtSignal(int)
@@ -123,7 +123,6 @@ class Usuario(QObject):
         if self.numero and self.mayuscula and self.alnum:
             self.signal_empezar.emit(True, "")
         else:
-            print(f"alnum: {self.alnum}, mayus: {self.mayuscula}, numero: {self.numero}")
             self.signal_empezar.emit(False, info(self.alnum, self.mayuscula, self.numero))
         self.alnum = False
         self.numero = False
@@ -132,9 +131,10 @@ class Usuario(QObject):
     def guardar_datos(self, lista):
         self.nombre = lista[0]  # nombre usuario
         self.nivel = lista[1]  # nombre archivo
+        mute = lista[2]
         dificultad = self.nivel.split("_")[0]
         self.tamano = p.TAMANO[dificultad]
-        self.signal_crear_tablero.emit(self.nivel)
+        self.signal_crear_tablero.emit(self.nivel, mute)
 
     def empezar_tiempo(self):
         self.timer = QTimer(self)
@@ -304,8 +304,8 @@ class Tablero(QObject):
             self.tiempo_restante = -1
 
     def producir_sandia(self):
-        x = random.randint(50, p.ANCHO_PANTALLA[p.TAMANO_INV[self.tamano]] - 20)
-        y = random.randint(50, p.LARGO_PANTALLA[p.TAMANO_INV[self.tamano]] - 20)
+        x = random.randint(50, p.ANCHO_JUEGO - 20)
+        y = random.randint(50, p.ALTURA_JUEGO - 20)
         self.signal_sandia.emit([x, y])
 
     def enviar_tablero(self):

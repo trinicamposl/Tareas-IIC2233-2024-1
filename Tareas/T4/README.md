@@ -82,6 +82,9 @@ La lista de librerías externas que utilicé fue la siguiente:
 3. ```os```: ```parametros.py`` para que los paths relativos funcionaran en cualquier dispositivo
 4. ```sys```: en varias partes, para manejar el fin del programa
 5. ```pyqt6```: principalmente en ```VentanaDeInicio.py```y ```Tablero.py```, para manejar interfaz gráfica, uso de timers, locks, etc. (incluyendo Qt, Qt.Core, Qt.Gui, etc.)
+6. ```random```: para generar la posición de la sandía
+7.  ```socket```: para toda la interacción entre servidor y cliente
+8.  ```threading```: para poder manejar Threads entre servidor y clientes
 
 ### Librerías propias
 Por otro lado, los módulos que fueron creados fueron los siguientes:

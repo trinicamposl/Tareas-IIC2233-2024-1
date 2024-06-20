@@ -40,6 +40,8 @@ class Tiempo(QWidget):
         layout = QVBoxLayout()
         layout.addWidget(self.label2)
         self.setLayout(layout)
+        self.setStyleSheet("background-color: transparent;")
+        # self.label2.setStyleSheet("background-color: #CBF88B;")
 
     def update(self):
         self.label2.setText(f'Te quedan {self.duration} segundos.')
@@ -75,13 +77,14 @@ class Tablero(QWidget):
         self.nivel_2 = nivel.split("_")[0]  # nombre dificultad
         self.tamano = p.TAMANO[self.nivel_2]
         self.grid_layout = None
-        self.mute = False
+        self.mute = True
         self.cor_x = 0  # estas coordenadas indican exactamente dónde está pepe (pixeles)
         self.cor_y = 0
 
         super().__init__()
         self.setGeometry(30, 40, p.ANCHO_JUEGO, p.ALTURA_JUEGO)
         self.setFixedSize(p.ANCHO_JUEGO, p.ALTURA_JUEGO)
+        # self.setStyleSheet("background-color: #CBF88B;")
         self.iniciar_dibujos()
         self.instalar_atajos()
 
@@ -116,6 +119,7 @@ class Tablero(QWidget):
         self.pepa.move(self.cor_x, self.cor_y)
         self.pepa.setWindowFlags(self.pepa.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
         self.pepa.show()
+        self.pepa.setStyleSheet("background-color: transparent;")
 
         QTimer.singleShot(100, self.definir_Pepa)
 
@@ -155,6 +159,8 @@ class Tablero(QWidget):
         self.sandia = Sandia(self)
         self.sandia.show()
         self.sandia.signal_apretaron_sandia.connect(self.sandia_presionada)
+
+        self.tiempo_original.raise_()
 
     def enviar_info(self):
         tiempo_og = self.grid_layout.itemAtPosition(0, self.tamano + 1).widget()

@@ -68,6 +68,7 @@ class Popup(QDialog):
         self.setLayout(self.layout)
         self.setWindowFlags(self.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
         self.setGeometry(210, 280, 200, 100)
+        # self.setStyleSheet("background-color: #CBF88B;")
 
 
 class VentanaInicio(QWidget):
@@ -151,6 +152,7 @@ class VentanaInicio(QWidget):
         self.signal_popup.connect(self.popup)
 
         self.setFixedSize(p.ANCHO_JUEGO, p.ALTURA_JUEGO)
+        # self.setStyleSheet("background-color: #CBF88B;")
 
     def popup(self, texto):
         # aquí conecto el cerrar el popup a activar todo
@@ -190,7 +192,7 @@ class VentanaInicio(QWidget):
             usuario = self.usuario.itemAt(1).widget().text()
             nivel = self.selector_puzzle.currentText()
             self.signal_empezo_juego.emit(True, texto)
-            self.signal_datos.emit([usuario, nivel])
+            self.signal_datos.emit([usuario, nivel, self.silenciado])
         else:
             self.signal_empezo_juego.emit(False, texto)
 

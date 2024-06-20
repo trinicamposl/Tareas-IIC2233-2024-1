@@ -20,7 +20,6 @@ def salon_fama():
 
 
 def info(alnum, mayusc, numero):
-    print(f"alnum: {alnum}, mayus: {mayusc}, numero: {numero}")
     if alnum and mayusc:
         texto = "Tu usuario tiene que:\n- Tener al menos un número\n"
     elif alnum and numero:

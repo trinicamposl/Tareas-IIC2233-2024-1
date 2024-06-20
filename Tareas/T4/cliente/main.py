@@ -24,6 +24,7 @@ class Empezar:
         self.modo = "inicio"
         self.conectado = False
         self.popup = None
+        self.en_silencio = False
 
         self.backend.signal_cerrar_ventana.connect(self.cerrar)
         self.backend.signal_actualizar_conectado.connect(self.actualizar_conectado)
@@ -46,9 +47,10 @@ class Empezar:
         else:
             self.frontend_inicio.signal_popup.emit(texto)
 
-    def crear_tablero(self, nivel):
+    def crear_tablero(self, nivel, mute):
         self.nivel = nivel
         self.tablero_juego = tablero.Tablero(nivel)
+        self.tablero_juego.mute = mute
         self.tablero_juego.show()
         self.conectar_juego()
 
