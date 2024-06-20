@@ -33,6 +33,21 @@ class VentanaSala(QWidget):
         layout_principal.addWidget(self.scroll)
         self.setLayout(layout_principal)
 
+    def actualizar_contenido(self):
+        jugadores = reversed(salon_fama())
+        # Limpiar el contenido actual del QVBoxLayout
+        for i in (range(self.vbox.count())):
+            widget = self.vbox.itemAt(i).widget()
+            if widget is not None:
+                widget.deleteLater()
+
+        for elemento in jugadores:
+            label = QLabel(elemento)
+            self.vbox.addWidget(label)
+
+        self.widget.setLayout(self.vbox)
+        self.scroll.update()
+
 
 class Popup(QDialog):
     def __init__(self, texto):
@@ -218,3 +233,6 @@ class VentanaInicio(QWidget):
     def silenciar(self):
         self.media_player_mp3.stop()
         self.silenciado = True
+
+    def actualizar_salon(self):
+        self.sala.actualizar_contenido()
