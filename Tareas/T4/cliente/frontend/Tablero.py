@@ -135,8 +135,8 @@ class Tablero(QWidget):
         self.comprobar.clicked.connect(self.enviar_info)
         self.pausar.clicked.connect(self.pausa)
         self.salir.clicked.connect(self.retirada)
-        self.signal_ganaste.connect(self.sonidos_de_victoria)
-        self.signal_perdiste.connect(self.sonidos_de_pena)
+        self.signal_ganaste.connect(self.sonidos("victoria"))
+        self.signal_perdiste.connect(self.sonidos("pena"))
 
         for i in range(self.tamano + 1):
             if i == 1:
@@ -241,7 +241,7 @@ class Tablero(QWidget):
         if accion == "rellenar":
             if not self.mute:
                 self.media_player_mp3 = QMediaPlayer(self)
-                file_url = QUrl.fromLocalFile(p.PATH_MUSICA_POOP)
+                file_url = QUrl.fromLocalFile(p.PATH_MUSICA["poop"])
                 self.media_player_mp3.setSource(file_url)
                 audio = QAudioOutput(self)
                 audio.setVolume(0.5)
@@ -254,7 +254,7 @@ class Tablero(QWidget):
         elif accion == "vaciar":
             if not self.mute:
                 self.media_player_mp3 = QMediaPlayer(self)
-                file_url = QUrl.fromLocalFile(p.PATH_MUSICA_COMER)
+                file_url = QUrl.fromLocalFile(p.PATH_MUSICA["comer"])
                 self.media_player_mp3.setSource(file_url)
                 audio = QAudioOutput(self)
                 audio.setVolume(0.5)
@@ -270,6 +270,7 @@ class Tablero(QWidget):
 
     def sandia_presionada(self):
         self.sandia.hide()
+        self.sonidos("sandia")
         self.agregar_tiempo()
 
     def empezar_tiempo_sandia(self):
@@ -279,20 +280,10 @@ class Tablero(QWidget):
         if self.sandia.isVisible:
             self.sandia.hide()
 
-    def sonidos_de_victoria(self):
+    def sonidos(self, que):
         if not self.mute:
             self.media_player_mp3 = QMediaPlayer(self)
-            file_url = QUrl.fromLocalFile(p.PATH_MUSICA_VICTORIA)
-            self.media_player_mp3.setSource(file_url)
-            audio = QAudioOutput(self)
-            audio.setVolume(0.5)
-            self.media_player_mp3.setAudioOutput(audio)
-            self.media_player_mp3.play()
-
-    def sonidos_de_pena(self):
-        if not self.mute:
-            self.media_player_mp3 = QMediaPlayer(self)
-            file_url = QUrl.fromLocalFile(p.PATH_MUSICA_PERDEDORA)
+            file_url = QUrl.fromLocalFile(p.PATH_MUSICA[que])
             self.media_player_mp3.setSource(file_url)
             audio = QAudioOutput(self)
             audio.setVolume(0.5)

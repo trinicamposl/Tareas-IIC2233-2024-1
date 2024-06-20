@@ -171,10 +171,10 @@ class VentanaInicio(QWidget):
     def iniciar_musica(self) -> None:
         # ponemos la música
         self.media_player_mp3 = QMediaPlayer(self)
-        file_url = QUrl.fromLocalFile(p.PATH_MUSICA_FONDO)
+        file_url = QUrl.fromLocalFile(p.PATH_MUSICA["fondo"])
         self.media_player_mp3.setSource(file_url)
         audio = QAudioOutput(self)
-        audio.setVolume(0.25)
+        audio.setVolume(0.20)
         self.media_player_mp3.setAudioOutput(audio)
         self.media_player_mp3.play()
         self.media_player_mp3.setLoops(-1)

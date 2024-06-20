@@ -143,7 +143,7 @@ class Usuario(QObject):
         if tiempo_restante == -1:
             puntaje_final = p.PUNTAJE_INF
         else:
-            puntaje_final = tiempo_restante * self.tamano * self.tamano / self.tiempo
+            puntaje_final = tiempo_restante * self.tamano * self.tamano * p.CONSTANTE / self.tiempo
         self.puntaje = puntaje_final
         self.signal_pedir_tablero.emit()
 
